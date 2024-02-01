@@ -64,13 +64,14 @@ warnings.simplefilter(action="ignore", category=pd.errors.PerformanceWarning)
 #############################################################################################################
 
 
-class NostalgiaForInfinityX4(IStrategy):
+class NostalgiaForInfinityX4_S(IStrategy):
   INTERFACE_VERSION = 3
 
   def version(self) -> str:
     return "v14.1.80"
 
   stoploss = -0.99
+  can_short = True
 
   # Trailing stoploss (not used)
   trailing_stop = False
