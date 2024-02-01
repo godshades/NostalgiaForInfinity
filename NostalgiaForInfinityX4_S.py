@@ -8506,10 +8506,10 @@ class NostalgiaForInfinityX4_S(IStrategy):
         item_sell = reduce(lambda x, y: x & y, item_sell_logic)
         dataframe.loc[item_sell, "enter_tag"] += f"{index} "
         conditions.append(item_sell)
-        dataframe.loc[:, "enter_long"] = item_sell
+        dataframe.loc[:, "enter_short"] = item_sell
 
     if conditions:
-      dataframe.loc[:, "enter_long"] = reduce(lambda x, y: x | y, conditions)
+      dataframe.loc[:, "enter_short"] = reduce(lambda x, y: x | y, conditions)
       dataframe.loc[
             (
                     (dataframe['rsi_3'] < 60.0)
