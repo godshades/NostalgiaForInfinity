@@ -8502,7 +8502,7 @@ class NostalgiaForInfinityX4_S(IStrategy):
           item_sell_logic.append(dataframe["ewo_50_200"] > self.entry_106_ewo_50_200_max.value)
           item_sell_logic.append(dataframe["close"] > (dataframe["sma_30"] * self.entry_106_sma_offset.value))
 
-        item_sell_logic.append(dataframe["volume"] < 0)
+        item_sell_logic.append(dataframe["volume"] > 0)
         item_sell = reduce(lambda x, y: x & y, item_sell_logic)
         dataframe.loc[item_sell, "enter_tag"] += f"{index} "
         conditions.append(item_sell)
