@@ -8920,6 +8920,16 @@ class NostalgiaForInfinityX4(IStrategy):
           item_buy_logic.append(dataframe["close"] < (dataframe["bb20_2_low"] * self.entry_12_bb_offset.value))
           item_buy_logic.append(dataframe["close"] < (dataframe["sma_30"] * self.entry_12_sma_offset.value))
 
+        # Condition #21 - Pump mode bull.
+        if index == 21:
+          # Logic
+          item_buy_logic.append(dataframe["ema_26"] > dataframe["ema_12"])
+          item_buy_logic.append((dataframe["ema_26"] - dataframe["ema_12"]) > (dataframe["open"] * 0.02))
+          item_buy_logic.append(
+            (dataframe["ema_26"].shift() - dataframe["ema_12"].shift()) > (dataframe["open"] / 100)
+          )
+          item_buy_logic.append(dataframe["close"] < (dataframe["bb20_2_low"] * 0.999))
+
         # Condition #22 - Pump mode bull.
         if index == 22:
           # Logic
