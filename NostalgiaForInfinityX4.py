@@ -68,7 +68,7 @@ class NostalgiaForInfinityX4(IStrategy):
   INTERFACE_VERSION = 3
 
   def version(self) -> str:
-    return "v14.1.105"
+    return "v14.1.106"
 
   stoploss = -0.99
 
@@ -139,7 +139,7 @@ class NostalgiaForInfinityX4(IStrategy):
   futures_mode_leverage = 3.0
   futures_mode_leverage_rebuy_mode = 3.0
 
-  # Stop thesholds. 0: Doom Bull, 1: Doom Bear, 2: u_e Bull, 3: u_e Bear, 4: u_e mins Bull, 5: u_e mins Bear.
+  # Stop thresholds. 0: Doom Bull, 1: Doom Bear, 2: u_e Bull, 3: u_e Bear, 4: u_e mins Bull, 5: u_e mins Bear.
   # 6: u_e ema % Bull, 7: u_e ema % Bear, 8: u_e RSI diff Bull, 9: u_e RSI diff Bear.
   # 10: enable Doom Bull, 11: enable Doom Bear, 12: enable u_e Bull, 13: enable u_e Bear.
   stop_thresholds = [-0.2, -0.2, -0.025, -0.025, 720, 720, 0.016, 0.016, 24.0, 24.0, False, False, True, True]
@@ -240,7 +240,7 @@ class NostalgiaForInfinityX4(IStrategy):
   regular_mode_stake_multiplier = 0.5
   regular_mode_stake_multiplier_alt = 0.75
   regular_mode_max = 3
-  regular_mode_derisk_spot = -1.6
+  regular_mode_derisk_spot = -0.8
   regular_mode_derisk_futures = -1.6
   regular_mode_stakes_spot = [1.0, 1.0, 1.0]
   regular_mode_stakes_futures = [1.0, 1.0, 1.0]
@@ -7836,8 +7836,6 @@ class NostalgiaForInfinityX4(IStrategy):
           (last_candle["rsi_14"] > 30.0)
           and (last_candle["rsi_14"] < 60.0)
           and (last_candle["hma_70_buy"])
-          and (last_candle["close"] > last_candle["zlma_50_1h"])
-          and (last_candle["ema_26"] > last_candle["ema_12"])
           and (last_candle["close"] < (last_candle["high_max_12_1h"] * 0.90))
           and (last_candle["cti_20_15m"] < 0.5)
           and (last_candle["rsi_14_15m"] < 50.0)
@@ -7889,6 +7887,17 @@ class NostalgiaForInfinityX4(IStrategy):
           and (last_candle["cti_20_4h"] < 0.8)
           and (last_candle["rsi_14_4h"] < 80.0)
           and (last_candle["ema_200_dec_48_1h"] == False)
+        )
+        or (
+          (last_candle["rsi_14"] < 60.0)
+          and (last_candle["hma_55_buy"])
+          and (last_candle["rsi_3_1h"] > 4.0)
+          and (last_candle["rsi_3_4h"] > 4.0)
+          and (last_candle["cti_20_15m"] < 0.8)
+          and (last_candle["cti_20_1h"] < 0.8)
+          and (last_candle["cti_20_4h"] < 0.8)
+          and (last_candle["rsi_14_1h"] < 80.0)
+          and (last_candle["close"] < (last_candle["high_max_12_1h"] * 0.90))
         )
       )
     ):
