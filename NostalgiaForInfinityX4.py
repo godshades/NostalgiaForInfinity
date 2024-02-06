@@ -9095,6 +9095,7 @@ class NostalgiaForInfinityX4(IStrategy):
           item_buy_logic.append(dataframe["close"] < (dataframe["sma_75"] * self.entry_24_sma_offset.value))
 
         # Condition #25 - Pump mode (Long).
+        if index == 25:
           # Logic
           item_buy_logic.append(dataframe["rsi_14"] < self.entry_24_rsi_14_max.value)
           item_buy_logic.append(dataframe["cti_20"] < self.entry_25_cti_20_max.value)
