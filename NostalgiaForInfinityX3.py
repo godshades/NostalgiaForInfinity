@@ -68,7 +68,7 @@ class NostalgiaForInfinityX3(IStrategy):
   INTERFACE_VERSION = 3
 
   def version(self) -> str:
-    return "v13.1.106"
+    return "v13.1.116"
 
   stoploss = -0.99
 
@@ -277,7 +277,7 @@ class NostalgiaForInfinityX3(IStrategy):
     "buy_condition_7_enable": True,
     "buy_condition_8_enable": True,
     "buy_condition_9_enable": True,
-    "buy_condition_10_enable": False,
+    "buy_condition_10_enable": True,
     "buy_condition_11_enable": False,
     "buy_condition_12_enable": False,
     "buy_condition_21_enable": True,
@@ -335,13 +335,13 @@ class NostalgiaForInfinityX3(IStrategy):
   entry_10_not_downtrend_1d_enabled = CategoricalParameter([True, False], default=False, space="buy", optimize=False)
   entry_10_rsi_3_min = DecimalParameter(00.0, 30.0, default=4.0, decimals=0, space="buy", optimize=False)
   entry_10_rsi_3_max = DecimalParameter(30.0, 70.0, default=46.0, decimals=0, space="buy", optimize=False)
-  entry_10_rsi_3_15m_min = DecimalParameter(00.0, 36.0, default=12.0, decimals=0, space="buy", optimize=False)
+  entry_10_rsi_3_15m_min = DecimalParameter(00.0, 36.0, default=6.0, decimals=0, space="buy", optimize=False)
   entry_10_rsi_3_1h_min = DecimalParameter(00.0, 36.0, default=8.0, decimals=0, space="buy", optimize=False)
   entry_10_rsi_3_4h_min = DecimalParameter(00.0, 36.0, default=8.0, decimals=0, space="buy", optimize=False)
   entry_10_rsi_3_1d_min = DecimalParameter(00.0, 30.0, default=8.0, decimals=0, space="buy", optimize=False)
-  entry_10_cti_20_1h_max = DecimalParameter(0.0, 0.99, default=0.95, decimals=2, space="buy", optimize=False)
+  entry_10_cti_20_1h_max = DecimalParameter(0.0, 0.99, default=0.90, decimals=2, space="buy", optimize=False)
   entry_10_rsi_14_1h_max = DecimalParameter(50.0, 90.0, default=80.0, decimals=0, space="buy", optimize=False)
-  entry_10_cti_20_4h_max = DecimalParameter(0.0, 0.99, default=0.95, decimals=2, space="buy", optimize=False)
+  entry_10_cti_20_4h_max = DecimalParameter(0.0, 0.99, default=0.90, decimals=2, space="buy", optimize=False)
   entry_10_rsi_14_4h_max = DecimalParameter(50.0, 90.0, default=80.0, decimals=0, space="buy", optimize=False)
   entry_10_cti_20_1d_max = DecimalParameter(0.0, 0.99, default=0.95, decimals=2, space="buy", optimize=False)
   entry_10_rsi_14_1d_max = DecimalParameter(50.0, 90.0, default=80.0, decimals=0, space="buy", optimize=False)
@@ -349,8 +349,8 @@ class NostalgiaForInfinityX3(IStrategy):
   entry_10_r_14_4h_max = DecimalParameter(-40.0, -0.0, default=-0.0, decimals=0, space="buy", optimize=False)
   entry_10_r_480_1h_max = DecimalParameter(-40.0, -0.0, default=-0.0, decimals=0, space="buy", optimize=False)
   entry_10_r_480_4h_max = DecimalParameter(-40.0, -0.0, default=-0.0, decimals=0, space="buy", optimize=False)
-  entry_10_rsi_14_max = DecimalParameter(20.0, 60.0, default=32.0, decimals=0, space="buy", optimize=False)
-  entry_10_ema_offset = DecimalParameter(0.940, 0.972, default=0.956, decimals=3, space="buy", optimize=False)
+  entry_10_rsi_14_max = DecimalParameter(20.0, 60.0, default=30.0, decimals=0, space="buy", optimize=False)
+  entry_10_ema_offset = DecimalParameter(0.940, 0.972, default=0.952, decimals=3, space="buy", optimize=False)
   entry_10_ema_open_offset = DecimalParameter(0.0100, 0.0400, default=0.0200, decimals=4, space="buy", optimize=False)
 
   entry_11_close_max_12 = DecimalParameter(00.50, 0.95, default=0.80, decimals=2, space="buy", optimize=False)
@@ -7581,6 +7581,21 @@ class NostalgiaForInfinityX3(IStrategy):
           and (last_candle["rsi_14_1h"] < 80.0)
           and (last_candle["close"] < (last_candle["high_max_12_1h"] * 0.90))
         )
+        or (
+          (last_candle["rsi_3"] > 12.0)
+          and (last_candle["rsi_3_15m"] > 30.0)
+          and (last_candle["rsi_3_1h"] > 30.0)
+          and (last_candle["rsi_3_4h"] > 30.0)
+          and (last_candle["rsi_14"] < 40.0)
+          and (last_candle["cti_20_15m"] < 0.8)
+          and (last_candle["rsi_14_15m"] < 70.0)
+          and (last_candle["cti_20_1h"] < 0.8)
+          and (last_candle["rsi_14_1h"] < 80.0)
+          and (last_candle["cti_20_4h"] < 0.8)
+          and (last_candle["rsi_14_4h"] < 80.0)
+          and (last_candle["r_14_1h"] > -80.0)
+          and (last_candle["ema_12"] < (last_candle["ema_26"] * 0.995))
+        )
       )
     ):
       return True
@@ -7657,27 +7672,25 @@ class NostalgiaForInfinityX3(IStrategy):
         )
         return buy_amount
 
-      if profit_stake < (
-        slice_amount
-        * (self.regular_mode_derisk_futures if self.is_futures_mode else self.regular_mode_derisk_spot)
-        / (trade.leverage if self.is_futures_mode else 1.0)
-      ):
-        sell_amount = trade.amount * exit_rate / (trade.leverage if self.is_futures_mode else 1.0) * 0.999
-        if (current_stake_amount / (trade.leverage if self.is_futures_mode else 1.0) - sell_amount) < (
+    if profit_stake < (
+      slice_amount
+      * (self.regular_mode_derisk_futures if self.is_futures_mode else self.regular_mode_derisk_spot)
+      / (trade.leverage if self.is_futures_mode else 1.0)
+    ):
+      sell_amount = trade.amount * exit_rate / (trade.leverage if self.is_futures_mode else 1.0) * 0.999
+      if (current_stake_amount / (trade.leverage if self.is_futures_mode else 1.0) - sell_amount) < (min_stake * 1.5):
+        sell_amount = (trade.amount * exit_rate / (trade.leverage if self.is_futures_mode else 1.0)) - (
           min_stake * 1.5
-        ):
-          sell_amount = (trade.amount * exit_rate / (trade.leverage if self.is_futures_mode else 1.0)) - (
-            min_stake * 1.5
-          )
-        if sell_amount > min_stake:
-          grind_profit = 0.0
-          self.dp.send_msg(
-            f"Rebuy de-risk [{trade.pair}] | Rate: {exit_rate} | Stake amount: {sell_amount} | Profit (stake): {profit_stake} | Profit: {(profit_ratio * 100.0):.2f}%"
-          )
-          print(
-            f"Rebuy de-risk [{trade.pair}] | Rate: {exit_rate} | Stake amount: {sell_amount} | Profit (stake): {profit_stake} | Profit: {(profit_ratio * 100.0):.2f}%"
-          )
-          return -sell_amount
+        )
+      if sell_amount > min_stake:
+        grind_profit = 0.0
+        self.dp.send_msg(
+          f"Rebuy de-risk [{trade.pair}] | Rate: {exit_rate} | Stake amount: {sell_amount} | Profit (stake): {profit_stake} | Profit: {(profit_ratio * 100.0):.2f}%"
+        )
+        print(
+          f"Rebuy de-risk [{trade.pair}] | Rate: {exit_rate} | Stake amount: {sell_amount} | Profit (stake): {profit_stake} | Profit: {(profit_ratio * 100.0):.2f}%"
+        )
+        return -sell_amount
 
     return None
 
@@ -16145,6 +16158,32 @@ class NostalgiaForInfinityX3(IStrategy):
         | (dataframe["close"] < dataframe["res_hlevel_4h"])
         | (dataframe["close"] < dataframe["res_hlevel_1d"])
         | (dataframe["close"] > (dataframe["high_max_6_1h"] * 0.88))
+      )
+      & (
+        (dataframe["change_pct_1d"] < 0.04)
+        | (dataframe["top_wick_pct_1d"] < 0.04)
+        | (dataframe["change_pct_4h"] < 0.02)
+        | (dataframe["top_wick_pct_4h"] < 0.02)
+        | (dataframe["change_pct_1h"] > -0.02)
+        | (dataframe["rsi_14_4h"] < 65.0)
+        | (dataframe["cti_20_1d"] < 0.8)
+        | (dataframe["rsi_14_1d"] < 70.0)
+        | (dataframe["close"] < dataframe["res_hlevel_1d"])
+      )
+      & (
+        (dataframe["change_pct_4h"] < 0.03)
+        | (dataframe["top_wick_pct_4h"] < 0.03)
+        | (dataframe["change_pct_1h"] > -0.08)
+        | (dataframe["change_pct_1h"].shift(12) < 0.02)
+        | (dataframe["rsi_14_4h"] < 65.0)
+        | (dataframe["r_480_4h"] < -15.0)
+      )
+      & (
+        (dataframe["change_pct_1h"] > -0.10)
+        | (dataframe["change_pct_1h"].shift(12) < 0.03)
+        | (dataframe["top_wick_pct_1h"].shift(12) < 0.03)
+        | (dataframe["rsi_14_1h"].shift(12) < 70.0)
+        | (dataframe["r_480_1h"].shift(12) < -25.0)
       )
     )
 
