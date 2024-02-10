@@ -64,11 +64,11 @@ warnings.simplefilter(action="ignore", category=pd.errors.PerformanceWarning)
 #############################################################################################################
 
 
-class NostalgiaForInfinityX4_L(IStrategy):
+class NostalgiaForInfinityX4(IStrategy):
   INTERFACE_VERSION = 3
 
   def version(self) -> str:
-    return "v14.1.123"
+    return "v14.1.131"
 
   stoploss = -0.99
 
@@ -113,7 +113,7 @@ class NostalgiaForInfinityX4_L(IStrategy):
   # Pump mode tags
   pump_mode_tags = ["21", "22", "23", "24", "25", "26"]
   # Quick mode tags
-  quick_mode_tags = ["41", "42", "43", "44", "45", "46", "47", "48", "49"]
+  quick_mode_tags = ["41", "42", "43", "44", "45", "46", "47", "48", "49", "50"]
   # Long rebuy mode tags
   long_rebuy_mode_tags = ["61"]
   # Long mode tags
@@ -218,13 +218,13 @@ class NostalgiaForInfinityX4_L(IStrategy):
     [0.75, 0.75],
   ]
   grinding_mode_2_sub_thresholds_spot = [
-    [-0.06, -0.07, -0.08, -0.10, -0.12],
-    [-0.06, -0.07, -0.08, -0.10],
-    [-0.06, -0.08, -0.10, -0.12],
-    [-0.06, -0.08, -0.10],
-    [-0.06, -0.08, -0.10],
-    [-0.06, -0.08, -0.10],
-    [-0.06, -0.10],
+    [-0.07, -0.08, -0.09, -0.12, -0.14],
+    [-0.07, -0.08, -0.09, -0.12],
+    [-0.07, -0.09, -0.12, -0.14],
+    [-0.07, -0.09, -0.12],
+    [-0.07, -0.09, -0.12],
+    [-0.07, -0.09, -0.12],
+    [-0.07, -0.12],
   ]
   grinding_mode_2_sub_thresholds_futures = [
     [-0.06, -0.07, -0.08, -0.10, -0.12],
@@ -297,9 +297,10 @@ class NostalgiaForInfinityX4_L(IStrategy):
     "buy_condition_44_enable": True,
     "buy_condition_45_enable": True,
     "buy_condition_46_enable": True,
-    "buy_condition_47_enable": False,
+    "buy_condition_47_enable": True,
     "buy_condition_48_enable": True,
     "buy_condition_49_enable": True,
+    "buy_condition_50_enable": True,
     "buy_condition_61_enable": True,
     "buy_condition_81_enable": True,
     "buy_condition_82_enable": True,
@@ -847,6 +848,55 @@ class NostalgiaForInfinityX4_L(IStrategy):
   entry_49_r_14_max = DecimalParameter(-99.0, -70.0, default=-50.0, decimals=0, space="buy", optimize=False)
   entry_49_inc_min = DecimalParameter(0.01, 0.04, default=0.028, decimals=3, space="buy", optimize=False)
 
+  entry_50_close_max_12 = DecimalParameter(00.50, 0.95, default=0.80, decimals=2, space="buy", optimize=False)
+  entry_50_close_max_24 = DecimalParameter(00.50, 0.95, default=0.75, decimals=2, space="buy", optimize=False)
+  entry_50_close_max_48 = DecimalParameter(00.50, 0.95, default=0.70, decimals=2, space="buy", optimize=False)
+  entry_50_high_max_24_1h = DecimalParameter(00.40, 0.95, default=0.60, decimals=2, space="buy", optimize=False)
+  entry_50_high_max_24_4h = DecimalParameter(00.40, 0.95, default=0.50, decimals=2, space="buy", optimize=False)
+  entry_50_high_max_6_1d = DecimalParameter(00.30, 0.95, default=0.45, decimals=2, space="buy", optimize=False)
+  entry_50_hl_pct_change_6_1h = DecimalParameter(00.30, 0.90, default=0.80, decimals=2, space="buy", optimize=False)
+  entry_50_hl_pct_change_12_1h = DecimalParameter(00.40, 1.00, default=0.90, decimals=2, space="buy", optimize=False)
+  entry_50_hl_pct_change_24_1h = DecimalParameter(00.50, 1.20, default=1.10, decimals=2, space="buy", optimize=False)
+  entry_50_hl_pct_change_48_1h = DecimalParameter(00.60, 1.60, default=1.20, decimals=2, space="buy", optimize=False)
+  entry_50_sup_level_1h_enabled = CategoricalParameter([True, False], default=False, space="buy", optimize=False)
+  entry_50_res_level_1h_enabled = CategoricalParameter([True, False], default=False, space="buy", optimize=False)
+  entry_50_sup_level_4h_enabled = CategoricalParameter([True, False], default=False, space="buy", optimize=False)
+  entry_50_res_level_4h_enabled = CategoricalParameter([True, False], default=False, space="buy", optimize=False)
+  entry_50_sup_level_1d_enabled = CategoricalParameter([True, False], default=False, space="buy", optimize=False)
+  entry_50_res_level_1d_enabled = CategoricalParameter([True, False], default=False, space="buy", optimize=False)
+  entry_50_ema_200_not_dec_1h_enabled = CategoricalParameter([True, False], default=False, space="buy", optimize=False)
+  entry_50_ema_200_not_dec_4h_enabled = CategoricalParameter([True, False], default=False, space="buy", optimize=False)
+  entry_50_ema_200_not_dec_1d_enabled = CategoricalParameter([True, False], default=False, space="buy", optimize=False)
+  entry_50_not_downtrend_15m_enabled = CategoricalParameter([True, False], default=False, space="buy", optimize=False)
+  entry_50_not_downtrend_1h_enabled = CategoricalParameter([True, False], default=False, space="buy", optimize=False)
+  entry_50_not_downtrend_4h_enabled = CategoricalParameter([True, False], default=False, space="buy", optimize=False)
+  entry_50_not_downtrend_1d_enabled = CategoricalParameter([True, False], default=False, space="buy", optimize=False)
+  entry_50_ema_12_1h_over_ema_200_1h_enabled = CategoricalParameter(
+    [True, False], default=True, space="buy", optimize=False
+  )
+  entry_50_rsi_3_min = DecimalParameter(00.0, 30.0, default=0.0, decimals=0, space="buy", optimize=False)
+  entry_50_rsi_3_max = DecimalParameter(30.0, 70.0, default=46.0, decimals=0, space="buy", optimize=False)
+  entry_50_rsi_3_15m_min = DecimalParameter(00.0, 36.0, default=0.0, decimals=0, space="buy", optimize=False)
+  entry_50_rsi_3_1h_min = DecimalParameter(00.0, 36.0, default=0.0, decimals=0, space="buy", optimize=False)
+  entry_50_rsi_3_4h_min = DecimalParameter(00.0, 36.0, default=0.0, decimals=0, space="buy", optimize=False)
+  entry_50_rsi_3_1d_min = DecimalParameter(00.0, 30.0, default=0.0, decimals=0, space="buy", optimize=False)
+  entry_50_cti_20_1h_max = DecimalParameter(0.0, 0.99, default=0.80, decimals=2, space="buy", optimize=False)
+  entry_50_rsi_14_1h_max = DecimalParameter(50.0, 90.0, default=80.0, decimals=0, space="buy", optimize=False)
+  entry_50_cti_20_4h_max = DecimalParameter(0.0, 0.99, default=0.95, decimals=2, space="buy", optimize=False)
+  entry_50_rsi_14_4h_max = DecimalParameter(50.0, 90.0, default=90.0, decimals=0, space="buy", optimize=False)
+  entry_50_cti_20_1d_max = DecimalParameter(0.0, 0.99, default=0.95, decimals=2, space="buy", optimize=False)
+  entry_50_rsi_14_1d_max = DecimalParameter(50.0, 90.0, default=90.0, decimals=0, space="buy", optimize=False)
+  entry_50_r_14_1h_min = DecimalParameter(-100.0, -70.0, default=-100.0, decimals=0, space="buy", optimize=False)
+  entry_50_r_14_1h_max = DecimalParameter(-40.0, -0.0, default=-0.0, decimals=0, space="buy", optimize=False)
+  entry_50_r_14_4h_min = DecimalParameter(-100.0, -70.0, default=-100.0, decimals=0, space="buy", optimize=False)
+  entry_50_r_14_4h_max = DecimalParameter(-40.0, -0.0, default=-0.0, decimals=0, space="buy", optimize=False)
+  entry_50_r_480_1h_min = DecimalParameter(-100.0, -70.0, default=-100.0, decimals=0, space="buy", optimize=False)
+  entry_50_r_480_1h_max = DecimalParameter(-40.0, -0.0, default=-0.0, decimals=0, space="buy", optimize=False)
+  entry_50_r_480_4h_min = DecimalParameter(-100.0, -70.0, default=-100.0, decimals=0, space="buy", optimize=False)
+  entry_50_r_480_4h_max = DecimalParameter(-40.0, -0.0, default=-0.0, decimals=0, space="buy", optimize=False)
+  entry_50_bb_offset = DecimalParameter(0.970, 0.999, default=0.995, decimals=3, space="buy", optimize=False)
+  entry_50_ema_open_offset = DecimalParameter(0.020, 0.040, default=0.020, decimals=3, space="buy", optimize=False)
+
   entry_102_close_max_12 = DecimalParameter(00.50, 0.95, default=0.92, decimals=2, space="buy", optimize=False)
   entry_102_close_max_24 = DecimalParameter(00.50, 0.95, default=0.75, decimals=2, space="buy", optimize=False)
   entry_102_close_max_48 = DecimalParameter(00.50, 0.95, default=0.70, decimals=2, space="buy", optimize=False)
@@ -1023,12 +1073,12 @@ class NostalgiaForInfinityX4_L(IStrategy):
   entry_106_not_downtrend_1h_enabled = CategoricalParameter([True, False], default=False, space="buy", optimize=False)
   entry_106_not_downtrend_4h_enabled = CategoricalParameter([True, False], default=False, space="buy", optimize=False)
   entry_106_not_downtrend_1d_enabled = CategoricalParameter([True, False], default=False, space="buy", optimize=False)
-  entry_106_rsi_3_min = DecimalParameter(00.0, 30.0, default=6.0, decimals=0, space="buy", optimize=False)
+  entry_106_rsi_3_min = DecimalParameter(00.0, 30.0, default=2.0, decimals=0, space="buy", optimize=False)
   entry_106_rsi_3_max = DecimalParameter(30.0, 60.0, default=60.0, decimals=0, space="buy", optimize=False)
-  entry_106_rsi_3_15m_min = DecimalParameter(00.0, 30.0, default=10.0, decimals=0, space="buy", optimize=False)
-  entry_106_rsi_3_1h_min = DecimalParameter(00.0, 30.0, default=10.0, decimals=0, space="buy", optimize=False)
-  entry_106_rsi_3_4h_min = DecimalParameter(00.0, 30.0, default=10.0, decimals=0, space="buy", optimize=False)
-  entry_106_rsi_3_1d_min = DecimalParameter(00.0, 30.0, default=10.0, decimals=0, space="buy", optimize=False)
+  entry_106_rsi_3_15m_min = DecimalParameter(00.0, 30.0, default=2.0, decimals=0, space="buy", optimize=False)
+  entry_106_rsi_3_1h_min = DecimalParameter(00.0, 30.0, default=6.0, decimals=0, space="buy", optimize=False)
+  entry_106_rsi_3_4h_min = DecimalParameter(00.0, 30.0, default=6.0, decimals=0, space="buy", optimize=False)
+  entry_106_rsi_3_1d_min = DecimalParameter(00.0, 30.0, default=6.0, decimals=0, space="buy", optimize=False)
   entry_106_cti_20_1h_max = DecimalParameter(0.0, 0.99, default=0.9, decimals=2, space="buy", optimize=False)
   entry_106_rsi_14_1h_max = DecimalParameter(50.0, 90.0, default=80.0, decimals=0, space="buy", optimize=False)
   entry_106_cti_20_4h_max = DecimalParameter(0.0, 0.99, default=0.9, decimals=2, space="buy", optimize=False)
@@ -8900,6 +8950,9 @@ class NostalgiaForInfinityX4_L(IStrategy):
       dataframe["hma_70"].shift(1) < dataframe["hma_70"].shift(2)
     )
 
+    # ZL MA
+    dataframe["zlma_50"] = pta.zlma(dataframe["close"], length=50, matype="linreg", offset=0)
+
     # EverGet ChandelierExit
     high = dataframe["high"]
     low = dataframe["low"]
@@ -9449,6 +9502,18 @@ class NostalgiaForInfinityX4_L(IStrategy):
           item_buy_logic.append(dataframe["rsi_14"] < self.entry_49_rsi_14_max.value)
           item_buy_logic.append(
             ((dataframe["close"] - dataframe["open_min_12"]) / dataframe["open_min_12"]) > self.entry_49_inc_min.value
+          )
+
+        # Condition #50 - Quick mode (Long)
+        if index == 50:
+          # Logic
+          item_buy_logic.append(dataframe["close"] < (dataframe["bb20_2_low"] * self.entry_50_bb_offset.value))
+          item_buy_logic.append(dataframe["ema_26"] > dataframe["ema_12"])
+          item_buy_logic.append(
+            (dataframe["ema_26"] - dataframe["ema_12"]) > (dataframe["open"] * self.entry_50_ema_open_offset.value)
+          )
+          item_buy_logic.append(
+            (dataframe["ema_26"].shift() - dataframe["ema_12"].shift()) > (dataframe["open"] / 100.0)
           )
 
         # Condition #61 - Rebuy mode (Long).
