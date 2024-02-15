@@ -8494,11 +8494,6 @@ class NostalgiaForInfinityX4(IStrategy):
         (0 <= sub_grind_count < max_sub_grinds)
         and (slice_profit_entry < regular_mode_sub_thresholds[sub_grind_count])
         and (
-          (last_candle["protections_long_rebuy"] == True)
-          and (last_candle["global_protections_long_pump"] == True)
-          and (last_candle["global_protections_long_dump"] == True)
-        )
-        and (
           (last_candle["close"] > (last_candle["close_max_12"] * 0.88))
           and (last_candle["close"] > (last_candle["close_max_24"] * 0.82))
           and (last_candle["close"] > (last_candle["close_max_48"] * 0.76))
