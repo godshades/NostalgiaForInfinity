@@ -68,7 +68,7 @@ class NostalgiaForInfinityX3(IStrategy):
   INTERFACE_VERSION = 3
 
   def version(self) -> str:
-    return "v13.1.143"
+    return "v13.1.160"
 
   stoploss = -0.99
 
@@ -292,7 +292,7 @@ class NostalgiaForInfinityX3(IStrategy):
     "buy_condition_44_enable": True,
     "buy_condition_45_enable": True,
     "buy_condition_46_enable": False,
-    "buy_condition_47_enable": False,
+    "buy_condition_47_enable": True,
     "buy_condition_48_enable": False,
     "buy_condition_49_enable": False,
     "buy_condition_50_enable": False,
@@ -389,23 +389,23 @@ class NostalgiaForInfinityX3(IStrategy):
   )
   entry_11_rsi_3_min = DecimalParameter(00.0, 30.0, default=2.0, decimals=0, space="buy", optimize=False)
   entry_11_rsi_3_max = DecimalParameter(30.0, 70.0, default=46.0, decimals=0, space="buy", optimize=False)
-  entry_11_rsi_3_15m_min = DecimalParameter(00.0, 36.0, default=2.0, decimals=0, space="buy", optimize=False)
+  entry_11_rsi_3_15m_min = DecimalParameter(00.0, 36.0, default=4.0, decimals=0, space="buy", optimize=False)
   entry_11_rsi_3_1h_min = DecimalParameter(00.0, 36.0, default=8.0, decimals=0, space="buy", optimize=False)
   entry_11_rsi_3_4h_min = DecimalParameter(00.0, 36.0, default=8.0, decimals=0, space="buy", optimize=False)
   entry_11_rsi_3_1d_min = DecimalParameter(00.0, 30.0, default=8.0, decimals=0, space="buy", optimize=False)
   entry_11_cti_20_1h_max = DecimalParameter(0.0, 0.99, default=0.95, decimals=2, space="buy", optimize=False)
-  entry_11_rsi_14_1h_max = DecimalParameter(50.0, 90.0, default=80.0, decimals=0, space="buy", optimize=False)
+  entry_11_rsi_14_1h_max = DecimalParameter(50.0, 90.0, default=85.0, decimals=0, space="buy", optimize=False)
   entry_11_cti_20_4h_max = DecimalParameter(0.0, 0.99, default=0.95, decimals=2, space="buy", optimize=False)
-  entry_11_rsi_14_4h_max = DecimalParameter(50.0, 90.0, default=80.0, decimals=0, space="buy", optimize=False)
+  entry_11_rsi_14_4h_max = DecimalParameter(50.0, 90.0, default=85.0, decimals=0, space="buy", optimize=False)
   entry_11_cti_20_1d_max = DecimalParameter(0.0, 0.99, default=0.95, decimals=2, space="buy", optimize=False)
-  entry_11_rsi_14_1d_max = DecimalParameter(50.0, 90.0, default=80.0, decimals=0, space="buy", optimize=False)
+  entry_11_rsi_14_1d_max = DecimalParameter(50.0, 90.0, default=85.0, decimals=0, space="buy", optimize=False)
   entry_11_r_14_1h_max = DecimalParameter(-40.0, -0.0, default=-0.0, decimals=0, space="buy", optimize=False)
   entry_11_r_14_4h_max = DecimalParameter(-40.0, -0.0, default=-0.0, decimals=0, space="buy", optimize=False)
   entry_11_r_480_1h_max = DecimalParameter(-40.0, -0.0, default=-0.0, decimals=0, space="buy", optimize=False)
   entry_11_r_480_4h_max = DecimalParameter(-40.0, -0.0, default=-0.0, decimals=0, space="buy", optimize=False)
   entry_11_rsi_14_max = DecimalParameter(20.0, 60.0, default=45.0, decimals=0, space="buy", optimize=False)
-  entry_11_cti_20_max = DecimalParameter(-0.99, -0.60, default=-0.75, decimals=2, space="buy", optimize=False)
-  entry_11_ema_open_offset = DecimalParameter(0.0200, 0.0400, default=0.0320, decimals=4, space="buy", optimize=False)
+  entry_11_cti_20_max = DecimalParameter(-0.99, -0.60, default=-0.50, decimals=2, space="buy", optimize=False)
+  entry_11_ema_open_offset = DecimalParameter(0.0200, 0.0400, default=0.0260, decimals=4, space="buy", optimize=False)
   entry_11_sma_offset = DecimalParameter(0.940, 0.988, default=0.978, decimals=3, space="buy", optimize=False)
 
   entry_12_close_max_12 = DecimalParameter(00.50, 0.95, default=0.80, decimals=2, space="buy", optimize=False)
@@ -705,13 +705,13 @@ class NostalgiaForInfinityX3(IStrategy):
   entry_47_ema_200_not_dec_1h_enabled = CategoricalParameter([True, False], default=False, space="buy", optimize=False)
   entry_47_ema_200_not_dec_4h_enabled = CategoricalParameter([True, False], default=False, space="buy", optimize=False)
   entry_47_ema_200_not_dec_1d_enabled = CategoricalParameter([True, False], default=False, space="buy", optimize=False)
-  entry_47_not_downtrend_15m_enabled = CategoricalParameter([True, False], default=False, space="buy", optimize=False)
+  entry_47_not_downtrend_15m_enabled = CategoricalParameter([True, False], default=True, space="buy", optimize=False)
   entry_47_not_downtrend_1h_enabled = CategoricalParameter([True, False], default=False, space="buy", optimize=False)
   entry_47_not_downtrend_4h_enabled = CategoricalParameter([True, False], default=False, space="buy", optimize=False)
   entry_47_not_downtrend_1d_enabled = CategoricalParameter([True, False], default=False, space="buy", optimize=False)
   entry_47_rsi_3_min = DecimalParameter(00.0, 30.0, default=6.0, decimals=0, space="buy", optimize=False)
   entry_47_rsi_3_max = DecimalParameter(30.0, 60.0, default=60.0, decimals=0, space="buy", optimize=False)
-  entry_47_rsi_3_15m_min = DecimalParameter(00.0, 30.0, default=20.0, decimals=0, space="buy", optimize=False)
+  entry_47_rsi_3_15m_min = DecimalParameter(00.0, 30.0, default=16.0, decimals=0, space="buy", optimize=False)
   entry_47_rsi_3_1h_min = DecimalParameter(00.0, 30.0, default=20.0, decimals=0, space="buy", optimize=False)
   entry_47_rsi_3_4h_min = DecimalParameter(00.0, 30.0, default=20.0, decimals=0, space="buy", optimize=False)
   entry_47_rsi_3_1d_min = DecimalParameter(00.0, 30.0, default=20.0, decimals=0, space="buy", optimize=False)
@@ -734,6 +734,7 @@ class NostalgiaForInfinityX3(IStrategy):
   entry_47_rsi_20_min = DecimalParameter(20.0, 40.0, default=24.0, decimals=0, space="buy", optimize=False)
   entry_47_rsi_20_max = DecimalParameter(26.0, 60.0, default=60.0, decimals=0, space="buy", optimize=False)
   entry_47_cti_20_max = DecimalParameter(-0.8, 0.8, default=-0.5, decimals=1, space="buy", optimize=False)
+  entry_47_ema_offset = DecimalParameter(0.980, 0.999, default=0.994, decimals=3, space="buy", optimize=False)
   entry_47_high_max_12_1h_max = DecimalParameter(00.70, 0.95, default=0.88, decimals=2, space="buy", optimize=False)
 
   entry_48_close_max_12 = DecimalParameter(00.50, 0.95, default=0.80, decimals=2, space="buy", optimize=False)
@@ -7778,6 +7779,8 @@ class NostalgiaForInfinityX3(IStrategy):
           current_exit_rate,
           current_entry_profit,
           current_exit_profit,
+          last_candle,
+          previous_candle,
           filled_orders,
           filled_entries,
           filled_exits,
@@ -7854,7 +7857,8 @@ class NostalgiaForInfinityX3(IStrategy):
             (slice_profit_entry if (sub_grind_count > 0) else profit_init_ratio)
             < (0.0 if (is_derisk and sub_grind_count == 0) else grinding_mode_2_sub_thresholds[sub_grind_count])
           )
-          and ((current_time - timedelta(hours=6) > filled_entries[-1].order_filled_utc) or (slice_profit < -0.04))
+          and (current_time - timedelta(minutes=10) > filled_entries[-1].order_filled_utc)
+          and ((current_time - timedelta(hours=12) > filled_orders[-1].order_filled_utc) or (slice_profit < -0.06))
           and self.long_grind_buy(last_candle, previous_candle, slice_profit)
         ):
           buy_amount = (
@@ -8127,6 +8131,8 @@ class NostalgiaForInfinityX3(IStrategy):
     current_exit_rate: float,
     current_entry_profit: float,
     current_exit_profit: float,
+    last_candle: Series,
+    previous_candle: Series,
     filled_orders: "Orders",
     filled_entries: "Orders",
     filled_exits: "Orders",
@@ -8166,8 +8172,28 @@ class NostalgiaForInfinityX3(IStrategy):
       current_grind_stake_profit = current_grind_stake - total_cost
 
     if (not partial_sell) and (sub_grind_count < max_sub_grinds):
-      if (0 <= sub_grind_count < max_sub_grinds) and (
-        slice_profit_entry < regular_mode_sub_thresholds[sub_grind_count]
+      if (
+        (0 <= sub_grind_count < max_sub_grinds)
+        and (slice_profit_entry < regular_mode_sub_thresholds[sub_grind_count])
+        and (
+          (last_candle["protections_long_rebuy"] == True)
+          and (last_candle["global_protections_long_pump"] == True)
+          and (last_candle["global_protections_long_dump"] == True)
+        )
+        and (
+          (last_candle["close"] > (last_candle["close_max_12"] * 0.88))
+          and (last_candle["close"] > (last_candle["close_max_24"] * 0.82))
+          and (last_candle["close"] > (last_candle["close_max_48"] * 0.76))
+          and (last_candle["btc_pct_close_max_72_5m"] < 0.03)
+          and (last_candle["btc_pct_close_max_24_5m"] < 0.03)
+        )
+        and (
+          (last_candle["rsi_3"] > 10.0)
+          and (last_candle["rsi_3_15m"] > 10.0)
+          and (last_candle["rsi_3_1h"] > 10.0)
+          and (last_candle["rsi_3_4h"] > 10.0)
+          and (last_candle["rsi_14"] < 50.0)
+        )
       ):
         buy_amount = (
           slice_amount * regular_mode_stakes[sub_grind_count] / (trade.leverage if self.is_futures_mode else 1.0)
@@ -8179,6 +8205,9 @@ class NostalgiaForInfinityX3(IStrategy):
         if buy_amount > max_stake:
           return None
         self.dp.send_msg(
+          f"Rebuy [{trade.pair}] | Rate: {current_rate} | Stake amount: {buy_amount} | Profit (stake): {profit_stake} | Profit: {(profit_ratio * 100.0):.2f}%"
+        )
+        log.info(
           f"Rebuy [{trade.pair}] | Rate: {current_rate} | Stake amount: {buy_amount} | Profit (stake): {profit_stake} | Profit: {(profit_ratio * 100.0):.2f}%"
         )
         return buy_amount
@@ -8196,6 +8225,9 @@ class NostalgiaForInfinityX3(IStrategy):
       if sell_amount > min_stake:
         grind_profit = 0.0
         self.dp.send_msg(
+          f"Rebuy de-risk [{trade.pair}] | Rate: {exit_rate} | Stake amount: {sell_amount} | Profit (stake): {profit_stake} | Profit: {(profit_ratio * 100.0):.2f}%"
+        )
+        log.info(
           f"Rebuy de-risk [{trade.pair}] | Rate: {exit_rate} | Stake amount: {sell_amount} | Profit (stake): {profit_stake} | Profit: {(profit_ratio * 100.0):.2f}%"
         )
         return -sell_amount
@@ -8363,7 +8395,19 @@ class NostalgiaForInfinityX3(IStrategy):
     for info_timeframe in self.info_timeframes:
       informative_pairs.extend([(pair, info_timeframe) for pair in pairs])
 
-    if self.config["stake_currency"] in ["USDT", "BUSD", "USDC", "DAI", "TUSD", "PAX", "USD", "EUR", "GBP"]:
+    if self.config["stake_currency"] in [
+      "USDT",
+      "BUSD",
+      "USDC",
+      "DAI",
+      "TUSD",
+      "FDUSD",
+      "PAX",
+      "USD",
+      "EUR",
+      "GBP",
+      "TRY",
+    ]:
       if ("trading_mode" in self.config) and (self.config["trading_mode"] in ["futures", "margin"]):
         btc_info_pair = f"BTC/{self.config['stake_currency']}:{self.config['stake_currency']}"
       else:
@@ -16757,6 +16801,25 @@ class NostalgiaForInfinityX3(IStrategy):
         | (dataframe["rsi_14_4h"] < 65.0)
         | (dataframe["rsi_14_1d"] < 65.0)
       )
+      & (
+        (dataframe["top_wick_pct_4h"] < 0.08)
+        | (dataframe["change_pct_1h"] > -0.01)
+        | (dataframe["change_pct_1h"].shift(12) > -0.02)
+        | (dataframe["top_wick_pct_1h"].shift(24) < 0.08)
+        | (dataframe["rsi_14_1h"] < 50.0)
+        | (dataframe["cti_20_4h"] < 0.5)
+        | (dataframe["rsi_14_4h"] < 50.0)
+        | (dataframe["rsi_14_max_6_4h"] < 70.0)
+      )
+      & (
+        (dataframe["change_pct_4h"] > -0.06)
+        | (dataframe["change_pct_4h"].shift(48) < 0.02)
+        | (dataframe["top_wick_pct_4h"].shift(48) < 0.02)
+        | (dataframe["not_downtrend_1h"])
+        | (dataframe["rsi_14_4h"].shift(48) < 65.0)
+        | (dataframe["cti_20_1d"] < 0.7)
+        | (dataframe["rsi_14_1d"] < 70.0)
+      )
     )
 
     dataframe["global_protections_long_dump"] = (
@@ -17065,6 +17128,54 @@ class NostalgiaForInfinityX3(IStrategy):
         | (dataframe["close"] > dataframe["sup_level_1d"])
         | (dataframe["ema_200_dec_48_1h"] == False)
         | (dataframe["close"] > (dataframe["high_max_6_1d"] * 0.60))
+      )
+      & (
+        (dataframe["change_pct_4h"] > -0.02)
+        | (dataframe["top_wick_pct_4h"] < 0.08)
+        | (dataframe["change_pct_4h"].shift(48) < 0.04)
+        | (dataframe["top_wick_pct_4h"].shift(48) < 0.04)
+        | (dataframe["change_pct_1h"] > -0.01)
+        | (dataframe["not_downtrend_1h"])
+        | (dataframe["is_downtrend_3_1h"] == False)
+        | (dataframe["rsi_3_1h"] > 30.0)
+        | (dataframe["cti_20_4h"] < 0.5)
+        | (dataframe["rsi_14_4h"].shift(48) < 65.0)
+      )
+      & (
+        (dataframe["change_pct_1d"] < 0.08)
+        | (dataframe["top_wick_pct_1d"] < 0.04)
+        | (dataframe["change_pct_4h"] > -0.04)
+        | (dataframe["change_pct_4h"].shift(48) < 0.04)
+        | (dataframe["rsi_3_1h"] > 30.0)
+        | (dataframe["rsi_14_1h"] < 40.0)
+        | (dataframe["rsi_14_4h"] < 40.0)
+        | (dataframe["cti_20_1d"] < 0.7)
+        | (dataframe["rsi_14_1d"] < 50.0)
+        | (dataframe["close"] > dataframe["sup_level_1h"])
+        | (dataframe["ema_200_dec_48_1h"] == False)
+        | (dataframe["close"] > (dataframe["high_max_6_1d"] * 0.80))
+      )
+      & (
+        (dataframe["not_downtrend_15m"])
+        | (dataframe["not_downtrend_1h"])
+        | (dataframe["rsi_3_15m"] > 26.0)
+        | (dataframe["rsi_3_1h"] > 30.0)
+        | (dataframe["r_480_1h"] > -80.0)
+        | (dataframe["close"] > dataframe["sup_level_1h"])
+        | (dataframe["close"] > dataframe["sup_level_4h"])
+        | (dataframe["close"] > dataframe["sup_level_1d"])
+        | (dataframe["ema_200_dec_48_1h"] == False)
+        | (dataframe["ema_200_dec_24_4h"] == False)
+      )
+      & (
+        (dataframe["top_wick_pct_4h"] < 0.08)
+        | (dataframe["not_downtrend_1h"])
+        | (dataframe["is_downtrend_3_1h"] == False)
+        | (dataframe["r_480_1h"] > -70.0)
+        | (dataframe["r_480_4h"] > -85.0)
+        | (dataframe["close"] > dataframe["sup_level_1h"])
+        | (dataframe["ema_200_dec_48_1h"] == False)
+        | (dataframe["ema_200_dec_24_4h"] == False)
       )
     )
 
@@ -27042,8 +27153,7 @@ class NostalgiaForInfinityX3(IStrategy):
           item_buy_logic.append(dataframe["cti_20"] < self.entry_47_cti_20_max.value)
           item_buy_logic.append(dataframe["chandelier_dir"].shift(1) < -0)
           item_buy_logic.append(dataframe["chandelier_dir"] > 0)
-          item_buy_logic.append(dataframe["close"] > dataframe["zlma_50"])
-          item_buy_logic.append(dataframe["ema_12"] < dataframe["ema_26"])
+          item_buy_logic.append(dataframe["ema_12"] < (dataframe["ema_26"] * self.entry_47_ema_offset.value))
           item_buy_logic.append(
             dataframe["close"] < (dataframe["high_max_12_1h"] * self.entry_47_high_max_12_1h_max.value)
           )
