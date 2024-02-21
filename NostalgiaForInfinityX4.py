@@ -68,7 +68,7 @@ class NostalgiaForInfinityX4(IStrategy):
   INTERFACE_VERSION = 3
 
   def version(self) -> str:
-    return "v14.1.204"
+    return "v14.1.206"
 
   stoploss = -0.99
 
@@ -237,7 +237,7 @@ class NostalgiaForInfinityX4(IStrategy):
   ]
 
   # Non rebuy modes
-  regular_mode_stake_multiplier_spot = [0.2, 0.25, 0.3, 0.35, 0.4, 0.5, 0.75]
+  regular_mode_stake_multiplier_spot = [0.3, 0.35, 0.4, 0.5, 0.75]
   regular_mode_rebuy_stakes_spot = [1.0, 1.0, 1.0, 1.0, 1.0]
   regular_mode_grind_1_stakes_spot = [1.0, 1.0, 1.0, 1.0, 1.0]
   regular_mode_rebuy_thresholds_spot = [-0.12, -0.12, -0.12, -0.12, -0.12]
@@ -245,7 +245,7 @@ class NostalgiaForInfinityX4(IStrategy):
   regular_mode_grind_1_profit_threshold_spot = 0.018
   regular_mode_derisk_spot = -1.25
 
-  regular_mode_stake_multiplier_futures = [0.2, 0.25, 0.3, 0.35, 0.4, 0.5, 0.75]
+  regular_mode_stake_multiplier_futures = [0.3, 0.35, 0.4, 0.5, 0.75]
   regular_mode_rebuy_stakes_futures = [1.0, 1.0, 1.0, 1.0, 1.0]
   regular_mode_grind_1_stakes_futures = [1.0, 1.0, 1.0, 1.0, 1.0]
   regular_mode_rebuy_thresholds_futures = [-0.12, -0.12, -0.12, -0.12, -0.12]
@@ -9138,6 +9138,10 @@ class NostalgiaForInfinityX4(IStrategy):
         (0 <= rebuy_sub_grind_count < max_rebuy_sub_grinds)
         and (slice_profit_entry < regular_mode_rebuy_sub_thresholds[rebuy_sub_grind_count])
         and (
+          (rebuy_distance_ratio if (rebuy_sub_grind_count > 0) else profit_init_ratio)
+          < (regular_mode_rebuy_sub_thresholds[rebuy_sub_grind_count])
+        )
+        and (
           (last_candle["close"] > (last_candle["close_max_12"] * 0.92))
           and (last_candle["close"] > (last_candle["close_max_24"] * 0.90))
           and (last_candle["close"] > (last_candle["close_max_48"] * 0.88))
@@ -9183,9 +9187,7 @@ class NostalgiaForInfinityX4(IStrategy):
         and (current_time - timedelta(minutes=10) > filled_entries[-1].order_filled_utc)
         and ((current_time - timedelta(hours=12) > filled_orders[-1].order_filled_utc) or (slice_profit < -0.06))
         and (
-          (last_candle["rsi_3_15m"] > 20.0)
-          and (last_candle["rsi_3_1h"] > 26.0)
-          and (last_candle["rsi_3_4h"] > 26.0)
+          (last_candle["rsi_3_15m"] > 20.0) and (last_candle["rsi_3_1h"] > 26.0) and (last_candle["rsi_3_4h"] > 26.0)
         )
         and self.long_grind_buy(last_candle, previous_candle, slice_profit)
       ):
