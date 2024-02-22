@@ -68,7 +68,7 @@ class NostalgiaForInfinityX3(IStrategy):
   INTERFACE_VERSION = 3
 
   def version(self) -> str:
-    return "v13.1.211"
+    return "v13.1.218"
 
   stoploss = -0.99
 
@@ -592,10 +592,10 @@ class NostalgiaForInfinityX3(IStrategy):
   entry_25_r_480_1h_max = DecimalParameter(-40.0, -0.0, default=-0.0, decimals=0, space="buy", optimize=False)
   entry_25_r_480_4h_min = DecimalParameter(-100.0, -70.0, default=-100.0, decimals=0, space="buy", optimize=False)
   entry_25_r_480_4h_max = DecimalParameter(-40.0, -0.0, default=-0.0, decimals=0, space="buy", optimize=False)
-  entry_25_rsi_14_max = DecimalParameter(20.0, 46.0, default=46.0, decimals=0, space="buy", optimize=True)
+  entry_25_rsi_14_max = DecimalParameter(20.0, 46.0, default=46.0, decimals=0, space="buy", optimize=False)
   entry_25_cti_20_max = DecimalParameter(-0.9, 0.0, default=-0.9, decimals=1, space="buy", optimize=False)
-  entry_25_ewo_50_200_min = DecimalParameter(1.0, 8.0, default=2.0, decimals=1, space="buy", optimize=True)
-  entry_25_sma_offset = DecimalParameter(0.920, 0.950, default=0.944, decimals=3, space="buy", optimize=True)
+  entry_25_ewo_50_200_min = DecimalParameter(1.0, 8.0, default=2.0, decimals=1, space="buy", optimize=False)
+  entry_25_sma_offset = DecimalParameter(0.920, 0.950, default=0.948, decimals=3, space="buy", optimize=False)
 
   entry_26_close_max_12 = DecimalParameter(00.50, 0.95, default=0.80, decimals=2, space="buy", optimize=False)
   entry_26_close_max_24 = DecimalParameter(00.50, 0.95, default=0.75, decimals=2, space="buy", optimize=False)
@@ -1379,12 +1379,10 @@ class NostalgiaForInfinityX3(IStrategy):
       "sell_profit_only" in self.config and self.config["sell_profit_only"]
     ):
       self.exit_profit_only = True
-    if "grinding_mode_2_derisk_spot" in self.config:
-      self.grinding_mode_2_derisk_spot = self.config["grinding_mode_2_derisk_spot"]
-    if "grinding_mode_2_stop_grinds_spot" in self.config:
-      self.grinding_mode_2_stop_grinds_spot = self.config["grinding_mode_2_stop_grinds_spot"]
-    if "grinding_profit_threshold" in self.config:
-      self.grinding_profit_threshold = self.config["grinding_profit_threshold"]
+    if "regular_mode_stake_multiplier_spot" in self.config:
+      self.regular_mode_stake_multiplier_spot = self.config["regular_mode_stake_multiplier_spot"]
+    if "regular_mode_stake_multiplier_futures" in self.config:
+      self.regular_mode_stake_multiplier_futures = self.config["regular_mode_stake_multiplier_futures"]
     if "max_slippage" in self.config:
       self.max_slippage = self.config["max_slippage"]
     if self.target_profit_cache is None:
@@ -18001,6 +17999,41 @@ class NostalgiaForInfinityX3(IStrategy):
         | (dataframe["r_480_1h"] < -30.0)
         | (dataframe["r_480_4h"] < -25.0)
       )
+      & (
+        (dataframe["top_wick_pct_4h"] < 0.06)
+        | (dataframe["change_pct_1h"] > -0.01)
+        | (dataframe["cti_20_4h"] < 0.5)
+        | (dataframe["rsi_14_4h"] < 70.0)
+        | (dataframe["cti_20_1d"] < 0.8)
+        | (dataframe["rsi_14_1d"] < 60.0)
+        | (dataframe["close"] < dataframe["res_hlevel_4h"])
+        | (dataframe["close"] < dataframe["res_hlevel_1d"])
+        | (dataframe["ema_200_dec_4_1d"] == False)
+      )
+      & (
+        (dataframe["change_pct_4h"] < 0.16)
+        | (dataframe["top_wick_pct_4h"] < 0.08)
+        | (dataframe["change_pct_1h"] > -0.01)
+        | (dataframe["cti_20_1h"] < 0.7)
+        | (dataframe["rsi_14_1h"] < 60.0)
+        | (dataframe["cti_20_4h"] < 0.5)
+        | (dataframe["rsi_14_4h"] < 70.0)
+        | (dataframe["close"] < dataframe["res_hlevel_1h"])
+        | (dataframe["close"] < dataframe["res_hlevel_4h"])
+      )
+      & (
+        (dataframe["change_pct_4h"] > -0.02)
+        | (dataframe["top_wick_pct_4h"] < 0.02)
+        | (dataframe["change_pct_4h"].shift(48) < 0.16)
+        | (dataframe["top_wick_pct_4h"].shift(48) < 0.08)
+        | (dataframe["change_pct_1h"] > -0.02)
+        | (dataframe["cti_20_1h"] < 0.7)
+        | (dataframe["rsi_14_1h"] < 50.0)
+        | (dataframe["cti_20_4h"] < 0.5)
+        | (dataframe["rsi_14_4h"] < 65.0)
+        | (dataframe["close"] < dataframe["res_hlevel_1h"])
+        | (dataframe["close"] < dataframe["res_hlevel_4h"])
+      )
     )
 
     dataframe["global_protections_long_dump"] = (
@@ -18491,6 +18524,13 @@ class NostalgiaForInfinityX3(IStrategy):
         | (dataframe["ema_200_dec_4_1d"] == False)
         | (dataframe["close"] > (dataframe["high_max_24_1h"] * 0.90))
         | (dataframe["hl_pct_change_6_1d"] < 0.8)
+      )
+      & (
+        (dataframe["change_pct_4h"] > -0.06)
+        | (dataframe["top_wick_pct_4h"] < 0.06)
+        | (dataframe["change_pct_4h"].shift(48) < 0.06)
+        | (dataframe["change_pct_1h"] > -0.01)
+        | (dataframe["cti_20_1d"] < 0.8)
       )
     )
 
@@ -28401,6 +28441,21 @@ class NostalgiaForInfinityX3(IStrategy):
           item_buy_logic.append(
             (dataframe["not_downtrend_1h"])
             | (dataframe["r_480_1h"] > -80.0)
+            | (dataframe["close"] > dataframe["sup_level_4h"])
+            | (dataframe["close"] > dataframe["sup_level_1d"])
+            | (dataframe["ema_200_dec_48_1h"] == False)
+            | (dataframe["ema_200_dec_24_4h"] == False)
+            | (dataframe["ema_200_dec_4_1d"] == False)
+          )
+          item_buy_logic.append(
+            (dataframe["not_downtrend_1h"])
+            | (dataframe["cti_20_1d"] < 0.8)
+            | (dataframe["rsi_14_1d"] < 50.0)
+            | (dataframe["ema_200_dec_4_1d"] == False)
+          )
+          item_buy_logic.append(
+            (dataframe["r_480_1h"] > -80.0)
+            | (dataframe["r_480_4h"] > -60.0)
             | (dataframe["close"] > dataframe["sup_level_4h"])
             | (dataframe["close"] > dataframe["sup_level_1d"])
             | (dataframe["ema_200_dec_48_1h"] == False)
