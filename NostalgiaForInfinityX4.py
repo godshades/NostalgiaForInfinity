@@ -68,7 +68,7 @@ class NostalgiaForInfinityX4(IStrategy):
   INTERFACE_VERSION = 3
 
   def version(self) -> str:
-    return "v14.1.256"
+    return "v14.1.257"
 
   stoploss = -0.99
 
@@ -11111,11 +11111,12 @@ class NostalgiaForInfinityX4(IStrategy):
         # -----------------------------------------------------------------------------------------
         item_buy_logic = []
         item_buy_logic.append(reduce(lambda x, y: x & y, item_buy_protection_list))
+        item_buy_logic.append(dataframe["not_downtrend_15m"])
+        item_buy_logic.append(dataframe["not_downtrend_1h"])
 
         # Condition #1 - Long mode bull. Uptrend.
         if index == 1:
-          # Logic
-          item_buy_logic.append(dataframe["not_downtrend_1h"])
+          # Logic    
           item_buy_logic.append(dataframe["ema_26"] > dataframe["ema_12"])
           item_buy_logic.append((dataframe["ema_26"] - dataframe["ema_12"]) > (dataframe["open"] * 0.02))
           item_buy_logic.append(
@@ -11126,7 +11127,6 @@ class NostalgiaForInfinityX4(IStrategy):
         # Condition #2 - Normal mode bull.
         if index == 2:
           # Logic
-          item_buy_logic.append(dataframe["not_downtrend_1h"])
           item_buy_logic.append(dataframe["bb40_2_delta"].gt(dataframe["close"] * 0.06))
           item_buy_logic.append(dataframe["close_delta"].gt(dataframe["close"] * 0.02))
           item_buy_logic.append(dataframe["bb40_2_tail"].lt(dataframe["bb40_2_delta"] * 0.2))
@@ -11136,7 +11136,6 @@ class NostalgiaForInfinityX4(IStrategy):
         # Condition #3 - Normal mode bull.
         if index == 3:
           # Logic
-          item_buy_logic.append(dataframe["not_downtrend_1h"])
           item_buy_logic.append(dataframe["rsi_14"] < 36.0)
           item_buy_logic.append(dataframe["ha_close"] > dataframe["ha_open"])
           item_buy_logic.append((dataframe["ema_26"] - dataframe["ema_12"]) > (dataframe["open"] * 0.020))
@@ -11144,7 +11143,6 @@ class NostalgiaForInfinityX4(IStrategy):
         # Condition #4 - Normal mode bull.
         if index == 4:
           # Logic
-          item_buy_logic.append(dataframe["not_downtrend_1h"])
           item_buy_logic.append(dataframe["ema_26"] > dataframe["ema_12"])
           item_buy_logic.append((dataframe["ema_26"] - dataframe["ema_12"]) > (dataframe["open"] * 0.018))
           item_buy_logic.append(
@@ -11155,7 +11153,6 @@ class NostalgiaForInfinityX4(IStrategy):
         # Condition #5 - Normal mode bull.
         if index == 5:
           # Logic
-          item_buy_logic.append(dataframe["not_downtrend_1h"])
           item_buy_logic.append(dataframe["ema_26"] > dataframe["ema_12"])
           item_buy_logic.append((dataframe["ema_26"] - dataframe["ema_12"]) > (dataframe["open"] * 0.03))
           item_buy_logic.append(
@@ -11166,14 +11163,12 @@ class NostalgiaForInfinityX4(IStrategy):
         # Condition #6 - Normal mode bull.
         if index == 6:
           # Logic
-          item_buy_logic.append(dataframe["not_downtrend_1h"])
           item_buy_logic.append(dataframe["close"] < (dataframe["ema_26"] * 0.94))
           item_buy_logic.append(dataframe["close"] < (dataframe["bb20_2_low"] * 0.996))
 
         # Condition #7 Normal mode.
         if index == 7:
           # Logic
-          item_buy_logic.append(dataframe["not_downtrend_1h"])
           item_buy_logic.append(dataframe["close"] < (dataframe["ema_16"] * 0.974))
           item_buy_logic.append(dataframe["ewo_50_200"] > 2.0)
           item_buy_logic.append(dataframe["rsi_14"] < 30.0)
@@ -11181,7 +11176,6 @@ class NostalgiaForInfinityX4(IStrategy):
         # Condition #8 Normal mode.
         if index == 8:
          # Logic
-          item_buy_logic.append(dataframe["not_downtrend_1h"])
           item_buy_logic.append(dataframe["close"] < (dataframe["ema_16"] * 0.944))
           item_buy_logic.append(dataframe["ewo_50_200"] < -4.0)
           item_buy_logic.append(dataframe["rsi_14"] < 30.0)
@@ -11189,7 +11183,6 @@ class NostalgiaForInfinityX4(IStrategy):
         # Condition #9 - Normal mode.
         if index == 9:
           # Logic
-          item_buy_logic.append(dataframe["not_downtrend_1h"])
           item_buy_logic.append(dataframe["ema_26_15m"] > dataframe["ema_12_15m"])
           item_buy_logic.append((dataframe["ema_26_15m"] - dataframe["ema_12_15m"]) > (dataframe["open_15m"] * 0.020))
           item_buy_logic.append(
@@ -11200,7 +11193,6 @@ class NostalgiaForInfinityX4(IStrategy):
         # Condition #10 - Normal mode (Long)
         if index == 10:
           # Logic
-          item_buy_logic.append(dataframe["not_downtrend_1h"])
           item_buy_logic.append(dataframe["ema_26"] > dataframe["ema_12"])
           item_buy_logic.append((dataframe["ema_26"] - dataframe["ema_12"]) > (dataframe["open"] * 0.016))
           item_buy_logic.append(
@@ -11210,7 +11202,6 @@ class NostalgiaForInfinityX4(IStrategy):
 
         if index == 11:
           # Logic
-          item_buy_logic.append(dataframe["not_downtrend_1h"])
           item_buy_logic.append(dataframe["rsi_14"] < self.entry_11_rsi_14_max.value)
           item_buy_logic.append(dataframe["cti_20"] < self.entry_11_cti_20_max.value)
           item_buy_logic.append(dataframe["ema_26"] > dataframe["ema_12"])
@@ -11225,7 +11216,6 @@ class NostalgiaForInfinityX4(IStrategy):
         # Condition #12 - Normal mode (Long)
         if index == 12:
           # Logic
-          item_buy_logic.append(dataframe["not_downtrend_1h"])
           item_buy_logic.append(dataframe["r_14"] < self.entry_12_r_14_max.value)
           item_buy_logic.append(dataframe["close"] < (dataframe["bb20_2_low"] * self.entry_12_bb_offset.value))
           item_buy_logic.append(dataframe["close"] < (dataframe["sma_30"] * self.entry_12_sma_offset.value))
@@ -11233,7 +11223,6 @@ class NostalgiaForInfinityX4(IStrategy):
         # Condition #21 - Pump mode bull.
         if index == 21:
           # Logic
-          item_buy_logic.append(dataframe["not_downtrend_1h"])
           item_buy_logic.append(dataframe["ema_26"] > dataframe["ema_12"])
           item_buy_logic.append((dataframe["ema_26"] - dataframe["ema_12"]) > (dataframe["open"] * 0.02))
           item_buy_logic.append(
@@ -11244,7 +11233,6 @@ class NostalgiaForInfinityX4(IStrategy):
         # Condition #22 - Pump mode bull.
         if index == 22:
           # Logic
-          item_buy_logic.append(dataframe["not_downtrend_1h"])
           item_buy_logic.append(dataframe["close"] < (dataframe["ema_16"] * 0.968))
           item_buy_logic.append(dataframe["cti_20"] < -0.9)
           item_buy_logic.append(dataframe["rsi_14"] < 50.0)
@@ -11252,7 +11240,6 @@ class NostalgiaForInfinityX4(IStrategy):
         # Condition #23 - Pump mode.
         if index == 23:
           # Logic
-          item_buy_logic.append(dataframe["not_downtrend_1h"])
           item_buy_logic.append(dataframe["ewo_50_200_15m"] > 4.2)
           item_buy_logic.append(dataframe["rsi_14_15m"].shift(1) < 30.0)
           item_buy_logic.append(dataframe["rsi_14_15m"] < 30.0)
@@ -11263,7 +11250,6 @@ class NostalgiaForInfinityX4(IStrategy):
         # Condition #24 - Pump mode (Long)
         if index == 24:
           # Logic
-          item_buy_logic.append(dataframe["not_downtrend_1h"])
           item_buy_logic.append(dataframe["rsi_14"] > self.entry_24_rsi_14_min.value)
           item_buy_logic.append(dataframe["rsi_14"] < self.entry_24_rsi_14_max.value)
           item_buy_logic.append(dataframe["cti_20"] < self.entry_24_cti_20_max.value)
@@ -11275,7 +11261,6 @@ class NostalgiaForInfinityX4(IStrategy):
         # Condition #25 - Pump mode (Long).
         if index == 25:
           # Logic
-          item_buy_logic.append(dataframe["not_downtrend_1h"])
           item_buy_logic.append(dataframe["rsi_14"] < self.entry_25_rsi_14_max.value)
           item_buy_logic.append(dataframe["cti_20"] < self.entry_25_cti_20_max.value)
           item_buy_logic.append(dataframe["ewo_50_200"] > self.entry_25_ewo_50_200_min.value)
@@ -11284,7 +11269,6 @@ class NostalgiaForInfinityX4(IStrategy):
         # Condition #26 - Pump mode (Long).
         if index == 26:
           # Logic
-          item_buy_logic.append(dataframe["not_downtrend_1h"])
           item_buy_logic.append(dataframe["close"] < (dataframe["bb20_2_low"] * self.entry_26_bb_offset.value))
           item_buy_logic.append(dataframe["ewo_50_200_1h"] > self.entry_26_ewo_50_200_1h_min.value)
           item_buy_logic.append(dataframe["ema_26"] > dataframe["ema_12"])
@@ -11298,7 +11282,6 @@ class NostalgiaForInfinityX4(IStrategy):
         # Condition #41 - Quick mode bull.
         if index == 41:
           # Logic
-          item_buy_logic.append(dataframe["not_downtrend_1h"])
           item_buy_logic.append(dataframe["bb40_2_delta"].gt(dataframe["close"] * 0.036))
           item_buy_logic.append(dataframe["close_delta"].gt(dataframe["close"] * 0.02))
           item_buy_logic.append(dataframe["bb40_2_tail"].lt(dataframe["bb40_2_delta"] * 0.4))
@@ -11309,7 +11292,6 @@ class NostalgiaForInfinityX4(IStrategy):
         # Condition #42 - Quick mode bull.
         if index == 42:
           # Logic
-          item_buy_logic.append(dataframe["not_downtrend_1h"])
           item_buy_logic.append(dataframe["ema_26"] > dataframe["ema_12"])
           item_buy_logic.append((dataframe["ema_26"] - dataframe["ema_12"]) > (dataframe["open"] * 0.018))
           item_buy_logic.append(
@@ -11321,7 +11303,6 @@ class NostalgiaForInfinityX4(IStrategy):
         # Condition #43 - Quick mode bull.
         if index == 43:
           # Logic
-          item_buy_logic.append(dataframe["not_downtrend_1h"])
           item_buy_logic.append(dataframe["close"] < (dataframe["ema_26"] * 0.938))
           item_buy_logic.append(dataframe["cti_20"] < -0.75)
           item_buy_logic.append(dataframe["r_14"] < -94.0)
@@ -11329,7 +11310,6 @@ class NostalgiaForInfinityX4(IStrategy):
         # Condition #44 - Quick mode bull.
         if index == 44:
           # Logic
-          item_buy_logic.append(dataframe["not_downtrend_1h"])
           item_buy_logic.append(dataframe["bb20_2_width_1h"] > 0.132)
           item_buy_logic.append(dataframe["cti_20"] < -0.8)
           item_buy_logic.append(dataframe["r_14"] < -90.0)
@@ -11337,7 +11317,6 @@ class NostalgiaForInfinityX4(IStrategy):
         # Condition #45 - Quick mode (Long).
         if index == 45:
          # Logic
-          item_buy_logic.append(dataframe["not_downtrend_1h"])
           item_buy_logic.append(dataframe["rsi_14"] > self.entry_45_rsi_14_min.value)
           item_buy_logic.append(dataframe["rsi_14"] < self.entry_45_rsi_14_max.value)
           item_buy_logic.append(dataframe["rsi_20"] < dataframe["rsi_20"].shift(1))
@@ -11347,7 +11326,6 @@ class NostalgiaForInfinityX4(IStrategy):
         # Condition #46 - Quick mode (Long).
         if index == 46:
           # Logic
-          item_buy_logic.append(dataframe["not_downtrend_1h"])
           item_buy_logic.append(dataframe["rsi_14"] < self.entry_46_rsi_14_max.value)
           item_buy_logic.append(dataframe["chandelier_dir_1h"].shift(1) < -0)
           item_buy_logic.append(dataframe["chandelier_dir_1h"] > 0)
@@ -11357,7 +11335,6 @@ class NostalgiaForInfinityX4(IStrategy):
         # Condition #47 - Quick mode (Long).
         if index == 47:
           # Logic
-          item_buy_logic.append(dataframe["not_downtrend_1h"])
           item_buy_logic.append(dataframe["rsi_14"] > self.entry_47_rsi_14_min.value)
           item_buy_logic.append(dataframe["rsi_14"] < self.entry_47_rsi_14_max.value)
           item_buy_logic.append(dataframe["rsi_20"] > self.entry_47_rsi_20_min.value)
@@ -11373,7 +11350,6 @@ class NostalgiaForInfinityX4(IStrategy):
         # Condition #48 - Quick mode (Long).
         if index == 48:
           # Logic
-          item_buy_logic.append(dataframe["not_downtrend_1h"])
           item_buy_logic.append(dataframe["rsi_14"] < self.entry_48_rsi_14_max.value)
           item_buy_logic.append(dataframe["cci_20"] < self.entry_48_cci_20_max.value)
           item_buy_logic.append(dataframe["close"] < (dataframe["sma_30"] * self.entry_48_sma_offset.value))
@@ -11384,7 +11360,6 @@ class NostalgiaForInfinityX4(IStrategy):
         # Condition #49 - Quick mode (Long).
         if index == 49:
           # Logic
-          item_buy_logic.append(dataframe["not_downtrend_1h"])
           item_buy_logic.append(dataframe["rsi_14"] < self.entry_49_rsi_14_max.value)
           item_buy_logic.append(
             ((dataframe["close"] - dataframe["open_min_12"]) / dataframe["open_min_12"]) > self.entry_49_inc_min.value
@@ -11393,7 +11368,6 @@ class NostalgiaForInfinityX4(IStrategy):
         # Condition #50 - Quick mode (Long)
         if index == 50:
           # Logic
-          item_buy_logic.append(dataframe["not_downtrend_1h"])
           item_buy_logic.append(dataframe["close"] < (dataframe["bb20_2_low"] * self.entry_50_bb_offset.value))
           item_buy_logic.append(dataframe["ema_26"] > dataframe["ema_12"])
           item_buy_logic.append(
@@ -11406,7 +11380,6 @@ class NostalgiaForInfinityX4(IStrategy):
         # Condition #61 - Rebuy mode (Long).
         if index == 61:
           # Logic
-          item_buy_logic.append(dataframe["not_downtrend_1h"])
           item_buy_logic.append(dataframe["rsi_14"] < 40.0)
           item_buy_logic.append(dataframe["bb40_2_delta"].gt(dataframe["close"] * 0.03))
           item_buy_logic.append(dataframe["close_delta"].gt(dataframe["close"] * 0.018))
@@ -11417,7 +11390,6 @@ class NostalgiaForInfinityX4(IStrategy):
         # Condition #81 - Long mode bull.
         if index == 81:
           # Logic
-          item_buy_logic.append(dataframe["not_downtrend_1h"])
           item_buy_logic.append(dataframe["bb40_2_delta"].gt(dataframe["close"] * 0.052))
           item_buy_logic.append(dataframe["close_delta"].gt(dataframe["close"] * 0.024))
           item_buy_logic.append(dataframe["bb40_2_tail"].lt(dataframe["bb40_2_delta"] * 0.2))
@@ -11428,7 +11400,6 @@ class NostalgiaForInfinityX4(IStrategy):
         # Condition #82 - Long mode bull.
         if index == 82:
           # Logic
-          item_buy_logic.append(dataframe["not_downtrend_1h"])
           item_buy_logic.append(dataframe["ema_26"] > dataframe["ema_12"])
           item_buy_logic.append((dataframe["ema_26"] - dataframe["ema_12"]) > (dataframe["open"] * 0.03))
           item_buy_logic.append(
@@ -11439,7 +11410,6 @@ class NostalgiaForInfinityX4(IStrategy):
         # Condition #101 - Long mode rapid
         if index == 101:
           # Logic
-          item_buy_logic.append(dataframe["not_downtrend_1h"])
           item_buy_logic.append(dataframe["rsi_14"] < 36.0)
           item_buy_logic.append(dataframe["rsi_14"] < dataframe["rsi_14"].shift(1))
           item_buy_logic.append(dataframe["close"] < (dataframe["sma_16"] * 0.956))
@@ -11448,7 +11418,6 @@ class NostalgiaForInfinityX4(IStrategy):
         # Condition #102 - Long mode rapid
         if index == 102:
           # Logic
-          item_buy_logic.append(dataframe["not_downtrend_1h"])
           item_buy_logic.append(dataframe["rsi_14"] < self.entry_46_rsi_14_max.value)
           item_buy_logic.append(dataframe["close"] < (dataframe["ema_16"] * self.entry_102_ema_offset.value))
           item_buy_logic.append(dataframe["close"] < (dataframe["bb20_2_low"] * self.entry_102_bb_offset.value))
@@ -11456,7 +11425,6 @@ class NostalgiaForInfinityX4(IStrategy):
         # Condition #103 - Long mode rapid
         if index == 103:
           # Logic
-          item_buy_logic.append(dataframe["not_downtrend_1h"])
           item_buy_logic.append(dataframe["rsi_14"] > self.entry_103_rsi_14_min.value)
           item_buy_logic.append(dataframe["close"] < (dataframe["sma_16"] * self.entry_103_sma_offset.value))
           item_buy_logic.append(dataframe["close"] < (dataframe["bb20_2_mid"] * self.entry_103_bb_offset.value))
@@ -11464,7 +11432,6 @@ class NostalgiaForInfinityX4(IStrategy):
         # Condition #104 - Long mode rapid
         if index == 104:
           # Logic
-          item_buy_logic.append(dataframe["not_downtrend_1h"])
           item_buy_logic.append(dataframe["rsi_14"] > self.entry_104_rsi_14_min.value)
           item_buy_logic.append(dataframe["rsi_14"] < self.entry_104_rsi_14_max.value)
           item_buy_logic.append(dataframe["close"] < (dataframe["sma_16"] * self.entry_104_sma_offset.value))
@@ -11472,7 +11439,6 @@ class NostalgiaForInfinityX4(IStrategy):
         # Condition #105 - Long mode rapid
         if index == 105:
           # Logic
-          item_buy_logic.append(dataframe["not_downtrend_1h"])
           item_buy_logic.append(dataframe["rsi_3"] < 60.0)
           item_buy_logic.append(dataframe["rsi_14"] < 46.0)
           item_buy_logic.append(dataframe["ema_26"] > dataframe["ema_12"])
@@ -11484,7 +11450,6 @@ class NostalgiaForInfinityX4(IStrategy):
         # Condition #106 - Rapid mode (Long).
         if index == 106:
           # Logic
-          item_buy_logic.append(dataframe["not_downtrend_1h"])
           item_buy_logic.append(dataframe["cti_20"] < self.entry_106_cti_20_max.value)
           item_buy_logic.append(dataframe["ewo_50_200"] < self.entry_106_ewo_50_200_max.value)
           item_buy_logic.append(dataframe["close"] < (dataframe["sma_30"] * self.entry_106_sma_offset.value))
@@ -11492,7 +11457,6 @@ class NostalgiaForInfinityX4(IStrategy):
         # Condition #107 - Rapid mode (Long)
         if index == 107:
           # Logic
-          item_buy_logic.append(dataframe["not_downtrend_1h"])
           item_buy_logic.append(dataframe["bb40_2_low"].shift().gt(0.0))
           item_buy_logic.append(
             dataframe["bb40_2_delta"].gt(dataframe["close"] * self.entry_107_bb40_bbdelta_close.value)
@@ -11511,7 +11475,6 @@ class NostalgiaForInfinityX4(IStrategy):
         # Condition #108 - Rapid mode (Long)
         if index == 108:
           # Logic
-          item_buy_logic.append(dataframe["not_downtrend_1h"])
           item_buy_logic.append(dataframe["rsi_14"] > self.entry_108_rsi_14_min.value)
           item_buy_logic.append(dataframe["cti_20"] < self.entry_108_cti_20_max.value)
           item_buy_logic.append(dataframe["r_14"] < self.entry_108_r_14_max.value)
@@ -11528,7 +11491,6 @@ class NostalgiaForInfinityX4(IStrategy):
         # Condition #109 - Rapid mode (Long)
         if index == 109:
           # Logic
-          item_buy_logic.append(dataframe["not_downtrend_1h"])
           item_buy_logic.append(dataframe["cti_20"] < self.entry_109_cti_20_max.value)
           item_buy_logic.append(dataframe["r_14"] < self.entry_109_r_14_max.value)
           item_buy_logic.append(dataframe["close"] < (dataframe["bb20_2_low"] * self.entry_109_bb_offset.value))
@@ -11537,7 +11499,6 @@ class NostalgiaForInfinityX4(IStrategy):
         # Condition #110 - Rapid mode (Long).
         if index == 110:
           # Logic
-          item_buy_logic.append(dataframe["not_downtrend_1h"])
           item_buy_logic.append(dataframe["cti_20"] < self.entry_110_cti_20_max.value)
           item_buy_logic.append(dataframe["ewo_50_200"] < self.entry_110_ewo_50_200_max.value)
           item_buy_logic.append(dataframe["close"] < (dataframe["ema_20"] * self.entry_110_ema_offset.value))
