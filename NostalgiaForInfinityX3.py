@@ -68,7 +68,7 @@ class NostalgiaForInfinityX3(IStrategy):
   INTERFACE_VERSION = 3
 
   def version(self) -> str:
-    return "v13.1.257"
+    return "v13.1.260"
 
   stoploss = -0.99
 
@@ -10222,7 +10222,7 @@ class NostalgiaForInfinityX3(IStrategy):
 
     # ZL MA
     informative_1h["zlma_50"] = pta.zlma(informative_1h["close"], length=50, matype="linreg", offset=0)
-    informative_1h["zlma_50"].fillna(0.0, inplace=True)
+    informative_1h.fillna({"zlma_50": 0.0}, inplace=True)
 
     informative_1h["zlma_50_dec"] = (informative_1h["zlma_50"].isnull()) | (
       informative_1h["zlma_50"] <= informative_1h["zlma_50"].shift(1)
@@ -18622,6 +18622,28 @@ class NostalgiaForInfinityX3(IStrategy):
         | (dataframe["close"] < dataframe["res_hlevel_1d"])
         | (dataframe["hl_pct_change_48_1h"] < 0.7)
       )
+      & (
+        (dataframe["change_pct_1d"] < 0.12)
+        | (dataframe["top_wick_pct_1d"] < 0.12)
+        | (dataframe["change_pct_1h"] > -0.01)
+        | (dataframe["cti_20_4h"] < 0.5)
+        | (dataframe["rsi_14_4h"] < 70.0)
+        | (dataframe["rsi_14_max_6_4h"] < 80.0)
+        | (dataframe["rsi_14_1d"] < 70.0)
+        | (dataframe["close"] < dataframe["res_hlevel_4h"])
+        | (dataframe["close"] < dataframe["res_hlevel_1d"])
+      )
+      & (
+        (dataframe["change_pct_4h"] < 0.05)
+        | (dataframe["change_pct_1h"] > -0.05)
+        | (dataframe["cti_20_4h"] < 0.8)
+        | (dataframe["rsi_14_4h"] < 70.0)
+        | (dataframe["r_480_1h"] < -30.0)
+        | (dataframe["r_480_4h"] < -10.0)
+        | (dataframe["close"] < dataframe["res_hlevel_4h"])
+        | (dataframe["close"] < dataframe["res_hlevel_1d"])
+        | (dataframe["hl_pct_change_6_1d"] < 0.7)
+      )
     )
 
     dataframe["global_protections_long_dump"] = (
@@ -25488,6 +25510,8 @@ class NostalgiaForInfinityX3(IStrategy):
             item_buy_logic.append(dataframe["not_downtrend_4h"])
           if self.entry_25_not_downtrend_1d_enabled.value:
             item_buy_logic.append(dataframe["not_downtrend_1d"])
+
+          item_buy_logic.append((dataframe["r_480_4h"] > -70.0) | (dataframe["ema_200_dec_24_4h"] == False))
 
           # Logic
           item_buy_logic.append(dataframe["rsi_14"] < self.entry_25_rsi_14_max.value)
