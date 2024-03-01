@@ -68,7 +68,7 @@ class NostalgiaForInfinityX4(IStrategy):
   INTERFACE_VERSION = 3
 
   def version(self) -> str:
-    return "v14.1.260"
+    return "v14.1.265"
 
   stoploss = -0.99
 
@@ -109,7 +109,7 @@ class NostalgiaForInfinityX4(IStrategy):
   startup_candle_count: int = 800
 
   # Normal mode tags
-  normal_mode_tags = ["force_entry", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12"]
+  normal_mode_tags = ["force_entry", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13"]
   # Pump mode tags
   pump_mode_tags = ["21", "22", "23", "24", "25", "26"]
   # Quick mode tags
@@ -382,6 +382,7 @@ class NostalgiaForInfinityX4(IStrategy):
     "buy_condition_10_enable": True,
     "buy_condition_11_enable": True,
     "buy_condition_12_enable": True,
+    "buy_condition_13_enable": True,
     "buy_condition_21_enable": True,
     "buy_condition_22_enable": True,
     "buy_condition_23_enable": True,
@@ -8345,14 +8346,17 @@ class NostalgiaForInfinityX4(IStrategy):
     """
     total_stake = 0.0
     total_profit = 0.0
+    total_amount = 0.0
     for entry in filled_entries:
       entry_stake = entry.safe_filled * entry.safe_price * (1 + trade.fee_open)
       total_stake += entry_stake
       total_profit -= entry_stake
+      total_amount += entry.safe_filled
     for exit in filled_exits:
       exit_stake = exit.safe_filled * exit.safe_price * (1 - trade.fee_close)
       total_profit += exit_stake
-    current_stake = trade.amount * exit_rate * (1 - trade.fee_close)
+      total_amount -= exit.safe_filled
+    current_stake = total_amount * exit_rate * (1 - trade.fee_close)
     if self.is_futures_mode:
       if trade.is_short:
         current_stake -= trade.funding_fees
@@ -8797,7 +8801,7 @@ class NostalgiaForInfinityX4(IStrategy):
     )
 
     current_stake_amount = trade.amount * current_rate
-    is_derisk = trade.amount < (filled_entries[0].safe_filled * 0.99)
+    is_derisk = trade.amount < (filled_entries[0].safe_filled * 0.95)
     is_derisk_calc = False
 
     # Rebuy mode
@@ -11219,6 +11223,16 @@ class NostalgiaForInfinityX4(IStrategy):
           item_buy_logic.append(dataframe["r_14"] < self.entry_12_r_14_max.value)
           item_buy_logic.append(dataframe["close"] < (dataframe["bb20_2_low"] * self.entry_12_bb_offset.value))
           item_buy_logic.append(dataframe["close"] < (dataframe["sma_30"] * self.entry_12_sma_offset.value))
+
+        # Condition #13 - Normal mode (Long)
+        if index == 13:
+          # Logic
+          item_buy_logic.append(dataframe["ema_26"] > dataframe["ema_12"])
+          item_buy_logic.append((dataframe["ema_26"] - dataframe["ema_12"]) > (dataframe["open"] * 0.0145))
+          item_buy_logic.append(
+            (dataframe["ema_26"].shift() - dataframe["ema_12"].shift()) > (dataframe["open"] / 100)
+          )
+          item_buy_logic.append(dataframe["close"] < (dataframe["bb20_2_low"] * 0.994))
 
         # Condition #21 - Pump mode bull.
         if index == 21:

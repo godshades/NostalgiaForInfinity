@@ -68,7 +68,7 @@ class NostalgiaForInfinityX3(IStrategy):
   INTERFACE_VERSION = 3
 
   def version(self) -> str:
-    return "v13.1.260"
+    return "v13.1.265"
 
   stoploss = -0.99
 
@@ -109,7 +109,7 @@ class NostalgiaForInfinityX3(IStrategy):
   startup_candle_count: int = 800
 
   # Normal mode tags
-  normal_mode_tags = ["force_entry", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12"]
+  normal_mode_tags = ["force_entry", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13"]
   # Pump mode tags
   pump_mode_tags = ["21", "22", "23", "24", "25", "26"]
   # Quick mode tags
@@ -375,6 +375,7 @@ class NostalgiaForInfinityX3(IStrategy):
     "buy_condition_10_enable": True,
     "buy_condition_11_enable": True,
     "buy_condition_12_enable": True,
+    "buy_condition_13_enable": False,
     "buy_condition_21_enable": True,
     "buy_condition_22_enable": True,
     "buy_condition_23_enable": True,
@@ -8048,14 +8049,17 @@ class NostalgiaForInfinityX3(IStrategy):
     """
     total_stake = 0.0
     total_profit = 0.0
+    total_amount = 0.0
     for entry in filled_entries:
       entry_stake = entry.safe_filled * entry.safe_price * (1 + trade.fee_open)
       total_stake += entry_stake
       total_profit -= entry_stake
+      total_amount += entry.safe_filled
     for exit in filled_exits:
       exit_stake = exit.safe_filled * exit.safe_price * (1 - trade.fee_close)
       total_profit += exit_stake
-    current_stake = trade.amount * exit_rate * (1 - trade.fee_close)
+      total_amount -= exit.safe_filled
+    current_stake = total_amount * exit_rate * (1 - trade.fee_close)
     if self.is_futures_mode:
       if trade.is_short:
         current_stake -= trade.funding_fees
@@ -8473,7 +8477,7 @@ class NostalgiaForInfinityX3(IStrategy):
     )
 
     current_stake_amount = trade.amount * current_rate
-    is_derisk = trade.amount < (filled_entries[0].safe_filled * 0.99)
+    is_derisk = trade.amount < (filled_entries[0].safe_filled * 0.95)
     is_derisk_calc = False
 
     # Rebuy mode
@@ -18644,6 +18648,16 @@ class NostalgiaForInfinityX3(IStrategy):
         | (dataframe["close"] < dataframe["res_hlevel_1d"])
         | (dataframe["hl_pct_change_6_1d"] < 0.7)
       )
+      & (
+        (dataframe["change_pct_1h"] > -0.02)
+        | (dataframe["rsi_3_15m"] > 26.0)
+        | (dataframe["rsi_14_1h"] < 50.0)
+        | (dataframe["rsi_14_4h"] < 80.0)
+        | (dataframe["close"] < dataframe["res_hlevel_4h"])
+        | (dataframe["close"] < dataframe["res_hlevel_1d"])
+        | (dataframe["ema_200_dec_4_1d"] == False)
+        | (dataframe["hl_pct_change_48_1h"] < 0.7)
+      )
     )
 
     dataframe["global_protections_long_dump"] = (
@@ -19175,6 +19189,25 @@ class NostalgiaForInfinityX3(IStrategy):
         | (dataframe["close"] > dataframe["sup_level_4h"])
         | (dataframe["close"] > dataframe["sup_level_1d"])
         | (dataframe["close"] > (dataframe["high_max_6_1d"] * 0.80))
+      )
+      & (
+        (dataframe["change_pct_1h"] > -0.02)
+        | (dataframe["not_downtrend_1h"])
+        | (dataframe["rsi_3_1h"] > 26.0)
+        | (dataframe["rsi_14_4h"] < 50.0)
+        | (dataframe["r_480_4h"] > -75.0)
+        | (dataframe["close"] > dataframe["sup_level_1h"])
+        | (dataframe["ema_200_dec_24_4h"] == False)
+        | (dataframe["ema_200_dec_4_1d"] == False)
+      )
+      & (
+        (dataframe["not_downtrend_15m"])
+        | (dataframe["rsi_14_1h"] < 70.0)
+        | (dataframe["rsi_14_4h"] < 60.0)
+        | (dataframe["close"] < dataframe["res_hlevel_1h"])
+        | (dataframe["ema_200_dec_48_1h"] == False)
+        | (dataframe["ema_200_dec_24_4h"] == False)
+        | (dataframe["ema_200_dec_4_1d"] == False)
       )
     )
 
@@ -23281,6 +23314,66 @@ class NostalgiaForInfinityX3(IStrategy):
           item_buy_logic.append(dataframe["r_14"] < self.entry_12_r_14_max.value)
           item_buy_logic.append(dataframe["close"] < (dataframe["bb20_2_low"] * self.entry_12_bb_offset.value))
           item_buy_logic.append(dataframe["close"] < (dataframe["sma_30"] * self.entry_12_sma_offset.value))
+
+        # Condition #13 - Normal mode (Long)
+        if index == 13:
+          # Protections
+          # item_buy_logic.append(dataframe["global_protections_long_pump"] == True)
+          # item_buy_logic.append(dataframe["global_protections_long_dump"] == True)
+          item_buy_logic.append(dataframe["btc_pct_close_max_24_5m"] < 0.06)
+          item_buy_logic.append(dataframe["btc_pct_close_max_72_5m"] < 0.06)
+          # item_buy_logic.append(dataframe["tpct_change_0"] > 0.032)
+          # item_buy_logic.append(dataframe["tpct_change_2"] > 0.06)
+          item_buy_logic.append(dataframe["close"] > (dataframe["close_max_12"] * 0.84))
+          item_buy_logic.append(dataframe["close"] > (dataframe["close_max_24"] * 0.80))
+          item_buy_logic.append(dataframe["close"] > (dataframe["close_max_48"] * 0.75))
+          item_buy_logic.append(dataframe["close"] > (dataframe["high_max_24_1h"] * 0.60))
+          # item_buy_logic.append(dataframe["close"] > (dataframe["high_max_24_4h"] * 0.50))
+          # item_buy_logic.append(dataframe["close"] > (dataframe["high_max_6_1d"] * 0.50))
+          item_buy_logic.append(dataframe["hl_pct_change_6_1h"] < 0.50)
+          item_buy_logic.append(dataframe["hl_pct_change_12_1h"] < 0.60)
+          item_buy_logic.append(dataframe["hl_pct_change_24_1h"] < 0.70)
+          item_buy_logic.append(dataframe["hl_pct_change_48_1h"] < 0.80)
+          item_buy_logic.append(dataframe["num_empty_288"] < allowed_empty_candles)
+
+          item_buy_logic.append(dataframe["rsi_3"] >= 6.0)
+          item_buy_logic.append(dataframe["rsi_3"] <= 50.0)
+          item_buy_logic.append(dataframe["rsi_3_15m"] >= 6.0)
+          item_buy_logic.append(dataframe["rsi_3_1h"] >= 6.0)
+          item_buy_logic.append(dataframe["rsi_3_4h"] >= 8.0)
+          item_buy_logic.append(dataframe["rsi_3_1d"] >= 8.0)
+          item_buy_logic.append(dataframe["cti_20_1h"] <= 0.90)
+          item_buy_logic.append(dataframe["rsi_14_1h"] <= 80.0)
+          item_buy_logic.append(dataframe["cti_20_4h"] <= 0.90)
+          item_buy_logic.append(dataframe["rsi_14_4h"] <= 80.0)
+          item_buy_logic.append(dataframe["cti_20_1d"] <= 0.90)
+          item_buy_logic.append(dataframe["rsi_14_1d"] <= 80.0)
+          # item_buy_logic.append(dataframe["r_14_1h"] >= -100.0)
+          # item_buy_logic.append(dataframe["r_14_1h"] <= -0.0)
+          # item_buy_logic.append(dataframe["r_14_4h"] >= -100.0)
+          # item_buy_logic.append(dataframe["r_14_4h"] <= -0.0)
+          # item_buy_logic.append(dataframe["r_480_1h"] >= -100.0)
+          # item_buy_logic.append(dataframe["r_480_1h"] <= -0.0)
+          # item_buy_logic.append(dataframe["r_480_4h"] >= -100.0)
+          # item_buy_logic.append(dataframe["r_480_4h"] <= -0.0)
+
+          item_buy_logic.append(dataframe["close"] > (dataframe["sup_level_1h"] * 0.8))
+          item_buy_logic.append(dataframe["close"] < (dataframe["res3_1d"] * 1.6))
+          item_buy_protection_list.append(dataframe["sma_200_1h"] > dataframe["sma_200_1h"].shift(48))
+
+          item_buy_logic.append(
+            (dataframe["r_480_4h"] > -75.0)
+            | (dataframe["ema_200_dec_24_4h"] == False)
+            | (dataframe["ema_200_dec_4_1d"] == False)
+          )
+
+          # Logic
+          item_buy_logic.append(dataframe["ema_26"] > dataframe["ema_12"])
+          item_buy_logic.append((dataframe["ema_26"] - dataframe["ema_12"]) > (dataframe["open"] * 0.0145))
+          item_buy_logic.append(
+            (dataframe["ema_26"].shift() - dataframe["ema_12"].shift()) > (dataframe["open"] / 100)
+          )
+          item_buy_logic.append(dataframe["close"] < (dataframe["bb20_2_low"] * 0.994))
 
         # Condition #21 - Pump mode bull.
         if index == 21:
