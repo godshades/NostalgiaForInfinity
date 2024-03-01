@@ -74,10 +74,10 @@ class NostalgiaForInfinityX4_S(IStrategy):
   can_short = True
 
   # Trailing stoploss (not used)
-  trailing_stop = False
+  trailing_stop = True
   trailing_only_offset_is_reached = True
-  trailing_stop_positive = 0.01
-  trailing_stop_positive_offset = 0.03
+  trailing_stop_positive = 0.05
+  trailing_stop_positive_offset = 0.1
 
   use_custom_stoploss = False
 
