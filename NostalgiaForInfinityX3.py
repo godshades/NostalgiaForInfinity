@@ -68,7 +68,7 @@ class NostalgiaForInfinityX3(IStrategy):
   INTERFACE_VERSION = 3
 
   def version(self) -> str:
-    return "v13.1.265"
+    return "v13.1.270"
 
   stoploss = -0.99
 
@@ -204,8 +204,10 @@ class NostalgiaForInfinityX3(IStrategy):
   grind_2_stakes_spot = [
     [0.10, 0.15, 0.20, 0.25, 0.30],
     [0.15, 0.20, 0.25, 0.30, 0.35],
+    [0.20, 0.25, 0.30, 0.35, 0.40],
   ]
   grind_2_sub_thresholds_spot = [
+    [-0.08, -0.10, -0.12, -0.14, -0.16],
     [-0.08, -0.10, -0.12, -0.14, -0.16],
     [-0.08, -0.10, -0.12, -0.14, -0.16],
   ]
@@ -215,8 +217,10 @@ class NostalgiaForInfinityX3(IStrategy):
   grind_2_stakes_futures = [
     [0.10, 0.15, 0.20, 0.25, 0.30],
     [0.15, 0.20, 0.25, 0.30, 0.35],
+    [0.20, 0.25, 0.30, 0.35, 0.40],
   ]
   grind_2_sub_thresholds_futures = [
+    [-0.08, -0.10, -0.12, -0.14, -0.16],
     [-0.08, -0.10, -0.12, -0.14, -0.16],
     [-0.08, -0.10, -0.12, -0.14, -0.16],
   ]
@@ -226,8 +230,10 @@ class NostalgiaForInfinityX3(IStrategy):
   grind_3_stakes_spot = [
     [0.10, 0.10, 0.10, 0.10, 0.10, 0.10, 0.10, 0.10, 0.10, 0.10],
     [0.15, 0.15, 0.15, 0.15, 0.15, 0.15, 0.15, 0.15, 0.15, 0.15],
+    [0.20, 0.20, 0.20, 0.20, 0.20, 0.20, 0.20, 0.20, 0.20, 0.20],
   ]
   grind_3_sub_thresholds_spot = [
+    [-0.08, -0.08, -0.08, -0.08, -0.08, -0.08, -0.08, -0.08, -0.08, -0.08],
     [-0.08, -0.08, -0.08, -0.08, -0.08, -0.08, -0.08, -0.08, -0.08, -0.08],
     [-0.08, -0.08, -0.08, -0.08, -0.08, -0.08, -0.08, -0.08, -0.08, -0.08],
   ]
@@ -237,8 +243,10 @@ class NostalgiaForInfinityX3(IStrategy):
   grind_3_stakes_futures = [
     [0.10, 0.10, 0.10, 0.10, 0.10, 0.10, 0.10, 0.10, 0.10, 0.10],
     [0.15, 0.15, 0.15, 0.15, 0.15, 0.15, 0.15, 0.15, 0.15, 0.15],
+    [0.20, 0.20, 0.20, 0.20, 0.20, 0.20, 0.20, 0.20, 0.20, 0.20],
   ]
   grind_3_sub_thresholds_futures = [
+    [-0.08, -0.08, -0.08, -0.08, -0.08, -0.08, -0.08, -0.08, -0.08, -0.08],
     [-0.08, -0.08, -0.08, -0.08, -0.08, -0.08, -0.08, -0.08, -0.08, -0.08],
     [-0.08, -0.08, -0.08, -0.08, -0.08, -0.08, -0.08, -0.08, -0.08, -0.08],
   ]
@@ -274,9 +282,11 @@ class NostalgiaForInfinityX3(IStrategy):
   regular_mode_grind_1_profit_threshold_spot = 0.018
   regular_mode_grind_2_stakes_spot = [
     [0.15, 0.20, 0.25, 0.30, 0.35],
-    [0.20, 0.25, 0.30, 0.45, 0.50],
+    [0.20, 0.25, 0.30, 0.35, 0.40],
+    [0.30, 0.35, 0.40, 0.45, 0.50],
   ]
   regular_mode_grind_2_thresholds_spot = [
+    [-0.04, -0.08, -0.10, -0.12, -0.14, -0.16],
     [-0.04, -0.08, -0.10, -0.12, -0.14, -0.16],
     [-0.04, -0.08, -0.10, -0.12, -0.14, -0.16],
   ]
@@ -284,8 +294,10 @@ class NostalgiaForInfinityX3(IStrategy):
   regular_mode_grind_3_stakes_spot = [
     [0.20, 0.20, 0.20, 0.20, 0.20, 0.20],
     [0.30, 0.30, 0.30, 0.30, 0.30, 0.30],
+    [0.40, 0.40, 0.40, 0.40, 0.40, 0.40],
   ]
   regular_mode_grind_3_thresholds_spot = [
+    [-0.03, -0.06, -0.08, -0.10, -0.12, -0.14],
     [-0.03, -0.08, -0.10, -0.12, -0.14, -0.16],
     [-0.03, -0.08, -0.10, -0.12, -0.14, -0.16],
   ]
@@ -319,9 +331,11 @@ class NostalgiaForInfinityX3(IStrategy):
   regular_mode_grind_1_profit_threshold_futures = 0.018
   regular_mode_grind_2_stakes_futures = [
     [0.15, 0.20, 0.25, 0.30, 0.35],
-    [0.20, 0.25, 0.30, 0.45, 0.50],
+    [0.20, 0.25, 0.30, 0.35, 0.40],
+    [0.30, 0.35, 0.40, 0.45, 0.50],
   ]
   regular_mode_grind_2_thresholds_futures = [
+    [-0.04, -0.08, -0.10, -0.12, -0.14, -0.16],
     [-0.04, -0.08, -0.10, -0.12, -0.14, -0.16],
     [-0.04, -0.08, -0.10, -0.12, -0.14, -0.16],
   ]
@@ -329,8 +343,10 @@ class NostalgiaForInfinityX3(IStrategy):
   regular_mode_grind_3_stakes_futures = [
     [0.20, 0.20, 0.20, 0.20, 0.20, 0.20],
     [0.30, 0.30, 0.30, 0.30, 0.30, 0.30],
+    [0.40, 0.40, 0.40, 0.40, 0.40, 0.40],
   ]
   regular_mode_grind_3_thresholds_futures = [
+    [-0.03, -0.06, -0.08, -0.10, -0.12, -0.14],
     [-0.03, -0.08, -0.10, -0.12, -0.14, -0.16],
     [-0.03, -0.08, -0.10, -0.12, -0.14, -0.16],
   ]
@@ -18658,6 +18674,16 @@ class NostalgiaForInfinityX3(IStrategy):
         | (dataframe["ema_200_dec_4_1d"] == False)
         | (dataframe["hl_pct_change_48_1h"] < 0.7)
       )
+      & (
+        (dataframe["change_pct_1d"] > -0.04)
+        | (dataframe["change_pct_1d"].shift(288) < 0.12)
+        | (dataframe["not_downtrend_1h"])
+        | (dataframe["rsi_14_4h"] < 50.0)
+        | (dataframe["rsi_14_1d"] < 50.0)
+        | (dataframe["r_480_4h"] < -30.0)
+        | (dataframe["close"] > dataframe["sup_level_1h"])
+        | (dataframe["close"] > dataframe["sup_level_4h"])
+      )
     )
 
     dataframe["global_protections_long_dump"] = (
@@ -19208,6 +19234,37 @@ class NostalgiaForInfinityX3(IStrategy):
         | (dataframe["ema_200_dec_48_1h"] == False)
         | (dataframe["ema_200_dec_24_4h"] == False)
         | (dataframe["ema_200_dec_4_1d"] == False)
+      )
+      & (
+        (dataframe["change_pct_1d"] > -0.06)
+        | (dataframe["not_downtrend_1h"])
+        | (dataframe["rsi_3_1h"] > 16.0)
+        | (dataframe["cti_20_1d"] < 0.5)
+        | (dataframe["rsi_14_1d"] < 50.0)
+        | (dataframe["close"] > dataframe["sup_level_1h"])
+        | (dataframe["close"] > dataframe["sup_level_4h"])
+        | (dataframe["close"] > dataframe["sup_level_1d"])
+        | (dataframe["hl_pct_change_6_1d"] < 0.7)
+      )
+      & (
+        (dataframe["not_downtrend_1d"])
+        | (dataframe["rsi_3_15m"] > 16.0)
+        | (dataframe["rsi_14_1h"] < 46.0)
+        | (dataframe["r_480_4h"] > -80.0)
+        | (dataframe["close"] > dataframe["sup_level_1h"])
+        | (dataframe["close"] > dataframe["sup_level_4h"])
+        | (dataframe["close"] > dataframe["sup_level_1d"])
+        | (dataframe["ema_200_dec_24_4h"] == False)
+        | (dataframe["ema_200_dec_4_1d"] == False)
+      )
+      & (
+        (dataframe["change_pct_4h"] < 0.16)
+        | (dataframe["top_wick_pct_4h"] < 0.04)
+        | (dataframe["change_pct_1h"] > -0.06)
+        | (dataframe["rsi_14_4h"] < 70.0)
+        | (dataframe["close"] < dataframe["res_hlevel_4h"])
+        | (dataframe["ema_200_dec_4_1d"] == False)
+        | (dataframe["close"] > (dataframe["high_max_12_1d"] * 0.75))
       )
     )
 
