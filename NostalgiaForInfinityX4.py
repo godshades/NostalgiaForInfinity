@@ -68,7 +68,7 @@ class NostalgiaForInfinityX4(IStrategy):
   INTERFACE_VERSION = 3
 
   def version(self) -> str:
-    return "v14.1.280"
+    return "v14.1.293"
 
   stoploss = -0.99
 
@@ -263,12 +263,16 @@ class NostalgiaForInfinityX4(IStrategy):
   regular_mode_stake_multiplier_futures = [0.5, 0.75]
 
   regular_mode_rebuy_stakes_spot = [
+    [0.20, 0.20, 0.20, 0.20, 0.20],
+    [0.30, 0.30, 0.30, 0.30, 0.30],
     [0.40, 0.40, 0.40, 0.40, 0.40],
     [0.50, 0.50, 0.50, 0.50, 0.50],
     [0.75, 0.75, 0.75, 0.75],
     [1.0, 1.0, 1.0],
   ]
   regular_mode_rebuy_thresholds_spot = [
+    [-0.12, -0.12, -0.12, -0.12, -0.12],
+    [-0.12, -0.12, -0.12, -0.12, -0.12],
     [-0.12, -0.12, -0.12, -0.12, -0.12],
     [-0.12, -0.12, -0.12, -0.12, -0.12],
     [-0.12, -0.12, -0.12, -0.12],
@@ -312,12 +316,16 @@ class NostalgiaForInfinityX4(IStrategy):
   regular_mode_derisk_spot = -0.80
 
   regular_mode_rebuy_stakes_futures = [
+    [0.20, 0.20, 0.20, 0.20, 0.20],
+    [0.30, 0.30, 0.30, 0.30, 0.30],
     [0.40, 0.40, 0.40, 0.40, 0.40],
     [0.50, 0.50, 0.50, 0.50, 0.50],
     [0.75, 0.75, 0.75, 0.75],
     [1.0, 1.0, 1.0],
   ]
   regular_mode_rebuy_thresholds_futures = [
+    [-0.12, -0.12, -0.12, -0.12, -0.12],
+    [-0.12, -0.12, -0.12, -0.12, -0.12],
     [-0.12, -0.12, -0.12, -0.12, -0.12],
     [-0.12, -0.12, -0.12, -0.12, -0.12],
     [-0.12, -0.12, -0.12, -0.12],
@@ -8362,17 +8370,14 @@ class NostalgiaForInfinityX4(IStrategy):
     """
     total_stake = 0.0
     total_profit = 0.0
-    total_amount = 0.0
     for entry in filled_entries:
       entry_stake = entry.safe_filled * entry.safe_price * (1 + trade.fee_open)
       total_stake += entry_stake
       total_profit -= entry_stake
-      total_amount += entry.safe_filled
     for exit in filled_exits:
       exit_stake = exit.safe_filled * exit.safe_price * (1 - trade.fee_close)
       total_profit += exit_stake
-      total_amount -= exit.safe_filled
-    current_stake = total_amount * exit_rate * (1 - trade.fee_close)
+    current_stake = trade.amount * exit_rate * (1 - trade.fee_close)
     if self.is_futures_mode:
       if trade.is_short:
         current_stake -= trade.funding_fees
@@ -11132,7 +11137,6 @@ class NostalgiaForInfinityX4(IStrategy):
         item_buy_logic = []
         item_buy_logic.append(reduce(lambda x, y: x & y, item_buy_protection_list))
         item_buy_logic.append(dataframe["not_downtrend_15m"])
-        item_buy_logic.append(dataframe["not_downtrend_1h"])
 
         # Condition #1 - Long mode bull. Uptrend.
         if index == 1:
@@ -11244,7 +11248,7 @@ class NostalgiaForInfinityX4(IStrategy):
         if index == 13:
           # Logic
           item_buy_logic.append(dataframe["ema_26"] > dataframe["ema_12"])
-          item_buy_logic.append((dataframe["ema_26"] - dataframe["ema_12"]) > (dataframe["open"] * 0.0145))
+          item_buy_logic.append((dataframe["ema_26"] - dataframe["ema_12"]) > (dataframe["open"] * 0.0150))
           item_buy_logic.append(
             (dataframe["ema_26"].shift() - dataframe["ema_12"].shift()) > (dataframe["open"] / 100)
           )
