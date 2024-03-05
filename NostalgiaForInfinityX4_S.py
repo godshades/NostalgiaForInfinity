@@ -1608,6 +1608,40 @@ class NostalgiaForInfinityX4_S(IStrategy):
     init_profit_ratio = total_profit / filled_entries[0].cost
     return total_profit, total_profit_ratio, current_profit_ratio, init_profit_ratio
 
+  def custom_stake_amount(
+    self,
+    pair: str,
+    current_time: datetime,
+    current_rate: float,
+    proposed_stake: float,
+    min_stake: Optional[float],
+    max_stake: float,
+    leverage: float,
+    entry_tag: Optional[str],
+    side: str,
+    **kwargs,
+  ) -> float:
+    if self.position_adjustment_enable == True:
+      enter_tags = entry_tag.split()
+      # Rebuy mode
+      if all(c in self.long_rebuy_mode_tags for c in enter_tags):
+        stake_multiplier = self.rebuy_mode_stake_multiplier
+        # Low stakes, on Binance mostly
+        if (proposed_stake * self.rebuy_mode_stake_multiplier) < min_stake:
+          stake_multiplier = self.rebuy_mode_stake_multiplier_alt
+        return proposed_stake * stake_multiplier
+      else:
+        for _, item in enumerate(
+          self.regular_mode_stake_multiplier_futures
+          if self.is_futures_mode
+          else self.regular_mode_stake_multiplier_spot
+        ):
+          if (proposed_stake * item) > min_stake:
+            stake_multiplier = item
+            return proposed_stake * stake_multiplier
+
+    return proposed_stake
+
   def informative_pairs(self):
     # get access to all pairs available in whitelist.
     pairs = self.dp.current_whitelist()
