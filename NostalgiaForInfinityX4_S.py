@@ -3178,20 +3178,6 @@ class NostalgiaForInfinityX4_S(IStrategy):
 
     return hold_trade
 
-  @property
-  def protections(self):
-      return [
-          {
-              "method": "StoplossGuard",
-              "lookback_period_candles": 12,
-              "trade_limit": 3,
-              "stop_duration_candles": 4,
-              "required_profit": 0.0,
-              "only_per_pair": False,
-              "only_per_side": False
-          }
-      ]
-
 # +---------------------------------------------------------------------------+
 # |                              Custom Indicators                            |
 # +---------------------------------------------------------------------------+
