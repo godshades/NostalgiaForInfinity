@@ -17710,14 +17710,35 @@ class NostalgiaForInfinityX4(IStrategy):
           long_entry_logic.append((df["ema_26"].shift() - df["ema_12"].shift()) > (df["open"] / 100))
           long_entry_logic.append(df["close"] < (df["bb20_2_low"] * 0.996))
 
+        # Condition #4 - Normal mode bull.
+        if index == 4:
+          # Logic
+          long_entry_logic.append(df["ema_26"] > df["ema_12"])
+          long_entry_logic.append((df["ema_26"] - df["ema_12"]) > (df["open"] * 0.018))
+          long_entry_logic.append((df["ema_26"].shift() - df["ema_12"].shift()) > (df["open"] / 100))
+          long_entry_logic.append(df["close"] < (df["bb20_2_low"] * 0.996))
+
         # Condition #5 - Normal mode bull.
         if index == 5:
           # Logic
           long_entry_logic.append(df["close"] < (df["ema_26"] * 0.94))
           long_entry_logic.append(df["close"] < (df["bb20_2_low"] * 0.996))
 
+        # Condition #6 - Normal mode bull.
+        if index == 6:
+          # Logic
+          long_entry_logic.append(df["close"] < (df["ema_26"] * 0.94))
+          long_entry_logic.append(df["close"] < (df["bb20_2_low"] * 0.996))
+
         # Condition #7 Normal mode.
         if index == 7:
+          # Logic
+          long_entry_logic.append(df["close"] < (df["ema_16"] * 0.944))
+          long_entry_logic.append(df["ewo_50_200"] < -4.0)
+          long_entry_logic.append(df["rsi_14"] < 30.0)
+
+        # Condition #8 Normal mode.
+        if index == 8:
           # Logic
           long_entry_logic.append(df["close"] < (df["ema_16"] * 0.944))
           long_entry_logic.append(df["ewo_50_200"] < -4.0)
@@ -17819,6 +17840,26 @@ class NostalgiaForInfinityX4(IStrategy):
           long_entry_logic.append((df["ema_26"].shift() - df["ema_12"].shift()) > (df["open"] / 100))
           long_entry_logic.append(df["close"] < (df["bb20_2_low"] * 0.996))
           long_entry_logic.append(df["rsi_14"] < 40.0)
+
+        # Condition #41 - Quick mode bull.
+        if index == 41:
+          # Logic
+          long_entry_logic.append(df["bb40_2_delta"].gt(df["close"] * 0.036))
+          long_entry_logic.append(df["close_delta"].gt(df["close"] * 0.02))
+          long_entry_logic.append(df["bb40_2_tail"].lt(df["bb40_2_delta"] * 0.4))
+          long_entry_logic.append(df["close"].lt(df["bb40_2_low"].shift()))
+          long_entry_logic.append(df["close"].le(df["close"].shift()))
+          long_entry_logic.append(df["rsi_14"] < 36.0)
+
+        # Condition #42 - Quick mode bull.
+        if index == 42:
+          # Logic
+          long_entry_logic.append(df["ema_26"] > df["ema_12"])
+          long_entry_logic.append((df["ema_26"] - df["ema_12"]) > (df["open"] * 0.018))
+          long_entry_logic.append((df["ema_26"].shift() - df["ema_12"].shift()) > (df["open"] / 100))
+          long_entry_logic.append(df["close"] < (df["bb20_2_low"] * 0.996))
+          long_entry_logic.append(df["rsi_14"] < 40.0)
+
 
         # Condition #43 - Quick mode bull.
         if index == 43:
