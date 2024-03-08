@@ -68,7 +68,7 @@ class NostalgiaForInfinityX3(IStrategy):
   INTERFACE_VERSION = 3
 
   def version(self) -> str:
-    return "v13.1.301"
+    return "v13.1.305"
 
   stoploss = -0.99
 
@@ -469,7 +469,7 @@ class NostalgiaForInfinityX3(IStrategy):
   grind_mode_first_entry_stop_threshold_spot = -0.20
   grind_mode_first_entry_stop_threshold_futures = -0.20
   grind_mode_max_slots = 1
-  grind_mode_coins = ["MATIC", "DOGE", "DOT", "SOL", "XLM", "ALGO", "BTC", "ETH"]
+  grind_mode_coins = ["MATIC", "DOGE", "DOT", "XLM", "ALGO", "ETH", "RNDR", "AVAX", "ADA"]
 
   # Profit max thresholds
   profit_max_thresholds = [0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.05, 0.05]
@@ -15636,7 +15636,7 @@ class NostalgiaForInfinityX3(IStrategy):
           or (is_grind_mode and grind_1_sub_grind_count == 0)
         )
         and (current_time - timedelta(minutes=10) > filled_entries[-1].order_filled_utc)
-        and ((current_time - timedelta(hours=12) > filled_orders[-1].order_filled_utc) or (slice_profit < -0.02))
+        and ((current_time - timedelta(hours=2) > filled_orders[-1].order_filled_utc) or (slice_profit < -0.02))
         and (
           (last_candle["close"] > (last_candle["close_max_12"] * 0.92))
           and (last_candle["close"] > (last_candle["close_max_24"] * 0.90))
@@ -15752,7 +15752,7 @@ class NostalgiaForInfinityX3(IStrategy):
           or (is_grind_mode and grind_2_sub_grind_count == 0)
         )
         and (current_time - timedelta(minutes=10) > filled_entries[-1].order_filled_utc)
-        and ((current_time - timedelta(hours=12) > filled_orders[-1].order_filled_utc) or (slice_profit < -0.02))
+        and ((current_time - timedelta(hours=2) > filled_orders[-1].order_filled_utc) or (slice_profit < -0.02))
         and (
           (last_candle["close"] > (last_candle["close_max_12"] * 0.92))
           and (last_candle["close"] > (last_candle["close_max_24"] * 0.90))
@@ -15874,7 +15874,7 @@ class NostalgiaForInfinityX3(IStrategy):
           or (is_grind_mode and grind_3_sub_grind_count == 0)
         )
         and (current_time - timedelta(minutes=10) > filled_entries[-1].order_filled_utc)
-        and ((current_time - timedelta(hours=12) > filled_orders[-1].order_filled_utc) or (slice_profit < -0.02))
+        and ((current_time - timedelta(hours=2) > filled_orders[-1].order_filled_utc) or (slice_profit < -0.02))
         and (
           (last_candle["close"] > (last_candle["close_max_12"] * 0.92))
           and (last_candle["close"] > (last_candle["close_max_24"] * 0.90))
@@ -16517,7 +16517,7 @@ class NostalgiaForInfinityX3(IStrategy):
           < (regular_mode_grind_1_sub_thresholds[grind_1_sub_grind_count])
         )
         and (current_time - timedelta(minutes=10) > filled_entries[-1].order_filled_utc)
-        and ((current_time - timedelta(hours=12) > filled_orders[-1].order_filled_utc) or (slice_profit < -0.02))
+        and ((current_time - timedelta(hours=2) > filled_orders[-1].order_filled_utc) or (slice_profit < -0.02))
         and (
           (last_candle["rsi_3_15m"] > 20.0) and (last_candle["rsi_3_1h"] > 26.0) and (last_candle["rsi_3_4h"] > 26.0)
         )
@@ -16583,7 +16583,7 @@ class NostalgiaForInfinityX3(IStrategy):
           < (regular_mode_grind_2_sub_thresholds[grind_2_sub_grind_count])
         )
         and (current_time - timedelta(minutes=10) > filled_entries[-1].order_filled_utc)
-        and ((current_time - timedelta(hours=12) > filled_orders[-1].order_filled_utc) or (slice_profit < -0.02))
+        and ((current_time - timedelta(hours=2) > filled_orders[-1].order_filled_utc) or (slice_profit < -0.02))
         and (
           (last_candle["rsi_3_15m"] > 20.0) and (last_candle["rsi_3_1h"] > 26.0) and (last_candle["rsi_3_4h"] > 26.0)
         )
@@ -16649,7 +16649,7 @@ class NostalgiaForInfinityX3(IStrategy):
           < (regular_mode_grind_3_sub_thresholds[grind_3_sub_grind_count])
         )
         and (current_time - timedelta(minutes=10) > filled_entries[-1].order_filled_utc)
-        and ((current_time - timedelta(hours=12) > filled_orders[-1].order_filled_utc) or (slice_profit < -0.02))
+        and ((current_time - timedelta(hours=2) > filled_orders[-1].order_filled_utc) or (slice_profit < -0.02))
         and (
           (last_candle["close"] > (last_candle["close_max_12"] * 0.92))
           and (last_candle["close"] > (last_candle["close_max_24"] * 0.90))
@@ -17604,7 +17604,19 @@ class NostalgiaForInfinityX3(IStrategy):
         --> BTC informative indicators
         ___________________________________________________________________________________________
         """
-    if self.config["stake_currency"] in ["USDT", "BUSD", "USDC", "DAI", "TUSD", "FDUSD" "PAX", "USD", "EUR", "GBP"]:
+    if self.config["stake_currency"] in [
+      "USDT",
+      "BUSD",
+      "USDC",
+      "DAI",
+      "TUSD",
+      "FDUSD",
+      "PAX",
+      "USD",
+      "EUR",
+      "GBP",
+      "TRY",
+    ]:
       if ("trading_mode" in self.config) and (self.config["trading_mode"] in ["futures", "margin"]):
         btc_info_pair = f"BTC/{self.config['stake_currency']}:{self.config['stake_currency']}"
       else:
@@ -36097,6 +36109,9 @@ class NostalgiaForInfinityX3(IStrategy):
             | (df["close"] > df["sup_level_1d"])
             | (df["ema_200_dec_48_1h"] == False)
             | (df["ema_200_dec_4_1d"] == False)
+          )
+          long_entry_logic.append(
+            (df["ema_200_dec_24_4h"] == False) | (df["ema_200_dec_4_1d"] == False) | (df["hl_pct_change_6_1d"] > 0.12)
           )
 
           # Logic
