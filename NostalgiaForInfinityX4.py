@@ -18940,7 +18940,7 @@ class NostalgiaForInfinityX4(IStrategy):
       return [
           {
               "method": "CooldownPeriod",
-              "stop_duration_candles": 6
+              "stop_duration_candles": 3
           },
           {
               "method": "StoplossGuard",
