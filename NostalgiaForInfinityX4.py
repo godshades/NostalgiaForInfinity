@@ -15830,11 +15830,6 @@ class NostalgiaForInfinityX4(IStrategy):
           or (slice_profit < -0.06)
         )
         and (
-          (last_candle["protections_long_rebuy"] == True)
-          and (last_candle["global_protections_long_pump"] == True)
-          and (last_candle["global_protections_long_dump"] == True)
-        )
-        and (
           (last_candle["close"] > (last_candle["close_max_12"] * 0.92))
           and (last_candle["close"] > (last_candle["close_max_24"] * 0.90))
           and (last_candle["close"] > (last_candle["close_max_48"] * 0.88))
@@ -15954,11 +15949,6 @@ class NostalgiaForInfinityX4(IStrategy):
           (num_open_grinds == 0)
           or (current_time - timedelta(hours=6) > filled_orders[-1].order_filled_utc)
           or (slice_profit < -0.06)
-        )
-        and (
-          (last_candle["protections_long_rebuy"] == True)
-          and (last_candle["global_protections_long_pump"] == True)
-          and (last_candle["global_protections_long_dump"] == True)
         )
         and (
           (last_candle["close"] > (last_candle["close_max_12"] * 0.92))
@@ -16088,11 +16078,6 @@ class NostalgiaForInfinityX4(IStrategy):
           or (slice_profit < -0.06)
         )
         and (
-          (last_candle["protections_long_rebuy"] == True)
-          and (last_candle["global_protections_long_pump"] == True)
-          and (last_candle["global_protections_long_dump"] == True)
-        )
-        and (
           (last_candle["close"] > (last_candle["close_max_12"] * 0.92))
           and (last_candle["close"] > (last_candle["close_max_24"] * 0.90))
           and (last_candle["close"] > (last_candle["close_max_48"] * 0.88))
@@ -16216,11 +16201,6 @@ class NostalgiaForInfinityX4(IStrategy):
           (num_open_grinds == 0)
           or (current_time - timedelta(hours=6) > filled_orders[-1].order_filled_utc)
           or (slice_profit < -0.06)
-        )
-        and (
-          (last_candle["protections_long_rebuy"] == True)
-          and (last_candle["global_protections_long_pump"] == True)
-          and (last_candle["global_protections_long_dump"] == True)
         )
         and (
           (last_candle["close"] > (last_candle["close_max_12"] * 0.92))
@@ -16930,11 +16910,6 @@ class NostalgiaForInfinityX4(IStrategy):
           or (slice_profit < -0.06)
         )
         and (
-          (last_candle["protections_long_rebuy"] == True)
-          and (last_candle["global_protections_long_pump"] == True)
-          and (last_candle["global_protections_long_dump"] == True)
-        )
-        and (
           (last_candle["rsi_3_15m"] > 20.0) and (last_candle["rsi_3_1h"] > 26.0) and (last_candle["rsi_3_4h"] > 26.0)
         )
         and (
@@ -17004,11 +16979,6 @@ class NostalgiaForInfinityX4(IStrategy):
           (num_open_grinds == 0)
           or (current_time - timedelta(hours=6) > filled_orders[-1].order_filled_utc)
           or (slice_profit < -0.06)
-        )
-        and (
-          (last_candle["protections_long_rebuy"] == True)
-          and (last_candle["global_protections_long_pump"] == True)
-          and (last_candle["global_protections_long_dump"] == True)
         )
         and (
           (last_candle["rsi_3_15m"] > 20.0) and (last_candle["rsi_3_1h"] > 26.0) and (last_candle["rsi_3_4h"] > 26.0)
@@ -17082,11 +17052,6 @@ class NostalgiaForInfinityX4(IStrategy):
           or (slice_profit < -0.06)
         )
         and (
-          (last_candle["protections_long_rebuy"] == True)
-          and (last_candle["global_protections_long_pump"] == True)
-          and (last_candle["global_protections_long_dump"] == True)
-        )
-        and (
           (last_candle["close"] > (last_candle["close_max_12"] * 0.92))
           and (last_candle["close"] > (last_candle["close_max_24"] * 0.90))
           and (last_candle["close"] > (last_candle["close_max_48"] * 0.88))
@@ -17157,11 +17122,6 @@ class NostalgiaForInfinityX4(IStrategy):
           (num_open_grinds == 0)
           or (current_time - timedelta(hours=6) > filled_orders[-1].order_filled_utc)
           or (slice_profit < -0.06)
-        )
-        and (
-          (last_candle["protections_long_rebuy"] == True)
-          and (last_candle["global_protections_long_pump"] == True)
-          and (last_candle["global_protections_long_dump"] == True)
         )
         and (
           (last_candle["close"] > (last_candle["close_max_12"] * 0.92))
