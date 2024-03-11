@@ -18946,7 +18946,7 @@ class NostalgiaForInfinityX4(IStrategy):
               "method": "StoplossGuard",
               "lookback_period_candles": 12,
               "trade_limit": 3,
-              "stop_duration_candles": 4,
+              "stop_duration_candles": 6,
               "required_profit": 0.0,
               "only_per_pair": False,
               "only_per_side": False
