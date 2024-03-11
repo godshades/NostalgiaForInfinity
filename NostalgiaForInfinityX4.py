@@ -18697,6 +18697,7 @@ class NostalgiaForInfinityX4(IStrategy):
     df, _ = self.dp.get_analyzed_dataframe(pair, self.timeframe)
 
     if len(df) < 1:
+      log.warning("len(df) < 1")
       return False
 
     df = df.iloc[-1].squeeze()
@@ -18715,13 +18716,16 @@ class NostalgiaForInfinityX4(IStrategy):
             num_open_grind_mode += 1
         if num_open_grind_mode >= self.grind_mode_max_slots:
           # Reached the limit of grind mode open trades
+          log.warning("Reached the limit of grind mode open trades")
           return False
       else:
         # The pair is not in the list of grind mode allowed
+        log.warning("The pair is not in the list of grind mode allowed")
         return False
 
     if rate > df["close"]:
       slippage = (rate / df["close"]) - 1.0
+      log.warning(f"rate {rate} - slippage {slippage}")
 
       if slippage < self.max_slippage:
         return True
