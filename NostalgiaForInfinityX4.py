@@ -18705,7 +18705,7 @@ class NostalgiaForInfinityX4(IStrategy):
     # Grind mode
     entry_tags = entry_tag.split()
     if all(c in self.long_grind_mode_tags for c in entry_tags):
-      is_pair_grind_mode = pair.split("/")[0] in self.grind_mode_coins
+      is_pair_grind_mode = True
       if is_pair_grind_mode:
         num_open_grind_mode = 0
         open_trades = Trade.get_trades_proxy(is_open=True)
