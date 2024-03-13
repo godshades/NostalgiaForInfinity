@@ -68,7 +68,7 @@ class NostalgiaForInfinityX4(IStrategy):
   INTERFACE_VERSION = 3
 
   def version(self) -> str:
-    return "v14.1.332"
+    return "v14.1.337"
 
   stoploss = -0.99
 
@@ -156,7 +156,7 @@ class NostalgiaForInfinityX4(IStrategy):
   is_futures_mode = False
   futures_mode_leverage = 10.0
   futures_mode_leverage_rebuy_mode = 10.0
-  futures_mode_leverage_grind_mode = 15.0
+  futures_mode_leverage_grind_mode = 10.0
 
   # Stop thresholds. 0: Doom Bull, 1: Doom Bear, 2: u_e Bull, 3: u_e Bear, 4: u_e mins Bull, 5: u_e mins Bear.
   # 6: u_e ema % Bull, 7: u_e ema % Bear, 8: u_e RSI diff Bull, 9: u_e RSI diff Bear.
@@ -3247,7 +3247,7 @@ class NostalgiaForInfinityX4(IStrategy):
     current_time: "datetime",
     enter_tags,
   ) -> tuple:
-    if len(filled_exits) > 100 and profit_init_ratio > 1.0:
+    if profit_init_ratio > 1.0: # len(filled_exits) > 100 and 
       return True, f"exit_{self.long_grind_mode_name}_g"
     return False, None
 
@@ -15799,7 +15799,7 @@ class NostalgiaForInfinityX4(IStrategy):
           grind_3_is_sell_found = True
         elif order_tag in ["gd2", "dd2"]:
           grind_2_is_sell_found = True
-        elif order_tag in ["p", "r", "d", "dd0"]:
+        elif order_tag in ["p", "r", "d", "dd0", "partial_exit", ""]:
           grind_1_is_sell_found = True
           grind_2_is_sell_found = True
           grind_3_is_sell_found = True
@@ -15854,7 +15854,13 @@ class NostalgiaForInfinityX4(IStrategy):
           else:
             return -sell_amount
 
-    if is_grind_mode:
+    if is_grind_mode and (
+      (
+        filled_entries[0].safe_filled * exit_rate / (trade.leverage if self.is_futures_mode else 1.0)
+        - (min_stake * 1.5)
+      )
+      > min_stake
+    ):
       is_first_entry_exit_found = False
       for order in filled_orders:
         if order.ft_order_side == "sell":
@@ -15880,11 +15886,9 @@ class NostalgiaForInfinityX4(IStrategy):
           if self.is_futures_mode
           else self.grind_mode_first_entry_profit_threshold_spot
         ):
-          sell_amount = first_entry.safe_filled * exit_rate / (trade.leverage if self.is_futures_mode else 1.0)
-          if (current_stake_amount - sell_amount) < (min_stake * 1.5):
-            sell_amount = (trade.amount * exit_rate / (trade.leverage if self.is_futures_mode else 1.0)) - (
-              min_stake * 1.5
-            )
+          sell_amount = first_entry.safe_filled * exit_rate / (trade.leverage if self.is_futures_mode else 1.0) - (
+            min_stake * 1.5
+          )
           if sell_amount > min_stake:
             grind_profit = (exit_rate - first_entry.safe_price) / first_entry.safe_price
             coin_amount = sell_amount / exit_rate
@@ -15956,7 +15960,7 @@ class NostalgiaForInfinityX4(IStrategy):
           and (last_candle["close"] > (last_candle["close_max_24"] * 0.90))
           and (last_candle["close"] > (last_candle["close_max_48"] * 0.88))
           and (last_candle["close"] > (last_candle["high_max_6_1d"] * 0.86))
-          and (last_candle["close"] > (last_candle["high_max_12_1d"] * 0.76))
+          and (last_candle["close"] > (last_candle["high_max_12_1d"] * 0.84))
         )
         and self.long_grind_buy(last_candle, previous_candle, slice_profit)
       ):
@@ -16077,7 +16081,7 @@ class NostalgiaForInfinityX4(IStrategy):
           and (last_candle["close"] > (last_candle["close_max_24"] * 0.90))
           and (last_candle["close"] > (last_candle["close_max_48"] * 0.88))
           and (last_candle["close"] > (last_candle["high_max_6_1d"] * 0.86))
-          and (last_candle["close"] > (last_candle["high_max_12_1d"] * 0.76))
+          and (last_candle["close"] > (last_candle["high_max_12_1d"] * 0.84))
         )
         and (
           (last_candle["rsi_3_15m"] > 20.0)
@@ -16204,7 +16208,7 @@ class NostalgiaForInfinityX4(IStrategy):
           and (last_candle["close"] > (last_candle["close_max_24"] * 0.90))
           and (last_candle["close"] > (last_candle["close_max_48"] * 0.88))
           and (last_candle["close"] > (last_candle["high_max_6_1d"] * 0.86))
-          and (last_candle["close"] > (last_candle["high_max_12_1d"] * 0.76))
+          and (last_candle["close"] > (last_candle["high_max_12_1d"] * 0.84))
         )
         and (
           (last_candle["rsi_3"] > 12.0)
@@ -16331,7 +16335,7 @@ class NostalgiaForInfinityX4(IStrategy):
           and (last_candle["close"] > (last_candle["close_max_24"] * 0.90))
           and (last_candle["close"] > (last_candle["close_max_48"] * 0.88))
           and (last_candle["close"] > (last_candle["high_max_6_1d"] * 0.86))
-          and (last_candle["close"] > (last_candle["high_max_12_1d"] * 0.76))
+          and (last_candle["close"] > (last_candle["high_max_12_1d"] * 0.84))
         )
         and (
           (last_candle["rsi_3"] > 12.0)
@@ -16985,7 +16989,7 @@ class NostalgiaForInfinityX4(IStrategy):
           and (last_candle["close"] > (last_candle["close_max_24"] * 0.90))
           and (last_candle["close"] > (last_candle["close_max_48"] * 0.88))
           and (last_candle["close"] > (last_candle["high_max_6_1d"] * 0.86))
-          and (last_candle["close"] > (last_candle["high_max_12_1d"] * 0.76))
+          and (last_candle["close"] > (last_candle["high_max_12_1d"] * 0.84))
           and (last_candle["btc_pct_close_max_72_5m"] < 0.03)
           and (last_candle["btc_pct_close_max_24_5m"] < 0.03)
         )
@@ -17042,8 +17046,8 @@ class NostalgiaForInfinityX4(IStrategy):
           (last_candle["close"] > (last_candle["close_max_12"] * 0.92))
           and (last_candle["close"] > (last_candle["close_max_24"] * 0.90))
           and (last_candle["close"] > (last_candle["close_max_48"] * 0.88))
-          and (last_candle["close"] > (last_candle["high_max_6_1d"] * 0.86))
-          and (last_candle["close"] > (last_candle["high_max_12_1d"] * 0.76))
+          and (last_candle["close"] > (last_candle["high_max_24_1h"] * 0.86))
+          and (last_candle["close"] > (last_candle["high_max_48_1h"] * 0.76))
         )
         and self.long_grind_buy(last_candle, previous_candle, slice_profit)
       ):
@@ -17113,8 +17117,8 @@ class NostalgiaForInfinityX4(IStrategy):
           (last_candle["close"] > (last_candle["close_max_12"] * 0.92))
           and (last_candle["close"] > (last_candle["close_max_24"] * 0.90))
           and (last_candle["close"] > (last_candle["close_max_48"] * 0.88))
-          and (last_candle["close"] > (last_candle["high_max_6_1d"] * 0.86))
-          and (last_candle["close"] > (last_candle["high_max_12_1d"] * 0.76))
+          and (last_candle["close"] > (last_candle["high_max_24_1h"] * 0.86))
+          and (last_candle["close"] > (last_candle["high_max_48_1h"] * 0.76))
         )
         and self.long_grind_buy(last_candle, previous_candle, slice_profit)
       ):
@@ -17181,8 +17185,8 @@ class NostalgiaForInfinityX4(IStrategy):
           (last_candle["close"] > (last_candle["close_max_12"] * 0.92))
           and (last_candle["close"] > (last_candle["close_max_24"] * 0.90))
           and (last_candle["close"] > (last_candle["close_max_48"] * 0.88))
-          and (last_candle["close"] > (last_candle["high_max_6_1d"] * 0.86))
-          and (last_candle["close"] > (last_candle["high_max_12_1d"] * 0.76))
+          and (last_candle["close"] > (last_candle["high_max_24_1h"] * 0.86))
+          and (last_candle["close"] > (last_candle["high_max_48_1h"] * 0.76))
         )
         and (
           (last_candle["rsi_3"] > 12.0)
@@ -17255,8 +17259,8 @@ class NostalgiaForInfinityX4(IStrategy):
           (last_candle["close"] > (last_candle["close_max_12"] * 0.92))
           and (last_candle["close"] > (last_candle["close_max_24"] * 0.90))
           and (last_candle["close"] > (last_candle["close_max_48"] * 0.88))
-          and (last_candle["close"] > (last_candle["high_max_6_1d"] * 0.86))
-          and (last_candle["close"] > (last_candle["high_max_12_1d"] * 0.76))
+          and (last_candle["close"] > (last_candle["high_max_24_1h"] * 0.86))
+          and (last_candle["close"] > (last_candle["high_max_48_1h"] * 0.76))
         )
         and (
           (last_candle["rsi_3"] > 12.0)
