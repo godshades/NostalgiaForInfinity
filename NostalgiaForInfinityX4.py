@@ -181,7 +181,7 @@ class NostalgiaForInfinityX4(IStrategy):
 
   # Grinding
   grind_derisk_spot = -0.40
-  grind_derisk_futures = -0.50
+  grind_derisk_futures = -0.40
 
   grind_1_stop_grinds_spot = -0.10
   grind_1_profit_threshold_spot = 0.018
