@@ -18676,7 +18676,7 @@ class NostalgiaForInfinityX4(IStrategy):
         # Condition #120 - Grind mode (Long).
         if index == 120:
           # Protections
-          long_entry_logic.append(num_open_grind_mode < self.grind_mode_max_slots)
+          # long_entry_logic.append(num_open_grind_mode < self.grind_mode_max_slots)
           # long_entry_logic.append(is_pair_grind_mode)
           long_entry_logic.append(df["btc_pct_close_max_24_5m"] < 0.03)
           long_entry_logic.append(df["btc_pct_close_max_72_5m"] < 0.06)
@@ -18804,10 +18804,10 @@ class NostalgiaForInfinityX4(IStrategy):
           enter_tags = enter_tag.split()
           if all(c in self.long_grind_mode_tags for c in enter_tags):
             num_open_grind_mode += 1
-        if num_open_grind_mode >= self.grind_mode_max_slots:
+        # if num_open_grind_mode >= self.grind_mode_max_slots:
           # Reached the limit of grind mode open trades
-          log.warning("Reached the limit of grind mode open trades")
-          return False
+        # log.warning("Reached the limit of grind mode open trades")
+        # return False
       else:
         # The pair is not in the list of grind mode allowed
         log.warning("The pair is not in the list of grind mode allowed")
