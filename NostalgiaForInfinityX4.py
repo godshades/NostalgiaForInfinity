@@ -19039,10 +19039,6 @@ class NostalgiaForInfinityX4(IStrategy):
   def protections(self):
       return [
           {
-              "method": "CooldownPeriod",
-              "stop_duration_candles": 3
-          },
-          {
               "method": "StoplossGuard",
               "lookback_period_candles": 12,
               "trade_limit": 3,
