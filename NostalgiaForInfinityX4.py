@@ -585,7 +585,7 @@ class NostalgiaForInfinityX4(IStrategy):
   grind_mode_first_entry_profit_threshold_futures = 0.018
   grind_mode_first_entry_stop_threshold_spot = -0.20
   grind_mode_first_entry_stop_threshold_futures = -0.20
-  grind_mode_max_slots = 4
+  grind_mode_max_slots = 2
   grind_mode_coins = [
     "MATIC",
     "ADA",
@@ -677,7 +677,7 @@ class NostalgiaForInfinityX4(IStrategy):
     "long_entry_condition_108_enable": True,
     "long_entry_condition_109_enable": True,
     "long_entry_condition_110_enable": True,
-    "long_entry_condition_120_enable": False,
+    "long_entry_condition_120_enable": True,
   }
 
   short_entry_signal_params = {
