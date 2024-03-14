@@ -68,7 +68,7 @@ class NostalgiaForInfinityX3(IStrategy):
   INTERFACE_VERSION = 3
 
   def version(self) -> str:
-    return "v13.1.337"
+    return "v13.1.343"
 
   stoploss = -0.99
 
@@ -585,7 +585,7 @@ class NostalgiaForInfinityX3(IStrategy):
   grind_mode_first_entry_profit_threshold_futures = 0.018
   grind_mode_first_entry_stop_threshold_spot = -0.20
   grind_mode_first_entry_stop_threshold_futures = -0.20
-  grind_mode_max_slots = 1
+  grind_mode_max_slots = 2
   grind_mode_coins = [
     "MATIC",
     "ADA",
@@ -16024,7 +16024,7 @@ class NostalgiaForInfinityX3(IStrategy):
           grind_1_current_grind_stake_profit
           < (slice_amount * grind_1_stop_grinds / (trade.leverage if self.is_futures_mode else 1.0))
         )
-        and (is_derisk or is_derisk_calc)
+        and (is_derisk or is_derisk_calc or is_grind_mode)
       )
       # temporary
       and (
@@ -16156,7 +16156,7 @@ class NostalgiaForInfinityX3(IStrategy):
           grind_2_current_grind_stake_profit
           < (slice_amount * grind_2_stop_grinds / (trade.leverage if self.is_futures_mode else 1.0))
         )
-        and (is_derisk or is_derisk_calc)
+        and (is_derisk or is_derisk_calc or is_grind_mode)
       )
       # temporary
       and (
@@ -16288,7 +16288,7 @@ class NostalgiaForInfinityX3(IStrategy):
           grind_3_current_grind_stake_profit
           < (slice_amount * grind_3_stop_grinds / (trade.leverage if self.is_futures_mode else 1.0))
         )
-        and (is_derisk or is_derisk_calc)
+        and (is_derisk or is_derisk_calc or is_grind_mode)
       )
       # temporary
       and (
@@ -16420,7 +16420,7 @@ class NostalgiaForInfinityX3(IStrategy):
           grind_4_current_grind_stake_profit
           < (slice_amount * grind_4_stop_grinds / (trade.leverage if self.is_futures_mode else 1.0))
         )
-        and (is_derisk or is_derisk_calc)
+        and (is_derisk or is_derisk_calc or is_grind_mode)
       )
       # temporary
       and (
@@ -26239,6 +26239,15 @@ class NostalgiaForInfinityX3(IStrategy):
         | (df["cti_20_4h"] < 0.5)
         | (df["rsi_14_4h"] < 70.0)
         | (df["close"] < df["res_hlevel_4h"])
+      )
+      & (
+        (df["change_pct_1h"] > -0.02)
+        | (df["rsi_14"] > df["rsi_14"].shift(12))
+        | (df["rsi_14_15m"] > df["rsi_14_15m"].shift(12))
+        | (df["rsi_14_1h"] < 50.0)
+        | (df["rsi_14_4h"] < 70.0)
+        | (df["r_480_1h"] < -25.0)
+        | (df["r_480_4h"] < -15.0)
       )
     )
 
@@ -36889,6 +36898,21 @@ class NostalgiaForInfinityX3(IStrategy):
             | (df["ema_200_dec_48_1h"] == False)
             | (df["ema_200_dec_4_1d"] == False)
             | (df["hl_pct_change_6_1d"] > 0.25)
+          )
+          long_entry_logic.append(
+            (df["not_downtrend_1h"])
+            | (df["rsi_14"] > df["rsi_14"].shift(12))
+            | (df["rsi_14_15m"] > df["rsi_14_15m"].shift(12))
+            | (df["ema_200_dec_24_4h"] == False)
+            | (df["ema_200_dec_4_1d"] == False)
+          )
+          long_entry_logic.append(
+            (df["rsi_14_4h"] < 40.0)
+            | (df["cti_20_1d"] < 0.7)
+            | (df["rsi_14_1d"] < 40.0)
+            | (df["rsi_14_max_6_1d"] < 70.0)
+            | (df["r_480_1h"] < -40.0)
+            | (df["r_480_4h"] < -30.0)
           )
 
           # Logic

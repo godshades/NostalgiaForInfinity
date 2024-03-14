@@ -68,7 +68,7 @@ class NostalgiaForInfinityX4(IStrategy):
   INTERFACE_VERSION = 3
 
   def version(self) -> str:
-    return "v14.1.337"
+    return "v14.1.343"
 
   stoploss = -0.99
 
@@ -156,7 +156,7 @@ class NostalgiaForInfinityX4(IStrategy):
   is_futures_mode = False
   futures_mode_leverage = 10.0
   futures_mode_leverage_rebuy_mode = 10.0
-  futures_mode_leverage_grind_mode = 10.0
+  futures_mode_leverage_grind_mode = 15.0
 
   # Stop thresholds. 0: Doom Bull, 1: Doom Bear, 2: u_e Bull, 3: u_e Bear, 4: u_e mins Bull, 5: u_e mins Bear.
   # 6: u_e ema % Bull, 7: u_e ema % Bear, 8: u_e RSI diff Bull, 9: u_e RSI diff Bear.
@@ -585,6 +585,7 @@ class NostalgiaForInfinityX4(IStrategy):
   grind_mode_first_entry_profit_threshold_futures = 0.018
   grind_mode_first_entry_stop_threshold_spot = -0.20
   grind_mode_first_entry_stop_threshold_futures = -0.20
+  grind_mode_max_slots = 2
   grind_mode_max_slots = 2
   grind_mode_coins = [
     "MATIC",
@@ -16019,7 +16020,7 @@ class NostalgiaForInfinityX4(IStrategy):
           grind_1_current_grind_stake_profit
           < (slice_amount * grind_1_stop_grinds / (trade.leverage if self.is_futures_mode else 1.0))
         )
-        and (is_derisk or is_derisk_calc)
+        and (is_derisk or is_derisk_calc or is_grind_mode)
       )
       # temporary
       and (
@@ -16146,7 +16147,7 @@ class NostalgiaForInfinityX4(IStrategy):
           grind_2_current_grind_stake_profit
           < (slice_amount * grind_2_stop_grinds / (trade.leverage if self.is_futures_mode else 1.0))
         )
-        and (is_derisk or is_derisk_calc)
+        and (is_derisk or is_derisk_calc or is_grind_mode)
       )
       # temporary
       and (
@@ -16273,7 +16274,7 @@ class NostalgiaForInfinityX4(IStrategy):
           grind_3_current_grind_stake_profit
           < (slice_amount * grind_3_stop_grinds / (trade.leverage if self.is_futures_mode else 1.0))
         )
-        and (is_derisk or is_derisk_calc)
+        and (is_derisk or is_derisk_calc or is_grind_mode)
       )
       # temporary
       and (
@@ -16400,7 +16401,7 @@ class NostalgiaForInfinityX4(IStrategy):
           grind_4_current_grind_stake_profit
           < (slice_amount * grind_4_stop_grinds / (trade.leverage if self.is_futures_mode else 1.0))
         )
-        and (is_derisk or is_derisk_calc)
+        and (is_derisk or is_derisk_calc or is_grind_mode)
       )
       # temporary
       and (
