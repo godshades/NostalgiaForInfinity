@@ -585,7 +585,7 @@ class NostalgiaForInfinityX4(IStrategy):
   grind_mode_first_entry_profit_threshold_futures = 0.018
   grind_mode_first_entry_stop_threshold_spot = -0.20
   grind_mode_first_entry_stop_threshold_futures = -0.20
-  grind_mode_max_slots = 1
+  grind_mode_max_slots = 4
   grind_mode_coins = [
     "MATIC",
     "ADA",
@@ -18680,7 +18680,7 @@ class NostalgiaForInfinityX4(IStrategy):
         # Condition #120 - Grind mode (Long).
         if index == 120:
           # Protections
-          # long_entry_logic.append(num_open_grind_mode < self.grind_mode_max_slots)
+          long_entry_logic.append(num_open_grind_mode < self.grind_mode_max_slots)
           # long_entry_logic.append(is_pair_grind_mode)
           long_entry_logic.append(df["btc_pct_close_max_24_5m"] < 0.03)
           long_entry_logic.append(df["btc_pct_close_max_72_5m"] < 0.06)
