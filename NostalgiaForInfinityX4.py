@@ -677,7 +677,7 @@ class NostalgiaForInfinityX4(IStrategy):
     "long_entry_condition_108_enable": True,
     "long_entry_condition_109_enable": True,
     "long_entry_condition_110_enable": True,
-    "long_entry_condition_120_enable": True,
+    "long_entry_condition_120_enable": False,
   }
 
   short_entry_signal_params = {
