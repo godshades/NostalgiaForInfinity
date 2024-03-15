@@ -28530,8 +28530,8 @@ class NostalgiaForInfinityX4(IStrategy):
           long_entry_logic.append(df["r_14_1h"] < -25.0)
           long_entry_logic.append(df["r_14_4h"] < -25.0)
 
-          long_entry_logic.append(df["pct_change_high_max_6_24_1h"] > -0.3)
-          long_entry_logic.append(df["pct_change_high_max_3_12_4h"] > -0.4)
+          # long_entry_logic.append(df["pct_change_high_max_6_24_1h"] > -0.3)
+          # long_entry_logic.append(df["pct_change_high_max_3_12_4h"] > -0.4)
 
           long_entry_logic.append(df["not_downtrend_15m"])
 
