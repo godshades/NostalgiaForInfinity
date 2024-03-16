@@ -156,7 +156,7 @@ class NostalgiaForInfinityX4(IStrategy):
   is_futures_mode = False
   futures_mode_leverage = 10.0
   futures_mode_leverage_rebuy_mode = 10.0
-  futures_mode_leverage_grind_mode = 15.0
+  futures_mode_leverage_grind_mode = 10.0
 
   # Stop thresholds. 0: Doom Bull, 1: Doom Bear, 2: u_e Bull, 3: u_e Bear, 4: u_e mins Bull, 5: u_e mins Bear.
   # 6: u_e ema % Bull, 7: u_e ema % Bear, 8: u_e RSI diff Bull, 9: u_e RSI diff Bear.
@@ -181,7 +181,7 @@ class NostalgiaForInfinityX4(IStrategy):
 
   # Grinding
   grind_derisk_spot = -0.40
-  grind_derisk_futures = -0.40
+  grind_derisk_futures = -0.30
 
   grind_1_stop_grinds_spot = -0.10
   grind_1_profit_threshold_spot = 0.018
@@ -585,8 +585,7 @@ class NostalgiaForInfinityX4(IStrategy):
   grind_mode_first_entry_profit_threshold_futures = 0.018
   grind_mode_first_entry_stop_threshold_spot = -0.20
   grind_mode_first_entry_stop_threshold_futures = -0.20
-  grind_mode_max_slots = 2
-  grind_mode_max_slots = 2
+  grind_mode_max_slots = 1
   grind_mode_coins = [
     "MATIC",
     "ADA",
@@ -658,7 +657,7 @@ class NostalgiaForInfinityX4(IStrategy):
     "long_entry_condition_41_enable": True,
     "long_entry_condition_42_enable": True,
     "long_entry_condition_43_enable": True,
-    "long_entry_condition_44_enable": True,
+    "long_entry_condition_44_enable": False,
     "long_entry_condition_45_enable": True,
     "long_entry_condition_46_enable": True,
     "long_entry_condition_47_enable": True,
