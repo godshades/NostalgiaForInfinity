@@ -68,7 +68,7 @@ class NostalgiaForInfinityX4(IStrategy):
   INTERFACE_VERSION = 3
 
   def version(self) -> str:
-    return "v14.1.343"
+    return "v14.1.363"
 
   stoploss = -0.99
 
@@ -5816,7 +5816,7 @@ class NostalgiaForInfinityX4(IStrategy):
       ):
         return True, f"exit_{mode_name}_d_0_19"
       elif (
-        (last_candle["r_14"] >= -2.0)
+        (last_candle["r_14"] >= -1.0)
         and (last_candle["rsi_14"] >= 60.0)
         and (last_candle["rsi_14_max_6_1d"] >= 70.0)
         and (last_candle["cti_20_dec_3_1d"] == True)
@@ -5849,6 +5849,16 @@ class NostalgiaForInfinityX4(IStrategy):
         and (last_candle["close"] < (last_candle["high_max_6_1d"] * 0.80))
       ):
         return True, f"exit_{mode_name}_d_0_23"
+      elif (
+        (last_candle["r_14"] >= -1.0)
+        and (last_candle["rsi_3"] >= 95.0)
+        and (last_candle["rsi_14"] <= 50.0)
+        and (last_candle["rsi_14_15m"] <= 50.0)
+        and (last_candle["rsi_3_1h"] <= 20.0)
+        and (last_candle["change_pct_1h"] < -0.02)
+        and (last_candle["not_downtrend_1h"] == False)
+      ):
+        return True, f"exit_{mode_name}_d_0_24"
     elif 0.02 > current_profit >= 0.01:
       if (
         (last_candle["r_14"] > -10.0)
@@ -6063,6 +6073,16 @@ class NostalgiaForInfinityX4(IStrategy):
         and (last_candle["close"] < (last_candle["high_max_6_1d"] * 0.80))
       ):
         return True, f"exit_{mode_name}_d_1_23"
+      elif (
+        (last_candle["r_14"] >= -20.0)
+        and (last_candle["rsi_3"] >= 80.0)
+        and (last_candle["rsi_14"] <= 50.0)
+        and (last_candle["rsi_14_15m"] <= 50.0)
+        and (last_candle["rsi_3_1h"] <= 20.0)
+        and (last_candle["change_pct_1h"] < -0.02)
+        and (last_candle["not_downtrend_1h"] == False)
+      ):
+        return True, f"exit_{mode_name}_d_1_24"
     elif 0.03 > current_profit >= 0.02:
       if (
         (last_candle["r_14"] > -16.0)
@@ -6277,6 +6297,16 @@ class NostalgiaForInfinityX4(IStrategy):
         and (last_candle["close"] < (last_candle["high_max_6_1d"] * 0.80))
       ):
         return True, f"exit_{mode_name}_d_2_23"
+      elif (
+        (last_candle["r_14"] >= -20.0)
+        and (last_candle["rsi_3"] >= 80.0)
+        and (last_candle["rsi_14"] <= 50.0)
+        and (last_candle["rsi_14_15m"] <= 50.0)
+        and (last_candle["rsi_3_1h"] <= 20.0)
+        and (last_candle["change_pct_1h"] < -0.02)
+        and (last_candle["not_downtrend_1h"] == False)
+      ):
+        return True, f"exit_{mode_name}_d_2_24"
     elif 0.04 > current_profit >= 0.03:
       if (
         (last_candle["r_14"] > -16.0)
@@ -6491,6 +6521,16 @@ class NostalgiaForInfinityX4(IStrategy):
         and (last_candle["close"] < (last_candle["high_max_6_1d"] * 0.80))
       ):
         return True, f"exit_{mode_name}_d_3_23"
+      elif (
+        (last_candle["r_14"] >= -20.0)
+        and (last_candle["rsi_3"] >= 80.0)
+        and (last_candle["rsi_14"] <= 50.0)
+        and (last_candle["rsi_14_15m"] <= 50.0)
+        and (last_candle["rsi_3_1h"] <= 20.0)
+        and (last_candle["change_pct_1h"] < -0.02)
+        and (last_candle["not_downtrend_1h"] == False)
+      ):
+        return True, f"exit_{mode_name}_d_3_24"
     elif 0.05 > current_profit >= 0.04:
       if (
         (last_candle["r_14"] > -16.0)
@@ -6705,6 +6745,16 @@ class NostalgiaForInfinityX4(IStrategy):
         and (last_candle["close"] < (last_candle["high_max_6_1d"] * 0.80))
       ):
         return True, f"exit_{mode_name}_d_4_23"
+      elif (
+        (last_candle["r_14"] >= -20.0)
+        and (last_candle["rsi_3"] >= 80.0)
+        and (last_candle["rsi_14"] <= 50.0)
+        and (last_candle["rsi_14_15m"] <= 50.0)
+        and (last_candle["rsi_3_1h"] <= 20.0)
+        and (last_candle["change_pct_1h"] < -0.02)
+        and (last_candle["not_downtrend_1h"] == False)
+      ):
+        return True, f"exit_{mode_name}_d_4_24"
     elif 0.06 > current_profit >= 0.05:
       if (
         (last_candle["r_14"] > -16.0)
@@ -6919,6 +6969,16 @@ class NostalgiaForInfinityX4(IStrategy):
         and (last_candle["close"] < (last_candle["high_max_6_1d"] * 0.80))
       ):
         return True, f"exit_{mode_name}_d_5_23"
+      elif (
+        (last_candle["r_14"] >= -20.0)
+        and (last_candle["rsi_3"] >= 80.0)
+        and (last_candle["rsi_14"] <= 50.0)
+        and (last_candle["rsi_14_15m"] <= 50.0)
+        and (last_candle["rsi_3_1h"] <= 20.0)
+        and (last_candle["change_pct_1h"] < -0.02)
+        and (last_candle["not_downtrend_1h"] == False)
+      ):
+        return True, f"exit_{mode_name}_d_5_24"
     elif 0.07 > current_profit >= 0.06:
       if (
         (last_candle["r_14"] > -16.0)
@@ -7133,6 +7193,16 @@ class NostalgiaForInfinityX4(IStrategy):
         and (last_candle["close"] < (last_candle["high_max_6_1d"] * 0.80))
       ):
         return True, f"exit_{mode_name}_d_6_23"
+      elif (
+        (last_candle["r_14"] >= -16.0)
+        and (last_candle["rsi_3"] >= 80.0)
+        and (last_candle["rsi_14"] <= 50.0)
+        and (last_candle["rsi_14_15m"] <= 50.0)
+        and (last_candle["rsi_3_1h"] <= 20.0)
+        and (last_candle["change_pct_1h"] < -0.02)
+        and (last_candle["not_downtrend_1h"] == False)
+      ):
+        return True, f"exit_{mode_name}_d_6_24"
     elif 0.08 > current_profit >= 0.07:
       if (
         (last_candle["r_14"] > -16.0)
@@ -7347,6 +7417,16 @@ class NostalgiaForInfinityX4(IStrategy):
         and (last_candle["close"] < (last_candle["high_max_6_1d"] * 0.80))
       ):
         return True, f"exit_{mode_name}_d_7_23"
+      elif (
+        (last_candle["r_14"] >= -14.0)
+        and (last_candle["rsi_3"] >= 80.0)
+        and (last_candle["rsi_14"] <= 50.0)
+        and (last_candle["rsi_14_15m"] <= 50.0)
+        and (last_candle["rsi_3_1h"] <= 20.0)
+        and (last_candle["change_pct_1h"] < -0.02)
+        and (last_candle["not_downtrend_1h"] == False)
+      ):
+        return True, f"exit_{mode_name}_d_7_24"
     elif 0.09 > current_profit >= 0.08:
       if (
         (last_candle["r_14"] > -16.0)
@@ -7561,6 +7641,16 @@ class NostalgiaForInfinityX4(IStrategy):
         and (last_candle["close"] < (last_candle["high_max_6_1d"] * 0.80))
       ):
         return True, f"exit_{mode_name}_d_8_23"
+      elif (
+        (last_candle["r_14"] >= -12.0)
+        and (last_candle["rsi_3"] >= 80.0)
+        and (last_candle["rsi_14"] <= 50.0)
+        and (last_candle["rsi_14_15m"] <= 50.0)
+        and (last_candle["rsi_3_1h"] <= 20.0)
+        and (last_candle["change_pct_1h"] < -0.02)
+        and (last_candle["not_downtrend_1h"] == False)
+      ):
+        return True, f"exit_{mode_name}_d_8_24"
     elif 0.1 > current_profit >= 0.09:
       if (
         (last_candle["r_14"] > -16.0)
@@ -7775,6 +7865,16 @@ class NostalgiaForInfinityX4(IStrategy):
         and (last_candle["close"] < (last_candle["high_max_6_1d"] * 0.80))
       ):
         return True, f"exit_{mode_name}_d_9_23"
+      elif (
+        (last_candle["r_14"] >= -10.0)
+        and (last_candle["rsi_3"] >= 80.0)
+        and (last_candle["rsi_14"] <= 50.0)
+        and (last_candle["rsi_14_15m"] <= 50.0)
+        and (last_candle["rsi_3_1h"] <= 20.0)
+        and (last_candle["change_pct_1h"] < -0.02)
+        and (last_candle["not_downtrend_1h"] == False)
+      ):
+        return True, f"exit_{mode_name}_d_9_24"
     elif 0.12 > current_profit >= 0.1:
       if (
         (last_candle["r_14"] > -16.0)
@@ -7989,6 +8089,16 @@ class NostalgiaForInfinityX4(IStrategy):
         and (last_candle["close"] < (last_candle["high_max_6_1d"] * 0.80))
       ):
         return True, f"exit_{mode_name}_d_10_23"
+      elif (
+        (last_candle["r_14"] >= -6.0)
+        and (last_candle["rsi_3"] >= 80.0)
+        and (last_candle["rsi_14"] <= 50.0)
+        and (last_candle["rsi_14_15m"] <= 50.0)
+        and (last_candle["rsi_3_1h"] <= 20.0)
+        and (last_candle["change_pct_1h"] < -0.02)
+        and (last_candle["not_downtrend_1h"] == False)
+      ):
+        return True, f"exit_{mode_name}_d_10_24"
     elif 0.2 > current_profit >= 0.12:
       if (
         (last_candle["r_14"] > -16.0)
@@ -8203,6 +8313,16 @@ class NostalgiaForInfinityX4(IStrategy):
         and (last_candle["close"] < (last_candle["high_max_6_1d"] * 0.80))
       ):
         return True, f"exit_{mode_name}_d_11_23"
+      elif (
+        (last_candle["r_14"] >= -4.0)
+        and (last_candle["rsi_3"] >= 80.0)
+        and (last_candle["rsi_14"] <= 50.0)
+        and (last_candle["rsi_14_15m"] <= 50.0)
+        and (last_candle["rsi_3_1h"] <= 20.0)
+        and (last_candle["change_pct_1h"] < -0.02)
+        and (last_candle["not_downtrend_1h"] == False)
+      ):
+        return True, f"exit_{mode_name}_d_11_24"
     elif current_profit >= 0.2:
       if (
         (last_candle["r_14"] > -10.0)
@@ -8417,6 +8537,16 @@ class NostalgiaForInfinityX4(IStrategy):
         and (last_candle["close"] < (last_candle["high_max_6_1d"] * 0.80))
       ):
         return True, f"exit_{mode_name}_d_12_23"
+      elif (
+        (last_candle["r_14"] >= -1.0)
+        and (last_candle["rsi_3"] >= 95.0)
+        and (last_candle["rsi_14"] <= 50.0)
+        and (last_candle["rsi_14_15m"] <= 50.0)
+        and (last_candle["rsi_3_1h"] <= 20.0)
+        and (last_candle["change_pct_1h"] < -0.02)
+        and (last_candle["not_downtrend_1h"] == False)
+      ):
+        return True, f"exit_{mode_name}_d_12_24"
 
     return False, None
 
@@ -16472,7 +16602,7 @@ class NostalgiaForInfinityX4(IStrategy):
           f"De-risk (dd0) [{current_time}] [{trade.pair}] | Rate: {exit_rate} | Stake amount: {sell_amount} | Coin amount: {grind_1_total_amount} | Profit (stake): {profit_stake} | Profit: {(profit_ratio * 100.0):.2f}%"
         )
         order_tag = "dd0"
-        for grind_entry_id in grind_1_buy_orders:
+        for grind_entry_id in grind_1_buy_orders + grind_2_buy_orders + grind_3_buy_orders + grind_4_buy_orders:
           order_tag += " " + str(grind_entry_id)
         if has_order_tags:
           return -sell_amount, order_tag
@@ -17328,10 +17458,10 @@ class NostalgiaForInfinityX4(IStrategy):
       if sell_amount > min_stake:
         grind_profit = 0.0
         self.dp.send_msg(
-          f"Rebuy de-risk [{trade.pair}] | Rate: {exit_rate} | Stake amount: {sell_amount} | Profit (stake): {profit_stake} | Profit: {(profit_ratio * 100.0):.2f}%"
+          f"De-risk [{trade.pair}] | Rate: {exit_rate} | Stake amount: {sell_amount} | Profit (stake): {profit_stake} | Profit: {(profit_ratio * 100.0):.2f}%"
         )
         log.info(
-          f"Rebuy de-risk [{current_time}] [{trade.pair}] | Rate: {exit_rate} | Stake amount: {sell_amount} | Profit (stake): {profit_stake} | Profit: {(profit_ratio * 100.0):.2f}%"
+          f"De-risk [{current_time}] [{trade.pair}] | Rate: {exit_rate} | Stake amount: {sell_amount} | Profit (stake): {profit_stake} | Profit: {(profit_ratio * 100.0):.2f}%"
         )
         return -sell_amount, "d", is_derisk
 
@@ -18699,18 +18829,20 @@ class NostalgiaForInfinityX4(IStrategy):
           long_entry_logic.append(df["rsi_3_15m"] >= 26.0)
           long_entry_logic.append(df["rsi_3_1h"] >= 30.0)
           long_entry_logic.append(df["rsi_3_4h"] >= 30.0)
-          long_entry_logic.append(df["rsi_3_1d"] >= 10.0)
-          long_entry_logic.append(df["cti_20_1h"] <= 0.80)
-          long_entry_logic.append(df["rsi_14_1h"] <= 70.0)
-          long_entry_logic.append(df["cti_20_4h"] <= 0.80)
-          long_entry_logic.append(df["rsi_14_4h"] <= 70.0)
-          # long_entry_logic.append(df["cti_20_1d"] <= 0.80)
+          long_entry_logic.append(df["rsi_3_1d"] >= 30.0)
+          long_entry_logic.append(df["cti_20_1h"] <= 0.70)
+          long_entry_logic.append(df["rsi_14_1h"] <= 60.0)
+          long_entry_logic.append(df["cti_20_4h"] <= 0.70)
+          long_entry_logic.append(df["rsi_14_4h"] <= 60.0)
+          long_entry_logic.append(df["cti_20_1d"] <= 0.70)
           long_entry_logic.append(df["rsi_14_1d"] <= 70.0)
 
           long_entry_logic.append(df["ema_200_dec_4_1d"] == False)
 
           # Logic
-          long_entry_logic.append(df["rsi_14"] < 46.0)
+          long_entry_logic.append(df["rsi_14"] < 40.0)
+          long_entry_logic.append(df["ema_12"] < df["ema_26"])
+          long_entry_logic.append(df["ha_close"] > df["ha_open"])
 
         # Long Entry Conditions Ends Here
 
@@ -18797,25 +18929,25 @@ class NostalgiaForInfinityX4(IStrategy):
     df = df.iloc[-1].squeeze()
 
     # Grind mode
-    entry_tags = entry_tag.split()
-    if all(c in self.long_grind_mode_tags for c in entry_tags):
-      is_pair_grind_mode = True
-      if is_pair_grind_mode:
-        num_open_grind_mode = 0
-        open_trades = Trade.get_trades_proxy(is_open=True)
-        for open_trade in open_trades:
-          enter_tag = open_trade.enter_tag
-          enter_tags = enter_tag.split()
-          if all(c in self.long_grind_mode_tags for c in enter_tags):
-            num_open_grind_mode += 1
-        # if num_open_grind_mode >= self.grind_mode_max_slots:
-          # Reached the limit of grind mode open trades
-        # log.warning("Reached the limit of grind mode open trades")
-        # return False
-      else:
-        # The pair is not in the list of grind mode allowed
-        log.warning("The pair is not in the list of grind mode allowed")
-        return False
+    is_backtest = self.dp.runmode.value in ["backtest", "hyperopt", "plot"]
+    if is_backtest:
+      entry_tags = entry_tag.split()
+      if all(c in self.long_grind_mode_tags for c in entry_tags):
+        is_pair_grind_mode = True
+        if is_pair_grind_mode:
+          num_open_grind_mode = 0
+          open_trades = Trade.get_trades_proxy(is_open=True)
+          for open_trade in open_trades:
+            enter_tag = open_trade.enter_tag
+            enter_tags = enter_tag.split()
+            if all(c in self.long_grind_mode_tags for c in enter_tags):
+              num_open_grind_mode += 1
+          if num_open_grind_mode >= self.grind_mode_max_slots:
+            # Reached the limit of grind mode open trades
+            return False
+        else:
+          # The pair is not in the list of grind mode allowed
+          return False
 
     if rate > df["close"]:
       slippage = (rate / df["close"]) - 1.0
