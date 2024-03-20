@@ -15129,11 +15129,7 @@ class NostalgiaForInfinityX4(IStrategy):
     total_profit_ratio = total_profit / total_stake
     current_profit_ratio = total_profit / current_stake
     init_profit_ratio = total_profit / filled_entries[0].cost
-    
-    log.info(
-      f"calc_total_profit [{trade.pair}] | current_stake: {current_stake} | total_profit: {total_profit} | total_stake: {total_stake} | total_profit_ratio: {total_profit_ratio} | current_profit_ratio: {(current_profit_ratio * 100.0):.2f}% | init_profit_ratio: {(init_profit_ratio * 100.0):.2f}%"
-    )
-    
+        
     return total_profit, total_profit_ratio, current_profit_ratio, init_profit_ratio
 
   def custom_exit(
@@ -15162,15 +15158,11 @@ class NostalgiaForInfinityX4(IStrategy):
     profit_stake, profit_ratio, profit_current_stake_ratio, profit_init_ratio = self.calc_total_profit(
       trade, filled_entries, filled_exits, current_rate
     )
-    ratio = self.futures_mode_leverage if self.is_futures_mode else 1.0
-    profit_current_stake_ratio = current_profit * ratio
+    # ratio = self.futures_mode_leverage if self.is_futures_mode else 1.0
+    # profit_current_stake_ratio = current_profit * ratio
     max_profit = (trade.max_rate - trade.open_rate) / trade.open_rate
     max_loss = (trade.open_rate - trade.min_rate) / trade.min_rate
     
-    log.info(
-      f"custom_exit [{trade.pair}] | profit_current_stake_ratio: {profit_current_stake_ratio} | max_profit: {max_profit} | max_loss: {max_loss}"
-    )
-
     count_of_entries = len(filled_entries)
     if count_of_entries > 1:
       initial_entry = filled_entries[0]
@@ -18554,7 +18546,7 @@ class NostalgiaForInfinityX4(IStrategy):
           enter_tags = enter_tag.split()
           if all(c in self.long_grind_mode_tags for c in enter_tags):
             num_open_grind_mode += 1
-          elif any(c in self.short_normal_mode_tags for c in enter_tags):
+          elif all(c in self.short_normal_mode_tags for c in enter_tags):
             num_open_short_mode += 1
     # if BTC/ETH stake
     is_btc_stake = self.config["stake_currency"] in self.btc_stakes
