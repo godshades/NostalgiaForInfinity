@@ -647,7 +647,7 @@ class NostalgiaForInfinityX4(IStrategy):
   ]
 
   # Short mode
-  short_mode_max_slots = 3
+  short_mode_max_slots = 0
 
   # Profit max thresholds
   profit_max_thresholds = [0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.05, 0.05]
@@ -15106,19 +15106,26 @@ class NostalgiaForInfinityX4(IStrategy):
     exit_stake = 0.0
     for entry in filled_entries:
       entry_stake = entry.safe_filled * entry.safe_price * (1 + trade.fee_open)
-      total_stake += entry_stake
-      total_profit -= entry_stake
+      total_stake += entry_stake      
+      if trade.is_short:
+        total_profit += entry_stake
+      else:
+        total_profit -= entry_stake
     for exit in filled_exits:
       exit_stake = exit.safe_filled * exit.safe_price * (1 - trade.fee_close)
-      total_profit += exit_stake
+      if trade.is_short:
+        total_profit -= exit_stake
+      else:
+        total_profit += exit_stake
     current_stake = trade.amount * exit_rate * (1 - trade.fee_close)
     if self.is_futures_mode:
       if trade.is_short:
         current_stake -= trade.funding_fees
+        total_profit -= current_stake
       else:
         current_stake += trade.funding_fees
+        total_profit += current_stake
 
-    total_profit += current_stake
     total_profit_ratio = total_profit / total_stake
     current_profit_ratio = total_profit / current_stake
     init_profit_ratio = total_profit / filled_entries[0].cost
@@ -19004,7 +19011,7 @@ class NostalgiaForInfinityX4(IStrategy):
           # Logic
           short_entry_logic.append(df["buy_short2"] > 0)
           
-        if short_index == 503:
+        if short_index == 502:
           # Logic
           short_entry_logic.append(num_open_short_mode < self.short_mode_max_slots)
           short_entry_logic.append(df["low"] < df["low"].shift())
