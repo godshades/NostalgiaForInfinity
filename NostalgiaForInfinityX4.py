@@ -647,7 +647,7 @@ class NostalgiaForInfinityX4(IStrategy):
   ]
 
   # Short mode
-  short_mode_max_slots = 1
+  short_mode_max_slots = 3
 
   # Profit max thresholds
   profit_max_thresholds = [0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.05, 0.05]
@@ -714,7 +714,7 @@ class NostalgiaForInfinityX4(IStrategy):
     # -------------------------------------------------------
     "short_entry_condition_500_enable": False,
     "short_entry_condition_501_enable": False,
-    "short_entry_condition_502_enable": False,
+    "short_entry_condition_502_enable": True,
   }
 
   buy_protection_params = {}
@@ -18554,7 +18554,7 @@ class NostalgiaForInfinityX4(IStrategy):
           enter_tags = enter_tag.split()
           if all(c in self.long_grind_mode_tags for c in enter_tags):
             num_open_grind_mode += 1
-          elif(c in self.short_normal_mode_tags for c in enter_tags):
+          elif any(c in self.short_normal_mode_tags for c in enter_tags):
             num_open_short_mode += 1
     # if BTC/ETH stake
     is_btc_stake = self.config["stake_currency"] in self.btc_stakes
