@@ -15,8 +15,12 @@ from functools import reduce
 from freqtrade.persistence import Trade
 from datetime import datetime, timedelta
 import time
-from typing import Optional
+from typing import Optional, Tuple
 import warnings
+from enum import Enum
+# --------------------------------
+# Add your lib to import here
+from collections import deque
 
 log = logging.getLogger(__name__)
 # log.setLevel(logging.DEBUG)
@@ -134,7 +138,7 @@ class NostalgiaForInfinityX4(IStrategy):
   # Shorting
 
   # Short normal mode tags
-  short_normal_mode_tags = ["500", "501"]
+  short_normal_mode_tags = ["500", "501", "502"]
   # Short Pump mode tags
   short_pump_mode_tags = ["521", "522", "523", "524", "525", "526"]
   # Short Quick mode tags
@@ -699,7 +703,7 @@ class NostalgiaForInfinityX4(IStrategy):
     "long_entry_condition_108_enable": True,
     "long_entry_condition_109_enable": True,
     "long_entry_condition_110_enable": True,
-    "long_entry_condition_120_enable": True,
+    "long_entry_condition_120_enable": False,
   }
 
   short_entry_signal_params = {
@@ -707,6 +711,7 @@ class NostalgiaForInfinityX4(IStrategy):
     # -------------------------------------------------------
     "short_entry_condition_500_enable": False,
     "short_entry_condition_501_enable": False,
+    "short_entry_condition_502_enable": True,
   }
 
   buy_protection_params = {}
@@ -18196,6 +18201,73 @@ class NostalgiaForInfinityX4(IStrategy):
     # For sell checks
     df["crossed_below_ema_12_26"] = qtpylib.crossed_below(df["ema_12"], df["ema_26"])
 
+    # Momentum Indicators - Short
+    # ------------------------------------
+    # RSI
+    df["rsi"] = ta.RSI(df)
+    # Stochastic Slow
+    df["stoch"] = ta.STOCH(df)["slowk"]
+    # ROC
+    df["roc"] = ta.ROC(df)
+    # Ultimate Oscillator
+    df["uo"] = ta.ULTOSC(df)
+    # Awesome Oscillator
+    df["ao"] = qtpylib.awesome_oscillator(df)
+    # MACD
+    df["macd"] = ta.MACD(df)["macd"]
+    # Commodity Channel Index
+    df["cci"] = ta.CCI(df)
+    # CMF
+    df["cmf"] = chaikin_money_flow(df, 20)
+    # OBV
+    df["obv"] = ta.OBV(df)
+    # MFI
+    df["mfi"] = ta.MFI(df)
+    # ADX
+    df["adx"] = ta.ADX(df)
+    # ATR
+    df["atr"] = qtpylib.atr(df, window=14, exp=False)
+    # Keltner Channel
+    keltner = qtpylib.keltner_channel(df, window=20, atrs=1)
+    keltner = emaKeltner(df)
+    df["kc_upperband"] = keltner["upper"]
+    df["kc_middleband"] = keltner["mid"]
+    df["kc_lowerband"] = keltner["lower"]
+    # Bollinger Bands
+    bollinger = qtpylib.bollinger_bands(qtpylib.typical_price(df), window=20, stds=2)
+    df["bollinger_upperband"] = bollinger["upper"]
+    df["bollinger_middleband"] = bollinger["mid"]
+    df["bollinger_lowerband"] = bollinger["lower"]
+    # EMA - Exponential Moving Average
+    df["ema9"] = ta.EMA(df, timeperiod=9)
+    df["ema20"] = ta.EMA(df, timeperiod=20)
+    df["ema50"] = ta.EMA(df, timeperiod=50)
+    df["ema200"] = ta.EMA(df, timeperiod=200)
+    # TEMA - Triple Exponential Moving Average
+    df["tema"] = ta.TEMA(df, timeperiod=9)
+    
+    # SAR - Parabolic SAR
+    df["sar"] = ta.SAR(df)
+    
+    #Pivots
+    pivots = pivot_points_S(df)
+    df["pivot_lows"] = pivots["pivot_lows"]
+    df["pivot_highs"] = pivots["pivot_highs"]
+    
+    # Add Divergences
+    initialize_divergences_lists(df)
+    add_divergences(df, "rsi")
+    add_divergences(df, "stoch")
+    add_divergences(df, "roc")
+    add_divergences(df, "uo")
+    add_divergences(df, "ao")
+    add_divergences(df, "macd")
+    add_divergences(df, "cci")
+    add_divergences(df, "cmf")
+    add_divergences(df, "obv")
+    add_divergences(df, "mfi")
+    add_divergences(df, "adx")
+
     # Global protections
     # -----------------------------------------------------------------------------------------
     if not self.config["runmode"].value in ("live", "dry_run"):
@@ -18912,6 +18984,13 @@ class NostalgiaForInfinityX4(IStrategy):
 
           # Logic
           short_entry_logic.append(df["buy_short2"] > 0)
+          
+        if short_index == 503:
+          # Logic
+          short_entry_logic.append(df["low"] < df["low"].shift())
+          short_entry_logic.append(df["total_bearish_divergences"].shift() > 0)
+          short_entry_logic.append(two_bands_check(df))
+          short_entry_logic.append(df["volume"] > 0)
 
         # Short Entry Conditions Ends Here
 
@@ -18927,6 +19006,12 @@ class NostalgiaForInfinityX4(IStrategy):
     return df
 
   def populate_exit_trend(self, df: DataFrame, metadata: dict) -> DataFrame:
+    # Detect bullish trend exits
+    df.loc[(df["total_bullish_divergences"].shift() < 0) & (df["total_bearish_divergences"].shift() > 0), "exit_long"] = 1
+
+    # Detect bearish trend exits
+    df.loc[(df["total_bullish_divergences"].shift() > 0) & (df["total_bearish_divergences"].shift() < 0), "exit_short"] = 1
+    
     df.loc[:, "exit_long"] = 0
     df.loc[:, "exit_short"] = 0
 
@@ -19448,6 +19533,245 @@ def top_percent_change(self, df: DataFrame, length: int) -> float:
   else:
     return (df["open"].rolling(length).max() - df["close"]) / df["close"]
 
+def resample(indicator):
+    # return "resample_5_" + indicator
+    return indicator
+
+def two_bands_check(dataframe):
+    check = (dataframe[resample("low")] < dataframe[resample("kc_lowerband")]) & (dataframe[resample("high")] > dataframe[resample("kc_upperband")])
+    return ~check
+
+def ema_cross_check(dataframe):
+    dataframe["ema20_50_cross"] = qtpylib.crossed_below(dataframe[resample("ema20")], dataframe[resample("ema50")])
+    dataframe["ema20_200_cross"] = qtpylib.crossed_below(dataframe[resample("ema20")], dataframe[resample("ema200")])
+    dataframe["ema50_200_cross"] = qtpylib.crossed_below(dataframe[resample("ema50")], dataframe[resample("ema200")])
+    return ~(dataframe["ema20_50_cross"] | dataframe["ema20_200_cross"] | dataframe["ema50_200_cross"])
+
+def green_candle(dataframe):
+    return dataframe[resample("open")] < dataframe[resample("close")]
+
+def keltner_middleband_check(dataframe):
+    return (dataframe[resample("low")] < dataframe[resample("kc_middleband")]) & (dataframe[resample("high")] > dataframe[resample("kc_middleband")])
+
+def keltner_lowerband_check(dataframe):
+    return (dataframe[resample("low")] < dataframe[resample("kc_lowerband")]) & (dataframe[resample("high")] > dataframe[resample("kc_lowerband")])
+
+def bollinger_lowerband_check(dataframe):
+    return (dataframe[resample("low")] < dataframe[resample("bollinger_lowerband")]) & (dataframe[resample("high")] > dataframe[resample("bollinger_lowerband")])
+
+def bollinger_keltner_check(dataframe):
+    return (dataframe[resample("bollinger_lowerband")] < dataframe[resample("kc_lowerband")]) & (dataframe[resample("bollinger_upperband")] > dataframe[resample("kc_upperband")])
+
+def ema_check(dataframe):
+    check = (dataframe[resample("ema9")] < dataframe[resample("ema20")]) & (dataframe[resample("ema20")] < dataframe[resample("ema50")]) & (dataframe[resample("ema50")] < dataframe[resample("ema200")])
+    return ~check
+
+def initialize_divergences_lists(dataframe: DataFrame):
+    dataframe["total_bullish_divergences"] = np.empty(len(dataframe["close"])) * np.nan
+    dataframe["total_bullish_divergences_count"] = np.empty(len(dataframe["close"])) * np.nan
+    dataframe["total_bullish_divergences_count"] = [0 if x != x else x for x in dataframe["total_bullish_divergences_count"]]
+    dataframe["total_bullish_divergences_names"] = np.empty(len(dataframe["close"])) * np.nan
+    dataframe["total_bullish_divergences_names"] = ["" if x != x else x for x in dataframe["total_bullish_divergences_names"]]
+    dataframe["total_bearish_divergences"] = np.empty(len(dataframe["close"])) * np.nan
+    dataframe["total_bearish_divergences_count"] = np.empty(len(dataframe["close"])) * np.nan
+    dataframe["total_bearish_divergences_count"] = [0 if x != x else x for x in dataframe["total_bearish_divergences_count"]]
+    dataframe["total_bearish_divergences_names"] = np.empty(len(dataframe["close"])) * np.nan
+    dataframe["total_bearish_divergences_names"] = ["" if x != x else x for x in dataframe["total_bearish_divergences_names"]]
+
+def add_divergences(dataframe: DataFrame, indicator: str):
+    bearish_divergences, bearish_lines, bullish_divergences, bullish_lines = divergence_finder_dataframe(dataframe, indicator)
+    dataframe["bearish_divergence_" + indicator + "_occurence"] = bearish_divergences
+    # for index, bearish_line in enumerate(bearish_lines):
+    #    dataframe["bearish_divergence_" + indicator + "_line_" + str(index)] = bearish_line
+    dataframe["bullish_divergence_" + indicator + "_occurence"] = bullish_divergences
+    # for index, bullish_line in enumerate(bullish_lines):
+    #    dataframe["bullish_divergence_" + indicator + "_line_" + str(index)] = bullish_line
+
+def divergence_finder_dataframe(dataframe: DataFrame, indicator_source: str) -> Tuple[pd.Series, pd.Series]:
+    bearish_lines = [np.empty(len(dataframe["close"])) * np.nan]
+    bearish_divergences = np.empty(len(dataframe["close"])) * np.nan
+    bullish_lines = [np.empty(len(dataframe["close"])) * np.nan]
+    bullish_divergences = np.empty(len(dataframe["close"])) * np.nan
+    low_iterator = []
+    high_iterator = []
+    for index, row in enumerate(dataframe.itertuples(index=True, name="Pandas")):
+        if np.isnan(row.pivot_lows):
+            low_iterator.append(0 if len(low_iterator) == 0 else low_iterator[-1])
+        else:
+            low_iterator.append(index)
+        if np.isnan(row.pivot_highs):
+            high_iterator.append(0 if len(high_iterator) == 0 else high_iterator[-1])
+        else:
+            high_iterator.append(index)
+    for index, row in enumerate(dataframe.itertuples(index=True, name="Pandas")):
+        bearish_occurence = bearish_divergence_finder(dataframe, dataframe[indicator_source], high_iterator, index)
+        if bearish_occurence != None:
+            prev_pivot, current_pivot = bearish_occurence
+            bearish_prev_pivot = dataframe["close"][prev_pivot]
+            bearish_current_pivot = dataframe["close"][current_pivot]
+            bearish_ind_prev_pivot = dataframe[indicator_source][prev_pivot]
+            bearish_ind_current_pivot = dataframe[indicator_source][current_pivot]
+            length = current_pivot - prev_pivot
+            bearish_lines_index = 0
+            can_exist = True
+            while True:
+                can_draw = True
+                if bearish_lines_index <= len(bearish_lines):
+                    bearish_lines.append(np.empty(len(dataframe["close"])) * np.nan)
+                actual_bearish_lines = bearish_lines[bearish_lines_index]
+                for i in range(length + 1):
+                    point = bearish_prev_pivot + (bearish_current_pivot - bearish_prev_pivot) * i / length
+                    indicator_point = bearish_ind_prev_pivot + (bearish_ind_current_pivot - bearish_ind_prev_pivot) * i / length
+                    if i != 0 and i != length:
+                        if point <= dataframe["close"][prev_pivot + i] or indicator_point <= dataframe[indicator_source][prev_pivot + i]:
+                            can_exist = False
+                    if not np.isnan(actual_bearish_lines[prev_pivot + i]):
+                        can_draw = False
+                if not can_exist:
+                    break
+                if can_draw:
+                    for i in range(length + 1):
+                        actual_bearish_lines[prev_pivot + i] = bearish_prev_pivot + (bearish_current_pivot - bearish_prev_pivot) * i / length
+                    break
+                bearish_lines_index = bearish_lines_index + 1
+            if can_exist:
+                bearish_divergences[index] = row.close
+                dataframe["total_bearish_divergences"][index] = row.close
+                if index > 30:
+                    dataframe["total_bearish_divergences_count"][index - 30] = dataframe["total_bearish_divergences_count"][index - 30] + 1
+                    dataframe["total_bearish_divergences_names"][index - 30] = dataframe["total_bearish_divergences_names"][index - 30] + indicator_source.upper() + "<br>"
+        bullish_occurence = bullish_divergence_finder(dataframe, dataframe[indicator_source], low_iterator, index)
+        if bullish_occurence != None:
+            prev_pivot, current_pivot = bullish_occurence
+            bullish_prev_pivot = dataframe["close"][prev_pivot]
+            bullish_current_pivot = dataframe["close"][current_pivot]
+            bullish_ind_prev_pivot = dataframe[indicator_source][prev_pivot]
+            bullish_ind_current_pivot = dataframe[indicator_source][current_pivot]
+            length = current_pivot - prev_pivot
+            bullish_lines_index = 0
+            can_exist = True
+            while True:
+                can_draw = True
+                if bullish_lines_index <= len(bullish_lines):
+                    bullish_lines.append(np.empty(len(dataframe["close"])) * np.nan)
+                actual_bullish_lines = bullish_lines[bullish_lines_index]
+                for i in range(length + 1):
+                    point = bullish_prev_pivot + (bullish_current_pivot - bullish_prev_pivot) * i / length
+                    indicator_point = bullish_ind_prev_pivot + (bullish_ind_current_pivot - bullish_ind_prev_pivot) * i / length
+                    if i != 0 and i != length:
+                        if point >= dataframe["close"][prev_pivot + i] or indicator_point >= dataframe[indicator_source][prev_pivot + i]:
+                            can_exist = False
+                    if not np.isnan(actual_bullish_lines[prev_pivot + i]):
+                        can_draw = False
+                if not can_exist:
+                    break
+                if can_draw:
+                    for i in range(length + 1):
+                        actual_bullish_lines[prev_pivot + i] = bullish_prev_pivot + (bullish_current_pivot - bullish_prev_pivot) * i / length
+                    break
+                bullish_lines_index = bullish_lines_index + 1
+            if can_exist:
+                bullish_divergences[index] = row.close
+                dataframe["total_bullish_divergences"][index] = row.close
+                if index > 30:
+                    dataframe["total_bullish_divergences_count"][index - 30] = dataframe["total_bullish_divergences_count"][index - 30] + 1
+                    dataframe["total_bullish_divergences_names"][index - 30] = dataframe["total_bullish_divergences_names"][index - 30] + indicator_source.upper() + "<br>"
+    return (bearish_divergences, bearish_lines, bullish_divergences, bullish_lines)
+
+def bearish_divergence_finder(dataframe, indicator, high_iterator, index):
+    if high_iterator[index] == index:
+        current_pivot = high_iterator[index]
+        occurences = list(dict.fromkeys(high_iterator))
+        current_index = occurences.index(high_iterator[index])
+        for i in range(current_index - 1, current_index - 6, -1):
+            prev_pivot = occurences[i]
+            if np.isnan(prev_pivot):
+                return
+            if dataframe["pivot_highs"][current_pivot] < dataframe["pivot_highs"][prev_pivot] and indicator[current_pivot] > indicator[prev_pivot] or (dataframe["pivot_highs"][current_pivot] > dataframe["pivot_highs"][prev_pivot] and indicator[current_pivot] < indicator[prev_pivot]):
+                return (prev_pivot, current_pivot)
+    return None
+
+def bullish_divergence_finder(dataframe, indicator, low_iterator, index):
+    if low_iterator[index] == index:
+        current_pivot = low_iterator[index]
+        occurences = list(dict.fromkeys(low_iterator))
+        current_index = occurences.index(low_iterator[index])
+        for i in range(current_index - 1, current_index - 6, -1):
+            prev_pivot = occurences[i]
+            if np.isnan(prev_pivot):
+                return
+            if dataframe["pivot_lows"][current_pivot] < dataframe["pivot_lows"][prev_pivot] and indicator[current_pivot] > indicator[prev_pivot] or (dataframe["pivot_lows"][current_pivot] > dataframe["pivot_lows"][prev_pivot] and indicator[current_pivot] < indicator[prev_pivot]):
+                return (prev_pivot, current_pivot)
+    return None
+
+class PivotSource(Enum):
+    HighLow = 0
+    Close = 1
+
+def pivot_points_S(dataframe: DataFrame, window: int=5, pivot_source: PivotSource=PivotSource.Close) -> DataFrame:
+    high_source = None
+    low_source = None
+    if pivot_source == PivotSource.Close:
+        high_source = "close"
+        low_source = "close"
+    elif pivot_source == PivotSource.HighLow:
+        high_source = "high"
+        low_source = "low"
+    pivot_points_lows = np.empty(len(dataframe["close"])) * np.nan
+    pivot_points_highs = np.empty(len(dataframe["close"])) * np.nan
+    last_values = deque()
+    # find pivot points
+    for index, row in enumerate(dataframe.itertuples(index=True, name="Pandas")):
+        last_values.append(row)
+        if len(last_values) >= window * 2 + 1:
+            current_value = last_values[window]
+            is_greater = True
+            is_less = True
+            for window_index in range(0, window):
+                left = last_values[window_index]
+                right = last_values[2 * window - window_index]
+                local_is_greater, local_is_less = check_if_pivot_is_greater_or_less(current_value, high_source, low_source, left, right)
+                is_greater &= local_is_greater
+                is_less &= local_is_less
+            if is_greater:
+                pivot_points_highs[index - window] = getattr(current_value, high_source)
+            if is_less:
+                pivot_points_lows[index - window] = getattr(current_value, low_source)
+            last_values.popleft()
+    # find last one
+    if len(last_values) >= window + 2:
+        current_value = last_values[-2]
+        is_greater = True
+        is_less = True
+        for window_index in range(0, window):
+            left = last_values[-2 - window_index - 1]
+            right = last_values[-1]
+            local_is_greater, local_is_less = check_if_pivot_is_greater_or_less(current_value, high_source, low_source, left, right)
+            is_greater &= local_is_greater
+            is_less &= local_is_less
+        if is_greater:
+            pivot_points_highs[index - 1] = getattr(current_value, high_source)
+        if is_less:
+            pivot_points_lows[index - 1] = getattr(current_value, low_source)
+    return pd.DataFrame(index=dataframe.index, data={"pivot_lows": pivot_points_lows, "pivot_highs": pivot_points_highs})
+
+def check_if_pivot_is_greater_or_less(current_value, high_source: str, low_source: str, left, right) -> Tuple[bool, bool]:
+    is_greater = True
+    is_less = True
+    if getattr(current_value, high_source) < getattr(left, high_source) or getattr(current_value, high_source) < getattr(right, high_source):
+        is_greater = False
+    if getattr(current_value, low_source) > getattr(left, low_source) or getattr(current_value, low_source) > getattr(right, low_source):
+        is_less = False
+    return (is_greater, is_less)
+
+def emaKeltner(df):
+    keltner = {}
+    atr = qtpylib.atr(df, window=10)
+    ema20 = ta.EMA(df, timeperiod=20)
+    keltner["upper"] = ema20 + atr
+    keltner["mid"] = ema20
+    keltner["lower"] = ema20 - atr
+    return keltner
 
 # +---------------------------------------------------------------------------+
 # |                              Classes                                      |
