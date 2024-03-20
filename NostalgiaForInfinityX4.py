@@ -647,7 +647,7 @@ class NostalgiaForInfinityX4(IStrategy):
   ]
 
   # Short mode
-  short_mode_max_slots = 0
+  short_mode_max_slots = 1
 
   # Profit max thresholds
   profit_max_thresholds = [0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.05, 0.05]
@@ -686,7 +686,7 @@ class NostalgiaForInfinityX4(IStrategy):
     "long_entry_condition_41_enable": True,
     "long_entry_condition_42_enable": True,
     "long_entry_condition_43_enable": True,
-    "long_entry_condition_44_enable": False,
+    "long_entry_condition_44_enable": True,
     "long_entry_condition_45_enable": True,
     "long_entry_condition_46_enable": True,
     "long_entry_condition_47_enable": True,
@@ -19031,14 +19031,12 @@ class NostalgiaForInfinityX4(IStrategy):
 
     return df
 
-  def populate_exit_trend(self, df: DataFrame, metadata: dict) -> DataFrame:
-    df["exit_tag"]=""
-    
+  def populate_exit_trend(self, df: DataFrame, metadata: dict) -> DataFrame:  
     # Detect bullish trend exits
-    df.loc[((df["total_bullish_divergences"].shift() < 0) & (df["total_bearish_divergences"].shift() > 0)), ["exit_long",""]] = (1, "bullish trend exits")
+    df.loc[((df["total_bullish_divergences"].shift() < 0) & (df["total_bearish_divergences"].shift() > 0)), ["exit_long",""]] = 1
 
     # Detect bearish trend exits
-    df.loc[((df["total_bullish_divergences"].shift() > 0) & (df["total_bearish_divergences"].shift() < 0)), ["exit_short",""]] = (1, "bearish trend exits")
+    df.loc[((df["total_bullish_divergences"].shift() > 0) & (df["total_bearish_divergences"].shift() < 0)), ["exit_short",""]] = 1
     
     # df.loc[:, "exit_long"] = 0
     # df.loc[:, "exit_short"] = 0
