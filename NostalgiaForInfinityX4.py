@@ -15089,7 +15089,7 @@ class NostalgiaForInfinityX4(IStrategy):
     return False, None
 
   def calc_total_profit(
-    self, trade: "Trade", filled_entries: "Orders", filled_exits: "Orders", current_rate: float
+    self, trade: "Trade", filled_entries: "Orders", filled_exits: "Orders", exit_rate: float
   ) -> tuple:
     """
     Calculates the absolute profit for open trades.
@@ -15097,7 +15097,7 @@ class NostalgiaForInfinityX4(IStrategy):
     :param trade: trade object.
     :param filled_entries: Filled entries list.
     :param filled_exits: Filled exits list.
-    :param current_rate: The exit rate.
+    :param exit_rate: The exit rate.
     :return tuple: The total profit in stake, ratio, ratio based on current stake, and ratio based on the first entry stake.
     """
     total_stake = 0.0
@@ -19025,6 +19025,8 @@ class NostalgiaForInfinityX4(IStrategy):
     return df
 
   def populate_exit_trend(self, df: DataFrame, metadata: dict) -> DataFrame:
+    df["exit_tag"]=""
+    
     # Detect bullish trend exits
     df.loc[((df["total_bullish_divergences"].shift() < 0) & (df["total_bearish_divergences"].shift() > 0)), ["exit_long",""]] = (1, "bullish trend exits")
 
