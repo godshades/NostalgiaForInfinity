@@ -15086,7 +15086,7 @@ class NostalgiaForInfinityX4(IStrategy):
     return False, None
 
   def calc_total_profit(
-    self, trade: "Trade", filled_entries: "Orders", filled_exits: "Orders", exit_rate: float
+    self, trade: "Trade", filled_entries: "Orders", filled_exits: "Orders", current_rate: float
   ) -> tuple:
     """
     Calculates the absolute profit for open trades.
@@ -15094,7 +15094,7 @@ class NostalgiaForInfinityX4(IStrategy):
     :param trade: trade object.
     :param filled_entries: Filled entries list.
     :param filled_exits: Filled exits list.
-    :param exit_rate: The exit rate.
+    :param current_rate: The exit rate.
     :return tuple: The total profit in stake, ratio, ratio based on current stake, and ratio based on the first entry stake.
     """
     total_stake = 0.0
@@ -15107,7 +15107,7 @@ class NostalgiaForInfinityX4(IStrategy):
     for exit in filled_exits:
       exit_stake = exit.safe_filled * exit.safe_price * (1 - trade.fee_close)
 
-    current_stake = trade.amount * exit_rate * (1 - trade.fee_close)
+    current_stake = trade.amount * current_rate * (1 - trade.fee_close)
     if self.is_futures_mode:
       if trade.is_short:
         total_profit += entry_stake
@@ -15122,6 +15122,11 @@ class NostalgiaForInfinityX4(IStrategy):
     total_profit_ratio = total_profit / total_stake
     current_profit_ratio = total_profit / current_stake
     init_profit_ratio = total_profit / filled_entries[0].cost
+    
+    log.info(
+      f"calc_total_profit [{trade.pair}] | current_stake: {current_stake} | total_profit: {total_profit} | total_stake: {total_stake} | total_profit_ratio: {total_profit_ratio} | current_profit_ratio: {(current_profit_ratio * 100.0):.2f}% | init_profit_ratio: {(init_profit_ratio * 100.0):.2f}%"
+    )
+    
     return total_profit, total_profit_ratio, current_profit_ratio, init_profit_ratio
 
   def custom_exit(
@@ -15150,9 +15155,13 @@ class NostalgiaForInfinityX4(IStrategy):
     profit_stake, profit_ratio, profit_current_stake_ratio, profit_init_ratio = self.calc_total_profit(
       trade, filled_entries, filled_exits, current_rate
     )
-
+    profit_current_stake_ratio = current_profit
     max_profit = (trade.max_rate - trade.open_rate) / trade.open_rate
     max_loss = (trade.open_rate - trade.min_rate) / trade.min_rate
+    
+    log.info(
+      f"custom_exit [{trade.pair}] | current_profit: {current_profit} | max_profit: {max_profit} | max_loss: {max_loss}"
+    )
 
     count_of_entries = len(filled_entries)
     if count_of_entries > 1:
