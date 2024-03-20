@@ -380,8 +380,8 @@ class NostalgiaForInfinityX4(IStrategy):
   ]
 
   # Non rebuy modes
-  regular_mode_stake_multiplier_spot = [1.0]
-  regular_mode_stake_multiplier_futures = [1.0]
+  regular_mode_stake_multiplier_spot = [0.5]
+  regular_mode_stake_multiplier_futures = [0.5]
 
   regular_mode_rebuy_stakes_spot = [
     [0.10, 0.10, 0.10, 0.10, 0.10],
@@ -15099,19 +15099,25 @@ class NostalgiaForInfinityX4(IStrategy):
     """
     total_stake = 0.0
     total_profit = 0.0
+    entry_stake = 0.0
+    exit_stake = 0.0
     for entry in filled_entries:
       entry_stake = entry.safe_filled * entry.safe_price * (1 + trade.fee_open)
       total_stake += entry_stake
-      total_profit -= entry_stake
     for exit in filled_exits:
       exit_stake = exit.safe_filled * exit.safe_price * (1 - trade.fee_close)
-      total_profit += exit_stake
+
     current_stake = trade.amount * exit_rate * (1 - trade.fee_close)
     if self.is_futures_mode:
       if trade.is_short:
+        total_profit += entry_stake
+        total_profit -= exit_stake
         current_stake -= trade.funding_fees
       else:
+        total_profit -= entry_stake
+        total_profit += exit_stake
         current_stake += trade.funding_fees
+
     total_profit += current_stake
     total_profit_ratio = total_profit / total_stake
     current_profit_ratio = total_profit / current_stake
