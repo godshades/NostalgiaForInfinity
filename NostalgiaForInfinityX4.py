@@ -646,6 +646,9 @@ class NostalgiaForInfinityX4(IStrategy):
     "QTUM",
   ]
 
+  # Short mode
+  short_mode_max_slots = 3
+
   # Profit max thresholds
   profit_max_thresholds = [0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.05, 0.05]
 
@@ -15104,18 +15107,15 @@ class NostalgiaForInfinityX4(IStrategy):
     for entry in filled_entries:
       entry_stake = entry.safe_filled * entry.safe_price * (1 + trade.fee_open)
       total_stake += entry_stake
+      total_profit -= entry_stake
     for exit in filled_exits:
       exit_stake = exit.safe_filled * exit.safe_price * (1 - trade.fee_close)
-
-    current_stake = trade.amount * current_rate * (1 - trade.fee_close)
+      total_profit += exit_stake
+    current_stake = trade.amount * exit_rate * (1 - trade.fee_close)
     if self.is_futures_mode:
       if trade.is_short:
-        total_profit += entry_stake
-        total_profit -= exit_stake
         current_stake -= trade.funding_fees
       else:
-        total_profit -= entry_stake
-        total_profit += exit_stake
         current_stake += trade.funding_fees
 
     total_profit += current_stake
@@ -15155,12 +15155,13 @@ class NostalgiaForInfinityX4(IStrategy):
     profit_stake, profit_ratio, profit_current_stake_ratio, profit_init_ratio = self.calc_total_profit(
       trade, filled_entries, filled_exits, current_rate
     )
-    profit_current_stake_ratio = current_profit
+    ratio = self.futures_mode_leverage if self.is_futures_mode else 1.0
+    profit_current_stake_ratio = current_profit * ratio
     max_profit = (trade.max_rate - trade.open_rate) / trade.open_rate
     max_loss = (trade.open_rate - trade.min_rate) / trade.min_rate
     
     log.info(
-      f"custom_exit [{trade.pair}] | current_profit: {current_profit} | max_profit: {max_profit} | max_loss: {max_loss}"
+      f"custom_exit [{trade.pair}] | profit_current_stake_ratio: {profit_current_stake_ratio} | max_profit: {max_profit} | max_loss: {max_loss}"
     )
 
     count_of_entries = len(filled_entries)
@@ -18536,6 +18537,7 @@ class NostalgiaForInfinityX4(IStrategy):
       current_free_slots = self.config["max_open_trades"] - Trade.get_open_trade_count()
     # Grind mode
     num_open_grind_mode = 0
+    num_open_short_mode = 0
     is_pair_grind_mode = metadata["pair"].split("/")[0] in self.grind_mode_coins
     if not is_backtest:
       open_trades = Trade.get_trades_proxy(is_open=True)
@@ -18545,6 +18547,8 @@ class NostalgiaForInfinityX4(IStrategy):
           enter_tags = enter_tag.split()
           if all(c in self.long_grind_mode_tags for c in enter_tags):
             num_open_grind_mode += 1
+          elif(c in self.short_normal_mode_tags for c in enter_tags):
+            num_open_short_mode += 1
     # if BTC/ETH stake
     is_btc_stake = self.config["stake_currency"] in self.btc_stakes
     allowed_empty_candles = 144 if is_btc_stake else 60
@@ -19002,10 +19006,10 @@ class NostalgiaForInfinityX4(IStrategy):
           
         if short_index == 503:
           # Logic
+          short_entry_logic.append(num_open_short_mode < self.short_mode_max_slots)
           short_entry_logic.append(df["low"] < df["low"].shift())
           short_entry_logic.append(df["total_bearish_divergences"].shift() > 0)
           short_entry_logic.append(two_bands_check(df))
-          short_entry_logic.append(df["volume"] > 0)
 
         # Short Entry Conditions Ends Here
 
@@ -19022,13 +19026,13 @@ class NostalgiaForInfinityX4(IStrategy):
 
   def populate_exit_trend(self, df: DataFrame, metadata: dict) -> DataFrame:
     # Detect bullish trend exits
-    df.loc[(df["total_bullish_divergences"].shift() < 0) & (df["total_bearish_divergences"].shift() > 0), "exit_long"] = 1
+    df.loc[((df["total_bullish_divergences"].shift() < 0) & (df["total_bearish_divergences"].shift() > 0)), ["exit_long",""]] = (1, "bullish trend exits")
 
     # Detect bearish trend exits
-    df.loc[(df["total_bullish_divergences"].shift() > 0) & (df["total_bearish_divergences"].shift() < 0), "exit_short"] = 1
+    df.loc[((df["total_bullish_divergences"].shift() > 0) & (df["total_bearish_divergences"].shift() < 0)), ["exit_short",""]] = (1, "bearish trend exits")
     
-    df.loc[:, "exit_long"] = 0
-    df.loc[:, "exit_short"] = 0
+    # df.loc[:, "exit_long"] = 0
+    # df.loc[:, "exit_short"] = 0
 
     return df
 
