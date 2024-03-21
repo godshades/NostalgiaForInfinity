@@ -686,7 +686,7 @@ class NostalgiaForInfinityX4(IStrategy):
     "long_entry_condition_41_enable": True,
     "long_entry_condition_42_enable": True,
     "long_entry_condition_43_enable": True,
-    "long_entry_condition_44_enable": True,
+    "long_entry_condition_44_enable": False,
     "long_entry_condition_45_enable": True,
     "long_entry_condition_46_enable": True,
     "long_entry_condition_47_enable": True,
@@ -714,7 +714,7 @@ class NostalgiaForInfinityX4(IStrategy):
     # -------------------------------------------------------
     "short_entry_condition_500_enable": False,
     "short_entry_condition_501_enable": False,
-    "short_entry_condition_502_enable": False,
+    "short_entry_condition_502_enable": True,
   }
 
   buy_protection_params = {}
