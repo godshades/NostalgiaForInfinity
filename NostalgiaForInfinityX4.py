@@ -380,8 +380,8 @@ class NostalgiaForInfinityX4(IStrategy):
   ]
 
   # Non rebuy modes
-  regular_mode_stake_multiplier_spot = [0.5]
-  regular_mode_stake_multiplier_futures = [0.5]
+  regular_mode_stake_multiplier_spot = [1.0]
+  regular_mode_stake_multiplier_futures = [1.0]
 
   regular_mode_rebuy_stakes_spot = [
     [0.10, 0.10, 0.10, 0.10, 0.10],
@@ -714,7 +714,7 @@ class NostalgiaForInfinityX4(IStrategy):
     # -------------------------------------------------------
     "short_entry_condition_500_enable": False,
     "short_entry_condition_501_enable": False,
-    "short_entry_condition_502_enable": True,
+    "short_entry_condition_502_enable": False,
   }
 
   buy_protection_params = {}
@@ -19040,13 +19040,13 @@ class NostalgiaForInfinityX4(IStrategy):
 
   def populate_exit_trend(self, df: DataFrame, metadata: dict) -> DataFrame:  
     # Detect bullish trend exits
-    df.loc[((df["total_bullish_divergences"].shift() < 0) & (df["total_bearish_divergences"].shift() > 0)), ["exit_long",""]] = 1
+    # df.loc[((df["total_bullish_divergences"].shift() < 0) & (df["total_bearish_divergences"].shift() > 0)), ["exit_long",""]] = 1
 
     # Detect bearish trend exits
-    df.loc[((df["total_bullish_divergences"].shift() > 0) & (df["total_bearish_divergences"].shift() < 0)), ["exit_short",""]] = 1
+    # df.loc[((df["total_bullish_divergences"].shift() > 0) & (df["total_bearish_divergences"].shift() < 0)), ["exit_short",""]] = 1
     
-    # df.loc[:, "exit_long"] = 0
-    # df.loc[:, "exit_short"] = 0
+    df.loc[:, "exit_long"] = 0
+    df.loc[:, "exit_short"] = 0
 
     return df
 
