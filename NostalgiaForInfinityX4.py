@@ -15104,34 +15104,23 @@ class NostalgiaForInfinityX4(IStrategy):
     """
     total_stake = 0.0
     total_profit = 0.0
-    entry_stake = 0.0
-    exit_stake = 0.0
     for entry in filled_entries:
       entry_stake = entry.safe_filled * entry.safe_price * (1 + trade.fee_open)
-      total_stake += entry_stake      
-      if trade.is_short:
-        total_profit += entry_stake
-      else:
-        total_profit -= entry_stake
+      total_stake += entry_stake
+      total_profit -= entry_stake
     for exit in filled_exits:
       exit_stake = exit.safe_filled * exit.safe_price * (1 - trade.fee_close)
-      if trade.is_short:
-        total_profit -= exit_stake
-      else:
-        total_profit += exit_stake
+      total_profit += exit_stake
     current_stake = trade.amount * exit_rate * (1 - trade.fee_close)
     if self.is_futures_mode:
       if trade.is_short:
         current_stake -= trade.funding_fees
-        total_profit -= current_stake
       else:
         current_stake += trade.funding_fees
-        total_profit += current_stake
-
+    total_profit += current_stake
     total_profit_ratio = total_profit / total_stake
     current_profit_ratio = total_profit / current_stake
     init_profit_ratio = total_profit / filled_entries[0].cost
-        
     return total_profit, total_profit_ratio, current_profit_ratio, init_profit_ratio
 
   def custom_exit(
