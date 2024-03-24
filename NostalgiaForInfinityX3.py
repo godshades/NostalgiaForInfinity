@@ -68,7 +68,7 @@ class NostalgiaForInfinityX3(IStrategy):
   INTERFACE_VERSION = 3
 
   def version(self) -> str:
-    return "v13.1.407"
+    return "v13.1.411"
 
   stoploss = -0.99
 
@@ -690,6 +690,7 @@ class NostalgiaForInfinityX3(IStrategy):
     "EOS",
     "LRC",
     "QTUM",
+    "CELR",
   ]
 
   # Profit max thresholds
@@ -17463,11 +17464,11 @@ class NostalgiaForInfinityX3(IStrategy):
         and (
           (last_candle["enter_long"] == True)
           or (
-            (last_candle["rsi_3"] > 12.0)
-            and (last_candle["rsi_3_15m"] > 20.0)
-            and (last_candle["rsi_3_1h"] > 26.0)
-            and (last_candle["rsi_3_4h"] > 26.0)
-            and (last_candle["rsi_14"] < 50.0)
+            (last_candle["rsi_3"] > 30.0)
+            and (last_candle["rsi_3_15m"] > 30.0)
+            and (last_candle["rsi_3_1h"] > 30.0)
+            and (last_candle["rsi_3_4h"] > 30.0)
+            and (last_candle["rsi_14"] < 42.0)
           )
         )
       ):
@@ -17512,9 +17513,6 @@ class NostalgiaForInfinityX3(IStrategy):
           and (last_candle["global_protections_long_dump"] == True)
         )
         and (
-          (last_candle["rsi_3_15m"] > 20.0) and (last_candle["rsi_3_1h"] > 26.0) and (last_candle["rsi_3_4h"] > 26.0)
-        )
-        and (
           (last_candle["close"] > (last_candle["close_max_12"] * 0.94))
           and (last_candle["close"] > (last_candle["close_max_24"] * 0.92))
           and (last_candle["close"] > (last_candle["close_max_48"] * 0.90))
@@ -17523,7 +17521,13 @@ class NostalgiaForInfinityX3(IStrategy):
           and (last_candle["close"] > (last_candle["high_max_6_1d"] * 0.80))
           and (last_candle["close"] > (last_candle["high_max_12_1d"] * 0.76))
         )
-        and self.long_grind_buy(last_candle, previous_candle, slice_profit)
+        and (
+          (last_candle["rsi_3"] > 30.0)
+          and (last_candle["rsi_3_15m"] > 30.0)
+          and (last_candle["rsi_3_1h"] > 30.0)
+          and (last_candle["rsi_3_4h"] > 30.0)
+          and (last_candle["rsi_14"] < 42.0)
+        )
       ):
         buy_amount = (
           slice_amount
@@ -17590,9 +17594,6 @@ class NostalgiaForInfinityX3(IStrategy):
           and (last_candle["global_protections_long_dump"] == True)
         )
         and (
-          (last_candle["rsi_3_15m"] > 20.0) and (last_candle["rsi_3_1h"] > 26.0) and (last_candle["rsi_3_4h"] > 26.0)
-        )
-        and (
           (last_candle["close"] > (last_candle["close_max_12"] * 0.94))
           and (last_candle["close"] > (last_candle["close_max_24"] * 0.92))
           and (last_candle["close"] > (last_candle["close_max_48"] * 0.90))
@@ -17601,7 +17602,13 @@ class NostalgiaForInfinityX3(IStrategy):
           and (last_candle["close"] > (last_candle["high_max_6_1d"] * 0.80))
           and (last_candle["close"] > (last_candle["high_max_12_1d"] * 0.76))
         )
-        and self.long_grind_buy(last_candle, previous_candle, slice_profit)
+        and (
+          (last_candle["rsi_3"] > 30.0)
+          and (last_candle["rsi_3_15m"] > 30.0)
+          and (last_candle["rsi_3_1h"] > 30.0)
+          and (last_candle["rsi_3_4h"] > 30.0)
+          and (last_candle["rsi_14"] < 42.0)
+        )
       ):
         buy_amount = (
           slice_amount
@@ -17681,7 +17688,7 @@ class NostalgiaForInfinityX3(IStrategy):
           and (last_candle["rsi_3_15m"] > 30.0)
           and (last_candle["rsi_3_1h"] > 30.0)
           and (last_candle["rsi_3_4h"] > 30.0)
-          and (last_candle["rsi_14"] < 40.0)
+          and (last_candle["rsi_14"] < 42.0)
         )
       ):
         buy_amount = (
@@ -17762,7 +17769,7 @@ class NostalgiaForInfinityX3(IStrategy):
           and (last_candle["rsi_3_15m"] > 30.0)
           and (last_candle["rsi_3_1h"] > 30.0)
           and (last_candle["rsi_3_4h"] > 30.0)
-          and (last_candle["rsi_14"] < 40.0)
+          and (last_candle["rsi_14"] < 42.0)
         )
       ):
         buy_amount = (
@@ -18033,8 +18040,8 @@ class NostalgiaForInfinityX3(IStrategy):
     # Indicators
     # -----------------------------------------------------------------------------------------
     # RSI
-    informative_1d["rsi_3"] = ta.RSI(informative_1d, timeperiod=3, fillna=True)
-    informative_1d["rsi_14"] = ta.RSI(informative_1d, timeperiod=14)
+    informative_1d["rsi_3"] = pta.rsi(informative_1d["close"], length=3)
+    informative_1d["rsi_14"] = pta.rsi(informative_1d["close"], length=14)
 
     informative_1d["rsi_14_max_6"] = informative_1d["rsi_14"].rolling(6).max()
 
@@ -18134,8 +18141,8 @@ class NostalgiaForInfinityX3(IStrategy):
     # Indicators
     # -----------------------------------------------------------------------------------------
     # RSI
-    informative_4h["rsi_3"] = ta.RSI(informative_4h, timeperiod=3, fillna=True)
-    informative_4h["rsi_14"] = ta.RSI(informative_4h, timeperiod=14, fillna=True)
+    informative_4h["rsi_3"] = pta.rsi(informative_4h["close"], length=3)
+    informative_4h["rsi_14"] = pta.rsi(informative_4h["close"], length=14)
 
     informative_4h["rsi_14_max_3"] = informative_4h["rsi_14"].rolling(3).max()
     informative_4h["rsi_14_max_6"] = informative_4h["rsi_14"].rolling(6).max()
@@ -18230,8 +18237,8 @@ class NostalgiaForInfinityX3(IStrategy):
     # Indicators
     # -----------------------------------------------------------------------------------------
     # RSI
-    informative_1h["rsi_3"] = ta.RSI(informative_1h, timeperiod=3)
-    informative_1h["rsi_14"] = ta.RSI(informative_1h, timeperiod=14)
+    informative_1h["rsi_3"] = pta.rsi(informative_1h["close"], length=3)
+    informative_1h["rsi_14"] = pta.rsi(informative_1h["close"], length=14)
 
     # EMA
     informative_1h["ema_12"] = ta.EMA(informative_1h, timeperiod=12)
@@ -18371,8 +18378,8 @@ class NostalgiaForInfinityX3(IStrategy):
     # -----------------------------------------------------------------------------------------
 
     # RSI
-    informative_15m["rsi_3"] = ta.RSI(informative_15m, timeperiod=3)
-    informative_15m["rsi_14"] = ta.RSI(informative_15m, timeperiod=14)
+    informative_15m["rsi_3"] = pta.rsi(informative_15m["close"], length=3)
+    informative_15m["rsi_14"] = pta.rsi(informative_15m["close"], length=14)
 
     # EMA
     informative_15m["ema_12"] = ta.EMA(informative_15m, timeperiod=12)
@@ -18429,9 +18436,9 @@ class NostalgiaForInfinityX3(IStrategy):
     # Indicators
     # -----------------------------------------------------------------------------------------
     # RSI
-    df["rsi_3"] = ta.RSI(df, timeperiod=3)
-    df["rsi_14"] = ta.RSI(df, timeperiod=14)
-    df["rsi_20"] = ta.RSI(df, timeperiod=20)
+    df["rsi_3"] = pta.rsi(df["close"], length=3)
+    df["rsi_14"] = pta.rsi(df["close"], length=14)
+    df["rsi_20"] = pta.rsi(df["close"], length=20)
 
     # EMA
     df["ema_12"] = ta.EMA(df, timeperiod=12)
@@ -18578,7 +18585,7 @@ class NostalgiaForInfinityX3(IStrategy):
     btc_info_1d = self.dp.get_pair_dataframe(btc_info_pair, btc_info_timeframe)
     # Indicators
     # -----------------------------------------------------------------------------------------
-    btc_info_1d["rsi_14"] = ta.RSI(btc_info_1d, timeperiod=14)
+    btc_info_1d["rsi_14"] = pta.rsi(btc_info_1d["close"], length=14)
     # btc_info_1d['pivot'], btc_info_1d['res1'], btc_info_1d['res2'], btc_info_1d['res3'], btc_info_1d['sup1'], btc_info_1d['sup2'], btc_info_1d['sup3'] = pivot_points(btc_info_1d, mode='fibonacci')
 
     # Add prefix
@@ -18599,7 +18606,7 @@ class NostalgiaForInfinityX3(IStrategy):
     # Indicators
     # -----------------------------------------------------------------------------------------
     # RSI
-    btc_info_4h["rsi_14"] = ta.RSI(btc_info_4h, timeperiod=14)
+    btc_info_4h["rsi_14"] = pta.rsi(btc_info_4h["close"], length=14)
 
     # SMA
     btc_info_4h["sma_200"] = ta.SMA(btc_info_4h, timeperiod=200)
@@ -18625,10 +18632,10 @@ class NostalgiaForInfinityX3(IStrategy):
     # Indicators
     # -----------------------------------------------------------------------------------------
     # RSI
-    btc_info_1h["rsi_14"] = ta.RSI(btc_info_1h, timeperiod=14)
+    btc_info_1h["rsi_14"] = pta.rsi(btc_info_1h["close"], length=14)
 
     btc_info_1h["not_downtrend"] = (btc_info_1h["close"] > btc_info_1h["close"].shift(2)) | (
-      btc_info_1h["rsi_14"] > 50
+      btc_info_1h["rsi_14"] > 50.0
     )
 
     # Add prefix
@@ -18648,7 +18655,7 @@ class NostalgiaForInfinityX3(IStrategy):
     btc_info_15m = self.dp.get_pair_dataframe(btc_info_pair, btc_info_timeframe)
     # Indicators
     # -----------------------------------------------------------------------------------------
-    btc_info_15m["rsi_14"] = ta.RSI(btc_info_15m, timeperiod=14)
+    btc_info_15m["rsi_14"] = pta.rsi(btc_info_15m["close"], length=14)
 
     # Add prefix
     # -----------------------------------------------------------------------------------------
@@ -18669,7 +18676,7 @@ class NostalgiaForInfinityX3(IStrategy):
     # -----------------------------------------------------------------------------------------
 
     # RSI
-    btc_info_5m["rsi_14"] = ta.RSI(btc_info_5m, timeperiod=14)
+    btc_info_5m["rsi_14"] = pta.rsi(btc_info_5m["close"], length=14)
 
     # Close max
     btc_info_5m["close_max_24"] = btc_info_5m["close"].rolling(24).max()
@@ -27698,6 +27705,17 @@ class NostalgiaForInfinityX3(IStrategy):
         | (df["close"] > df["sup_level_4h"])
         | (df["ema_200_dec_24_4h"] == False)
       )
+      & (
+        (df["change_pct_1d"] < 0.06)
+        | (df["top_wick_pct_1d"] < 0.06)
+        | (df["change_pct_4h"] < 0.06)
+        | (df["rsi_14"] > df["rsi_14"].shift(12))
+        | (df["rsi_14_15m"] > df["rsi_14_15m"].shift(12))
+        | (df["rsi_3_15m"] > 16.0)
+        | (df["rsi_14_4h"] < 50.0)
+        | (df["close"] > df["sup_level_1h"])
+        | (df["ema_200_dec_48_1h"] == False)
+      )
     )
 
     # Global protections
@@ -31899,6 +31917,22 @@ class NostalgiaForInfinityX3(IStrategy):
             | (df["rsi_3_15m"] > 12.0)
             | (df["rsi_14_1h"] < 60.0)
             | (df["rsi_14_4h"] < 65.0)
+          )
+          long_entry_logic.append(
+            (df["not_downtrend_15m"])
+            | (df["not_downtrend_1h"])
+            | (df["rsi_14"] > df["rsi_14"].shift(12))
+            | (df["rsi_14_15m"] > df["rsi_14_15m"].shift(12))
+            | (df["rsi_3"] > 26.0)
+            | (df["rsi_3_15m"] > 26.0)
+            | (df["close"] > (df["high_max_6_1d"] * 0.65))
+          )
+          long_entry_logic.append(
+            (df["not_downtrend_1h"])
+            | (df["rsi_14"] > df["rsi_14"].shift(12))
+            | (df["rsi_14_15m"] > df["rsi_14_15m"].shift(12))
+            | (df["rsi_3"] > 12.0)
+            | (df["ema_200_dec_24_4h"] == False)
           )
 
           # Logic
