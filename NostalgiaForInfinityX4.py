@@ -737,7 +737,7 @@ class NostalgiaForInfinityX4(IStrategy):
     "long_entry_condition_41_enable": True,
     "long_entry_condition_42_enable": True,
     "long_entry_condition_43_enable": True,
-    "long_entry_condition_44_enable": True,
+    "long_entry_condition_44_enable": False,
     "long_entry_condition_45_enable": True,
     "long_entry_condition_46_enable": True,
     "long_entry_condition_47_enable": True,
@@ -3330,7 +3330,7 @@ class NostalgiaForInfinityX4(IStrategy):
     current_time: "datetime",
     enter_tags,
   ) -> tuple:
-    if profit_init_ratio > 1.0: # len(filled_exits) > 100 and 
+    if len(filled_exits) > 100 and profit_init_ratio > 1.0: #  
       return True, f"exit_{self.long_grind_mode_name}_g"
     return False, None
 
@@ -20456,7 +20456,7 @@ class NostalgiaForInfinityX4(IStrategy):
           long_entry_logic.append(df["ema_200_dec_4_1d"] == False)
 
           # Logic
-          long_entry_logic.append(df["rsi_14"] < 40.0)
+          long_entry_logic.append(df["rsi_14"] < 42.0)
           long_entry_logic.append(df["ema_12"] < df["ema_26"])
           long_entry_logic.append(df["ha_close"] > df["ha_open"])
 
