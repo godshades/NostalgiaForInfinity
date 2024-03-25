@@ -72,7 +72,7 @@ class NostalgiaForInfinityX4(IStrategy):
   INTERFACE_VERSION = 3
 
   def version(self) -> str:
-    return "v14.1.411"
+    return "v14.1.415"
 
   stoploss = -0.99
 
@@ -16222,6 +16222,8 @@ class NostalgiaForInfinityX4(IStrategy):
             else:
               return -sell_amount
 
+    is_long_grind_buy = self.long_grind_buy(last_candle, previous_candle, slice_profit)
+
     # Grinding 1
     # Buy
     if (not partial_sell) and (grind_1_sub_grind_count < grind_1_max_sub_grinds):
@@ -16252,13 +16254,15 @@ class NostalgiaForInfinityX4(IStrategy):
           and (last_candle["close"] > (last_candle["high_max_48_1h"] * 0.78))
         )
         and (
-          (last_candle["rsi_3"] > 30.0)
-          and (last_candle["rsi_3_15m"] > 30.0)
-          and (last_candle["rsi_3_1h"] > 30.0)
-          and (last_candle["rsi_3_4h"] > 30.0)
-          and (last_candle["rsi_14"] < 42.0)
+          is_long_grind_buy
+          or (
+            (last_candle["rsi_3"] > 30.0)
+            and (last_candle["rsi_3_15m"] > 30.0)
+            and (last_candle["rsi_3_1h"] > 30.0)
+            and (last_candle["rsi_3_4h"] > 30.0)
+            and (last_candle["rsi_14"] < 42.0)
+          )
         )
-        # and self.long_grind_buy(last_candle, previous_candle, slice_profit)
       ):
         buy_amount = (
           slice_amount * grind_1_stakes[grind_1_sub_grind_count] / (trade.leverage if self.is_futures_mode else 1.0)
@@ -16380,19 +16384,15 @@ class NostalgiaForInfinityX4(IStrategy):
           and (last_candle["close"] > (last_candle["high_max_48_1h"] * 0.78))
         )
         and (
-          (last_candle["rsi_3"] > 30.0)
-          and (last_candle["rsi_3_15m"] > 30.0)
-          and (last_candle["rsi_3_1h"] > 30.0)
-          and (last_candle["rsi_3_4h"] > 30.0)
-          and (last_candle["rsi_14"] < 42.0)
+          is_long_grind_buy
+          or (
+            (last_candle["rsi_3"] > 30.0)
+            and (last_candle["rsi_3_15m"] > 30.0)
+            and (last_candle["rsi_3_1h"] > 30.0)
+            and (last_candle["rsi_3_4h"] > 30.0)
+            and (last_candle["rsi_14"] < 42.0)
+          )
         )
-        # and (
-        #   (last_candle["rsi_3_15m"] > 20.0)
-        #   and (last_candle["rsi_3_1h"] > 26.0)
-        #   and (last_candle["rsi_3_4h"] > 26.0)
-        #   and (last_candle["rsi_14"] < 50.0)
-        # )
-        # and self.long_grind_buy(last_candle, previous_candle, slice_profit)
       ):
         buy_amount = (
           slice_amount * grind_2_stakes[grind_2_sub_grind_count] / (trade.leverage if self.is_futures_mode else 1.0)
@@ -16514,11 +16514,14 @@ class NostalgiaForInfinityX4(IStrategy):
           and (last_candle["close"] > (last_candle["high_max_48_1h"] * 0.78))
         )
         and (
-          (last_candle["rsi_3"] > 30.0)
-          and (last_candle["rsi_3_15m"] > 30.0)
-          and (last_candle["rsi_3_1h"] > 30.0)
-          and (last_candle["rsi_3_4h"] > 30.0)
-          and (last_candle["rsi_14"] < 42.0)
+          is_long_grind_buy
+          or (
+            (last_candle["rsi_3"] > 30.0)
+            and (last_candle["rsi_3_15m"] > 30.0)
+            and (last_candle["rsi_3_1h"] > 30.0)
+            and (last_candle["rsi_3_4h"] > 30.0)
+            and (last_candle["rsi_14"] < 42.0)
+          )
         )
       ):
         buy_amount = (
@@ -16641,11 +16644,14 @@ class NostalgiaForInfinityX4(IStrategy):
           and (last_candle["close"] > (last_candle["high_max_48_1h"] * 0.78))
         )
         and (
-          (last_candle["rsi_3"] > 30.0)
-          and (last_candle["rsi_3_15m"] > 30.0)
-          and (last_candle["rsi_3_1h"] > 30.0)
-          and (last_candle["rsi_3_4h"] > 30.0)
-          and (last_candle["rsi_14"] < 42.0)
+          is_long_grind_buy
+          or (
+            (last_candle["rsi_3"] > 30.0)
+            and (last_candle["rsi_3_15m"] > 30.0)
+            and (last_candle["rsi_3_1h"] > 30.0)
+            and (last_candle["rsi_3_4h"] > 30.0)
+            and (last_candle["rsi_14"] < 42.0)
+          )
         )
       ):
         buy_amount = (
@@ -16768,11 +16774,14 @@ class NostalgiaForInfinityX4(IStrategy):
           and (last_candle["close"] > (last_candle["high_max_48_1h"] * 0.78))
         )
         and (
-          (last_candle["rsi_3"] > 30.0)
-          and (last_candle["rsi_3_15m"] > 30.0)
-          and (last_candle["rsi_3_1h"] > 30.0)
-          and (last_candle["rsi_3_4h"] > 30.0)
-          and (last_candle["rsi_14"] < 42.0)
+          is_long_grind_buy
+          or (
+            (last_candle["rsi_3"] > 30.0)
+            and (last_candle["rsi_3_15m"] > 30.0)
+            and (last_candle["rsi_3_1h"] > 30.0)
+            and (last_candle["rsi_3_4h"] > 30.0)
+            and (last_candle["rsi_14"] < 42.0)
+          )
         )
       ):
         buy_amount = (
@@ -17414,6 +17423,8 @@ class NostalgiaForInfinityX4(IStrategy):
               order_tag = order.ft_order_tag
           return -sell_amount, order_tag, is_derisk
 
+    is_long_grind_buy = self.long_grind_buy(last_candle, previous_candle, slice_profit)
+
     # Rebuy
     if (not partial_sell) and (not rebuy_is_sell_found) and (rebuy_sub_grind_count < max_rebuy_sub_grinds):
       if (
@@ -17437,7 +17448,7 @@ class NostalgiaForInfinityX4(IStrategy):
           and (last_candle["btc_pct_close_max_24_5m"] < 0.03)
         )
         and (
-          (last_candle["enter_long"] == True)
+          is_long_grind_buy
           or (
             (last_candle["rsi_3"] > 30.0)
             and (last_candle["rsi_3_15m"] > 30.0)
@@ -17483,9 +17494,6 @@ class NostalgiaForInfinityX4(IStrategy):
           or (slice_profit < -0.06)
         )
         and (
-          (last_candle["rsi_3_15m"] > 20.0) and (last_candle["rsi_3_1h"] > 26.0) and (last_candle["rsi_3_4h"] > 26.0)
-        )
-        and (
           (last_candle["close"] > (last_candle["close_max_12"] * 0.94))
           and (last_candle["close"] > (last_candle["close_max_24"] * 0.92))
           and (last_candle["close"] > (last_candle["close_max_48"] * 0.90))
@@ -17495,11 +17503,14 @@ class NostalgiaForInfinityX4(IStrategy):
           and (last_candle["close"] > (last_candle["high_max_12_1d"] * 0.76))
         )
         and (
-          (last_candle["rsi_3"] > 30.0)
-          and (last_candle["rsi_3_15m"] > 30.0)
-          and (last_candle["rsi_3_1h"] > 30.0)
-          and (last_candle["rsi_3_4h"] > 30.0)
-          and (last_candle["rsi_14"] < 42.0)
+          is_long_grind_buy
+          or (
+            (last_candle["rsi_3"] > 30.0)
+            and (last_candle["rsi_3_15m"] > 30.0)
+            and (last_candle["rsi_3_1h"] > 30.0)
+            and (last_candle["rsi_3_4h"] > 30.0)
+            and (last_candle["rsi_14"] < 42.0)
+          )
         )
       ):
         buy_amount = (
@@ -17574,11 +17585,14 @@ class NostalgiaForInfinityX4(IStrategy):
           and (last_candle["close"] > (last_candle["high_max_12_1d"] * 0.76))
         )
         and (
-          (last_candle["rsi_3"] > 30.0)
-          and (last_candle["rsi_3_15m"] > 30.0)
-          and (last_candle["rsi_3_1h"] > 30.0)
-          and (last_candle["rsi_3_4h"] > 30.0)
-          and (last_candle["rsi_14"] < 42.0)
+          is_long_grind_buy
+          or (
+            (last_candle["rsi_3"] > 30.0)
+            and (last_candle["rsi_3_15m"] > 30.0)
+            and (last_candle["rsi_3_1h"] > 30.0)
+            and (last_candle["rsi_3_4h"] > 30.0)
+            and (last_candle["rsi_14"] < 42.0)
+          )
         )
       ):
         buy_amount = (
@@ -17650,11 +17664,14 @@ class NostalgiaForInfinityX4(IStrategy):
           and (last_candle["close"] > (last_candle["high_max_12_1d"] * 0.76))
         )
         and (
-          (last_candle["rsi_3"] > 30.0)
-          and (last_candle["rsi_3_15m"] > 30.0)
-          and (last_candle["rsi_3_1h"] > 30.0)
-          and (last_candle["rsi_3_4h"] > 30.0)
-          and (last_candle["rsi_14"] < 42.0)
+          is_long_grind_buy
+          or (
+            (last_candle["rsi_3"] > 30.0)
+            and (last_candle["rsi_3_15m"] > 30.0)
+            and (last_candle["rsi_3_1h"] > 30.0)
+            and (last_candle["rsi_3_4h"] > 30.0)
+            and (last_candle["rsi_14"] < 42.0)
+          )
         )
       ):
         buy_amount = (
@@ -17726,11 +17743,14 @@ class NostalgiaForInfinityX4(IStrategy):
           and (last_candle["close"] > (last_candle["high_max_12_1d"] * 0.76))
         )
         and (
-          (last_candle["rsi_3"] > 30.0)
-          and (last_candle["rsi_3_15m"] > 30.0)
-          and (last_candle["rsi_3_1h"] > 30.0)
-          and (last_candle["rsi_3_4h"] > 30.0)
-          and (last_candle["rsi_14"] < 42.0)
+          is_long_grind_buy
+          or (
+            (last_candle["rsi_3"] > 30.0)
+            and (last_candle["rsi_3_15m"] > 30.0)
+            and (last_candle["rsi_3_1h"] > 30.0)
+            and (last_candle["rsi_3_4h"] > 30.0)
+            and (last_candle["rsi_14"] < 42.0)
+          )
         )
       ):
         buy_amount = (
@@ -18509,69 +18529,69 @@ class NostalgiaForInfinityX4(IStrategy):
     # Momentum Indicators - Short
     # ------------------------------------
     # RSI
-    df["rsi"] = ta.RSI(df)
+    # df["rsi"] = ta.RSI(df)
     # Stochastic Slow
-    df["stoch"] = ta.STOCH(df)["slowk"]
+    # df["stoch"] = ta.STOCH(df)["slowk"]
     # ROC
-    df["roc"] = ta.ROC(df)
+    # df["roc"] = ta.ROC(df)
     # Ultimate Oscillator
-    df["uo"] = ta.ULTOSC(df)
+    # df["uo"] = ta.ULTOSC(df)
     # Awesome Oscillator
-    df["ao"] = qtpylib.awesome_oscillator(df)
+    # df["ao"] = qtpylib.awesome_oscillator(df)
     # MACD
-    df["macd"] = ta.MACD(df)["macd"]
+    # df["macd"] = ta.MACD(df)["macd"]
     # Commodity Channel Index
-    df["cci"] = ta.CCI(df)
-    # CMF
-    df["cmf"] = chaikin_money_flow(df, 20)
-    # OBV
-    df["obv"] = ta.OBV(df)
-    # MFI
-    df["mfi"] = ta.MFI(df)
-    # ADX
-    df["adx"] = ta.ADX(df)
-    # ATR
-    df["atr"] = qtpylib.atr(df, window=14, exp=False)
-    # Keltner Channel
-    keltner = qtpylib.keltner_channel(df, window=20, atrs=1)
-    keltner = emaKeltner(df)
-    df["kc_upperband"] = keltner["upper"]
-    df["kc_middleband"] = keltner["mid"]
-    df["kc_lowerband"] = keltner["lower"]
-    # Bollinger Bands
-    bollinger = qtpylib.bollinger_bands(qtpylib.typical_price(df), window=20, stds=2)
-    df["bollinger_upperband"] = bollinger["upper"]
-    df["bollinger_middleband"] = bollinger["mid"]
-    df["bollinger_lowerband"] = bollinger["lower"]
-    # EMA - Exponential Moving Average
-    df["ema9"] = ta.EMA(df, timeperiod=9)
-    df["ema20"] = ta.EMA(df, timeperiod=20)
-    df["ema50"] = ta.EMA(df, timeperiod=50)
-    df["ema200"] = ta.EMA(df, timeperiod=200)
-    # TEMA - Triple Exponential Moving Average
-    df["tema"] = ta.TEMA(df, timeperiod=9)
+    # df["cci"] = ta.CCI(df)
+    # # CMF
+    # df["cmf"] = chaikin_money_flow(df, 20)
+    # # OBV
+    # df["obv"] = ta.OBV(df)
+    # # MFI
+    # df["mfi"] = ta.MFI(df)
+    # # ADX
+    # df["adx"] = ta.ADX(df)
+    # # ATR
+    # df["atr"] = qtpylib.atr(df, window=14, exp=False)
+    # # Keltner Channel
+    # keltner = qtpylib.keltner_channel(df, window=20, atrs=1)
+    # keltner = emaKeltner(df)
+    # df["kc_upperband"] = keltner["upper"]
+    # df["kc_middleband"] = keltner["mid"]
+    # df["kc_lowerband"] = keltner["lower"]
+    # # Bollinger Bands
+    # bollinger = qtpylib.bollinger_bands(qtpylib.typical_price(df), window=20, stds=2)
+    # df["bollinger_upperband"] = bollinger["upper"]
+    # df["bollinger_middleband"] = bollinger["mid"]
+    # df["bollinger_lowerband"] = bollinger["lower"]
+    # # EMA - Exponential Moving Average
+    # df["ema9"] = ta.EMA(df, timeperiod=9)
+    # df["ema20"] = ta.EMA(df, timeperiod=20)
+    # df["ema50"] = ta.EMA(df, timeperiod=50)
+    # df["ema200"] = ta.EMA(df, timeperiod=200)
+    # # TEMA - Triple Exponential Moving Average
+    # df["tema"] = ta.TEMA(df, timeperiod=9)
     
-    # SAR - Parabolic SAR
-    df["sar"] = ta.SAR(df)
+    # # SAR - Parabolic SAR
+    # df["sar"] = ta.SAR(df)
     
-    #Pivots
-    pivots = pivot_points_S(df)
-    df["pivot_lows"] = pivots["pivot_lows"]
-    df["pivot_highs"] = pivots["pivot_highs"]
+    # #Pivots
+    # pivots = pivot_points_S(df)
+    # df["pivot_lows"] = pivots["pivot_lows"]
+    # df["pivot_highs"] = pivots["pivot_highs"]
     
-    # Add Divergences
-    initialize_divergences_lists(df)
-    add_divergences(df, "rsi")
-    add_divergences(df, "stoch")
-    add_divergences(df, "roc")
-    add_divergences(df, "uo")
-    add_divergences(df, "ao")
-    add_divergences(df, "macd")
-    add_divergences(df, "cci")
-    add_divergences(df, "cmf")
-    add_divergences(df, "obv")
-    add_divergences(df, "mfi")
-    add_divergences(df, "adx")
+    # # Add Divergences
+    # initialize_divergences_lists(df)
+    # add_divergences(df, "rsi")
+    # add_divergences(df, "stoch")
+    # add_divergences(df, "roc")
+    # add_divergences(df, "uo")
+    # add_divergences(df, "ao")
+    # add_divergences(df, "macd")
+    # add_divergences(df, "cci")
+    # add_divergences(df, "cmf")
+    # add_divergences(df, "obv")
+    # add_divergences(df, "mfi")
+    # add_divergences(df, "adx")
 
     # Global protections
     # -----------------------------------------------------------------------------------------
@@ -18887,8 +18907,10 @@ class NostalgiaForInfinityX4(IStrategy):
         # Condition #5 - Normal mode bull.
         if index == 5:
           # Logic
-          long_entry_logic.append(df["close"] < (df["ema_26"] * 0.94))
-          long_entry_logic.append(df["close"] < (df["bb20_2_low"] * 0.996))
+          long_entry_logic.append(df["ema_26"] > df["ema_12"])
+          long_entry_logic.append((df["ema_26"] - df["ema_12"]) > (df["open"] * 0.03))
+          long_entry_logic.append((df["ema_26"].shift() - df["ema_12"].shift()) > (df["open"] / 100))
+          long_entry_logic.append(df["rsi_14"] < 36.0)
 
         # Condition #6 - Normal mode bull.
         if index == 6:
@@ -18899,8 +18921,8 @@ class NostalgiaForInfinityX4(IStrategy):
         # Condition #7 Normal mode.
         if index == 7:
           # Logic
-          long_entry_logic.append(df["close"] < (df["ema_16"] * 0.944))
-          long_entry_logic.append(df["ewo_50_200"] < -4.0)
+          long_entry_logic.append(df["close"] < (df["ema_16"] * 0.974))
+          long_entry_logic.append(df["ewo_50_200"] > 2.0)
           long_entry_logic.append(df["rsi_14"] < 30.0)
 
         # Condition #8 Normal mode.
@@ -19001,11 +19023,11 @@ class NostalgiaForInfinityX4(IStrategy):
         # Condition #26 - Pump mode (Long).
         if index == 26:
           # Logic
+          long_entry_logic.append(df["close"] < (df["bb20_2_low"] * self.entry_26_bb_offset.value))
+          long_entry_logic.append(df["ewo_50_200_1h"] > self.entry_26_ewo_50_200_1h_min.value)
           long_entry_logic.append(df["ema_26"] > df["ema_12"])
-          long_entry_logic.append((df["ema_26"] - df["ema_12"]) > (df["open"] * 0.018))
-          long_entry_logic.append((df["ema_26"].shift() - df["ema_12"].shift()) > (df["open"] / 100))
-          long_entry_logic.append(df["close"] < (df["bb20_2_low"] * 0.996))
-          long_entry_logic.append(df["rsi_14"] < 40.0)
+          long_entry_logic.append((df["ema_26"] - df["ema_12"]) > (df["open"] * self.entry_26_ema_open_offset.value))
+          long_entry_logic.append((df["ema_26"].shift() - df["ema_12"].shift()) > (df["open"] / 100.0))
 
         # Condition #41 - Quick mode bull.
         if index == 41:
@@ -20432,8 +20454,11 @@ class NostalgiaForInfinityX4(IStrategy):
           long_entry_logic.append(df["btc_pct_close_max_72_5m"] < 0.06)
           long_entry_logic.append(df["close"] > (df["close_max_12"] * 0.94))
           long_entry_logic.append(df["close"] > (df["close_max_24"] * 0.92))
-          long_entry_logic.append(df["close"] > (df["close_max_48"] * 0.88))
-          long_entry_logic.append(df["close"] > (df["high_max_24_1h"] * 0.84))
+          long_entry_logic.append(df["close"] > (df["close_max_48"] * 0.90))
+          long_entry_logic.append(df["close"] > (df["high_max_12_1h"] * 0.88))
+          long_entry_logic.append(df["close"] > (df["high_max_24_1h"] * 0.86))
+          long_entry_logic.append(df["close"] > (df["high_max_6_1d"] * 0.84))
+          long_entry_logic.append(df["close"] > (df["high_max_12_1d"] * 0.80))
           long_entry_logic.append(df["hl_pct_change_6_1h"] < 0.30)
           long_entry_logic.append(df["hl_pct_change_12_1h"] < 0.40)
           long_entry_logic.append(df["hl_pct_change_24_1h"] < 0.50)
@@ -20442,7 +20467,7 @@ class NostalgiaForInfinityX4(IStrategy):
 
           long_entry_logic.append(df["rsi_3"] >= 12.0)
           long_entry_logic.append(df["rsi_3"] <= 50.0)
-          long_entry_logic.append(df["rsi_3_15m"] >= 26.0)
+          long_entry_logic.append(df["rsi_3_15m"] >= 30.0)
           long_entry_logic.append(df["rsi_3_1h"] >= 30.0)
           long_entry_logic.append(df["rsi_3_4h"] >= 30.0)
           long_entry_logic.append(df["rsi_3_1d"] >= 30.0)
@@ -20456,7 +20481,7 @@ class NostalgiaForInfinityX4(IStrategy):
           long_entry_logic.append(df["ema_200_dec_4_1d"] == False)
 
           # Logic
-          long_entry_logic.append(df["rsi_14"] < 42.0)
+          long_entry_logic.append(df["rsi_14"] < 40.0)
           long_entry_logic.append(df["ema_12"] < df["ema_26"])
           long_entry_logic.append(df["ha_close"] > df["ha_open"])
 

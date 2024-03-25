@@ -68,7 +68,7 @@ class NostalgiaForInfinityX3(IStrategy):
   INTERFACE_VERSION = 3
 
   def version(self) -> str:
-    return "v13.1.411"
+    return "v13.1.415"
 
   stoploss = -0.99
 
@@ -16213,6 +16213,8 @@ class NostalgiaForInfinityX3(IStrategy):
             else:
               return -sell_amount
 
+    is_long_grind_buy = self.long_grind_buy(last_candle, previous_candle, slice_profit)
+
     # Grinding 1
     # Buy
     if (not partial_sell) and (grind_1_sub_grind_count < grind_1_max_sub_grinds):
@@ -16248,13 +16250,15 @@ class NostalgiaForInfinityX3(IStrategy):
           and (last_candle["close"] > (last_candle["high_max_48_1h"] * 0.78))
         )
         and (
-          (last_candle["rsi_3"] > 30.0)
-          and (last_candle["rsi_3_15m"] > 30.0)
-          and (last_candle["rsi_3_1h"] > 30.0)
-          and (last_candle["rsi_3_4h"] > 30.0)
-          and (last_candle["rsi_14"] < 42.0)
+          is_long_grind_buy
+          or (
+            (last_candle["rsi_3"] > 30.0)
+            and (last_candle["rsi_3_15m"] > 30.0)
+            and (last_candle["rsi_3_1h"] > 30.0)
+            and (last_candle["rsi_3_4h"] > 30.0)
+            and (last_candle["rsi_14"] < 42.0)
+          )
         )
-        # and self.long_grind_buy(last_candle, previous_candle, slice_profit)
       ):
         buy_amount = (
           slice_amount * grind_1_stakes[grind_1_sub_grind_count] / (trade.leverage if self.is_futures_mode else 1.0)
@@ -16381,19 +16385,15 @@ class NostalgiaForInfinityX3(IStrategy):
           and (last_candle["close"] > (last_candle["high_max_48_1h"] * 0.78))
         )
         and (
-          (last_candle["rsi_3"] > 30.0)
-          and (last_candle["rsi_3_15m"] > 30.0)
-          and (last_candle["rsi_3_1h"] > 30.0)
-          and (last_candle["rsi_3_4h"] > 30.0)
-          and (last_candle["rsi_14"] < 42.0)
+          is_long_grind_buy
+          or (
+            (last_candle["rsi_3"] > 30.0)
+            and (last_candle["rsi_3_15m"] > 30.0)
+            and (last_candle["rsi_3_1h"] > 30.0)
+            and (last_candle["rsi_3_4h"] > 30.0)
+            and (last_candle["rsi_14"] < 42.0)
+          )
         )
-        # and (
-        #   (last_candle["rsi_3_15m"] > 20.0)
-        #   and (last_candle["rsi_3_1h"] > 26.0)
-        #   and (last_candle["rsi_3_4h"] > 26.0)
-        #   and (last_candle["rsi_14"] < 50.0)
-        # )
-        # and self.long_grind_buy(last_candle, previous_candle, slice_profit)
       ):
         buy_amount = (
           slice_amount * grind_2_stakes[grind_2_sub_grind_count] / (trade.leverage if self.is_futures_mode else 1.0)
@@ -16520,11 +16520,14 @@ class NostalgiaForInfinityX3(IStrategy):
           and (last_candle["close"] > (last_candle["high_max_48_1h"] * 0.78))
         )
         and (
-          (last_candle["rsi_3"] > 30.0)
-          and (last_candle["rsi_3_15m"] > 30.0)
-          and (last_candle["rsi_3_1h"] > 30.0)
-          and (last_candle["rsi_3_4h"] > 30.0)
-          and (last_candle["rsi_14"] < 42.0)
+          is_long_grind_buy
+          or (
+            (last_candle["rsi_3"] > 30.0)
+            and (last_candle["rsi_3_15m"] > 30.0)
+            and (last_candle["rsi_3_1h"] > 30.0)
+            and (last_candle["rsi_3_4h"] > 30.0)
+            and (last_candle["rsi_14"] < 42.0)
+          )
         )
       ):
         buy_amount = (
@@ -16652,11 +16655,14 @@ class NostalgiaForInfinityX3(IStrategy):
           and (last_candle["close"] > (last_candle["high_max_48_1h"] * 0.78))
         )
         and (
-          (last_candle["rsi_3"] > 30.0)
-          and (last_candle["rsi_3_15m"] > 30.0)
-          and (last_candle["rsi_3_1h"] > 30.0)
-          and (last_candle["rsi_3_4h"] > 30.0)
-          and (last_candle["rsi_14"] < 42.0)
+          is_long_grind_buy
+          or (
+            (last_candle["rsi_3"] > 30.0)
+            and (last_candle["rsi_3_15m"] > 30.0)
+            and (last_candle["rsi_3_1h"] > 30.0)
+            and (last_candle["rsi_3_4h"] > 30.0)
+            and (last_candle["rsi_14"] < 42.0)
+          )
         )
       ):
         buy_amount = (
@@ -16784,11 +16790,14 @@ class NostalgiaForInfinityX3(IStrategy):
           and (last_candle["close"] > (last_candle["high_max_48_1h"] * 0.78))
         )
         and (
-          (last_candle["rsi_3"] > 30.0)
-          and (last_candle["rsi_3_15m"] > 30.0)
-          and (last_candle["rsi_3_1h"] > 30.0)
-          and (last_candle["rsi_3_4h"] > 30.0)
-          and (last_candle["rsi_14"] < 42.0)
+          is_long_grind_buy
+          or (
+            (last_candle["rsi_3"] > 30.0)
+            and (last_candle["rsi_3_15m"] > 30.0)
+            and (last_candle["rsi_3_1h"] > 30.0)
+            and (last_candle["rsi_3_4h"] > 30.0)
+            and (last_candle["rsi_14"] < 42.0)
+          )
         )
       ):
         buy_amount = (
@@ -17434,6 +17443,8 @@ class NostalgiaForInfinityX3(IStrategy):
               order_tag = order.ft_order_tag
           return -sell_amount, order_tag, is_derisk
 
+    is_long_grind_buy = self.long_grind_buy(last_candle, previous_candle, slice_profit)
+
     # Rebuy
     if (not partial_sell) and (not rebuy_is_sell_found) and (rebuy_sub_grind_count < max_rebuy_sub_grinds):
       if (
@@ -17462,7 +17473,7 @@ class NostalgiaForInfinityX3(IStrategy):
           and (last_candle["btc_pct_close_max_24_5m"] < 0.03)
         )
         and (
-          (last_candle["enter_long"] == True)
+          is_long_grind_buy
           or (
             (last_candle["rsi_3"] > 30.0)
             and (last_candle["rsi_3_15m"] > 30.0)
@@ -17522,11 +17533,14 @@ class NostalgiaForInfinityX3(IStrategy):
           and (last_candle["close"] > (last_candle["high_max_12_1d"] * 0.76))
         )
         and (
-          (last_candle["rsi_3"] > 30.0)
-          and (last_candle["rsi_3_15m"] > 30.0)
-          and (last_candle["rsi_3_1h"] > 30.0)
-          and (last_candle["rsi_3_4h"] > 30.0)
-          and (last_candle["rsi_14"] < 42.0)
+          is_long_grind_buy
+          or (
+            (last_candle["rsi_3"] > 30.0)
+            and (last_candle["rsi_3_15m"] > 30.0)
+            and (last_candle["rsi_3_1h"] > 30.0)
+            and (last_candle["rsi_3_4h"] > 30.0)
+            and (last_candle["rsi_14"] < 42.0)
+          )
         )
       ):
         buy_amount = (
@@ -17603,11 +17617,14 @@ class NostalgiaForInfinityX3(IStrategy):
           and (last_candle["close"] > (last_candle["high_max_12_1d"] * 0.76))
         )
         and (
-          (last_candle["rsi_3"] > 30.0)
-          and (last_candle["rsi_3_15m"] > 30.0)
-          and (last_candle["rsi_3_1h"] > 30.0)
-          and (last_candle["rsi_3_4h"] > 30.0)
-          and (last_candle["rsi_14"] < 42.0)
+          is_long_grind_buy
+          or (
+            (last_candle["rsi_3"] > 30.0)
+            and (last_candle["rsi_3_15m"] > 30.0)
+            and (last_candle["rsi_3_1h"] > 30.0)
+            and (last_candle["rsi_3_4h"] > 30.0)
+            and (last_candle["rsi_14"] < 42.0)
+          )
         )
       ):
         buy_amount = (
@@ -17684,11 +17701,14 @@ class NostalgiaForInfinityX3(IStrategy):
           and (last_candle["close"] > (last_candle["high_max_12_1d"] * 0.76))
         )
         and (
-          (last_candle["rsi_3"] > 30.0)
-          and (last_candle["rsi_3_15m"] > 30.0)
-          and (last_candle["rsi_3_1h"] > 30.0)
-          and (last_candle["rsi_3_4h"] > 30.0)
-          and (last_candle["rsi_14"] < 42.0)
+          is_long_grind_buy
+          or (
+            (last_candle["rsi_3"] > 30.0)
+            and (last_candle["rsi_3_15m"] > 30.0)
+            and (last_candle["rsi_3_1h"] > 30.0)
+            and (last_candle["rsi_3_4h"] > 30.0)
+            and (last_candle["rsi_14"] < 42.0)
+          )
         )
       ):
         buy_amount = (
@@ -17765,11 +17785,14 @@ class NostalgiaForInfinityX3(IStrategy):
           and (last_candle["close"] > (last_candle["high_max_12_1d"] * 0.76))
         )
         and (
-          (last_candle["rsi_3"] > 30.0)
-          and (last_candle["rsi_3_15m"] > 30.0)
-          and (last_candle["rsi_3_1h"] > 30.0)
-          and (last_candle["rsi_3_4h"] > 30.0)
-          and (last_candle["rsi_14"] < 42.0)
+          is_long_grind_buy
+          or (
+            (last_candle["rsi_3"] > 30.0)
+            and (last_candle["rsi_3_15m"] > 30.0)
+            and (last_candle["rsi_3_1h"] > 30.0)
+            and (last_candle["rsi_3_4h"] > 30.0)
+            and (last_candle["rsi_14"] < 42.0)
+          )
         )
       ):
         buy_amount = (
@@ -34081,6 +34104,7 @@ class NostalgiaForInfinityX3(IStrategy):
         # Condition #25 - Pump mode (Long).
         if index == 25:
           # Protections
+          long_entry_logic.append(df["protections_long_global"] == True)
           long_entry_logic.append(df["global_protections_long_pump"] == True)
           long_entry_logic.append(df["global_protections_long_dump"] == True)
           long_entry_logic.append(df["btc_pct_close_max_24_5m"] < 0.03)
