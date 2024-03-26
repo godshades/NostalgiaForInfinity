@@ -68,7 +68,7 @@ class NostalgiaForInfinityX3(IStrategy):
   INTERFACE_VERSION = 3
 
   def version(self) -> str:
-    return "v13.1.415"
+    return "v13.1.417"
 
   stoploss = -0.99
 
@@ -1798,6 +1798,10 @@ class NostalgiaForInfinityX3(IStrategy):
       self.regular_mode_stake_multiplier_spot = self.config["regular_mode_stake_multiplier_spot"]
     if "regular_mode_stake_multiplier_futures" in self.config:
       self.regular_mode_stake_multiplier_futures = self.config["regular_mode_stake_multiplier_futures"]
+    if "regular_mode_derisk_spot" in self.config:
+      self.regular_mode_derisk_spot = self.config["regular_mode_derisk_spot"]
+    if "regular_mode_derisk_futures" in self.config:
+      self.regular_mode_derisk_futures = self.config["regular_mode_derisk_futures"]
     if "grind_mode_coins" in self.config:
       self.grind_mode_coins = self.config["grind_mode_coins"]
     if "max_slippage" in self.config:
@@ -16921,9 +16925,9 @@ class NostalgiaForInfinityX3(IStrategy):
       )
     ):
       sell_amount = trade.amount * exit_rate / (trade.leverage if self.is_futures_mode else 1.0) * 0.999
-      if (current_stake_amount / (trade.leverage if self.is_futures_mode else 1.0) - sell_amount) < (min_stake * 1.5):
+      if (current_stake_amount / (trade.leverage if self.is_futures_mode else 1.0) - sell_amount) < (min_stake * 1.7):
         sell_amount = (trade.amount * exit_rate / (trade.leverage if self.is_futures_mode else 1.0)) - (
-          min_stake * 1.5
+          min_stake * 1.7
         )
       if sell_amount > min_stake:
         self.dp.send_msg(
@@ -16964,7 +16968,7 @@ class NostalgiaForInfinityX3(IStrategy):
           and (last_candle["rsi_3_15m"] > 20.0)
           and (last_candle["rsi_3_1h"] > 20.0)
           and (last_candle["rsi_3_4h"] > 20.0)
-          and (last_candle["rsi_14"] < 46.0)
+          and (last_candle["rsi_14"] < 44.0)
           and (last_candle["ha_close"] > last_candle["ha_open"])
           and (last_candle["ema_12"] < (last_candle["ema_26"] * 0.990))
           and (last_candle["cti_20_1h"] < 0.8)
@@ -17076,8 +17080,11 @@ class NostalgiaForInfinityX3(IStrategy):
           and (last_candle["rsi_3_15m"] > 30.0)
           and (last_candle["rsi_3_1h"] > 30.0)
           and (last_candle["rsi_3_4h"] > 30.0)
-          and (last_candle["rsi_14"] < 46.0)
+          and (last_candle["rsi_14"] < 42.0)
           and (last_candle["rsi_14_1d"] < 70.0)
+          and (last_candle["close"] > last_candle["sup_level_1h"])
+          and (last_candle["close"] > last_candle["sup_level_4h"])
+          and (last_candle["close"] > last_candle["sup_level_1d"])
           and (last_candle["not_downtrend_1h"] == True)
           and (last_candle["not_downtrend_4h"] == True)
           and (last_candle["not_downtrend_1d"] == True)
@@ -17087,7 +17094,7 @@ class NostalgiaForInfinityX3(IStrategy):
           and (last_candle["rsi_3_15m"] > 30.0)
           and (last_candle["rsi_3_1h"] > 30.0)
           and (last_candle["rsi_3_4h"] > 30.0)
-          and (last_candle["rsi_14"] < 46.0)
+          and (last_candle["rsi_14"] < 44.0)
           and (last_candle["ha_close"] > last_candle["ha_open"])
           and (last_candle["close"] < last_candle["res_hlevel_4h"])
           and (last_candle["close"] > last_candle["sup_level_4h"])
@@ -18063,8 +18070,8 @@ class NostalgiaForInfinityX3(IStrategy):
     # Indicators
     # -----------------------------------------------------------------------------------------
     # RSI
-    informative_1d["rsi_3"] = pta.rsi(informative_1d["close"], length=3)
-    informative_1d["rsi_14"] = pta.rsi(informative_1d["close"], length=14)
+    informative_1d["rsi_3"] = pta.rsi(informative_1d["close"], length=3, fillna=0.0)
+    informative_1d["rsi_14"] = pta.rsi(informative_1d["close"], length=14, fillna=0.0)
 
     informative_1d["rsi_14_max_6"] = informative_1d["rsi_14"].rolling(6).max()
 
@@ -18164,8 +18171,8 @@ class NostalgiaForInfinityX3(IStrategy):
     # Indicators
     # -----------------------------------------------------------------------------------------
     # RSI
-    informative_4h["rsi_3"] = pta.rsi(informative_4h["close"], length=3)
-    informative_4h["rsi_14"] = pta.rsi(informative_4h["close"], length=14)
+    informative_4h["rsi_3"] = pta.rsi(informative_4h["close"], length=3, fillna=0.0)
+    informative_4h["rsi_14"] = pta.rsi(informative_4h["close"], length=14, fillna=0.0)
 
     informative_4h["rsi_14_max_3"] = informative_4h["rsi_14"].rolling(3).max()
     informative_4h["rsi_14_max_6"] = informative_4h["rsi_14"].rolling(6).max()
@@ -18260,8 +18267,8 @@ class NostalgiaForInfinityX3(IStrategy):
     # Indicators
     # -----------------------------------------------------------------------------------------
     # RSI
-    informative_1h["rsi_3"] = pta.rsi(informative_1h["close"], length=3)
-    informative_1h["rsi_14"] = pta.rsi(informative_1h["close"], length=14)
+    informative_1h["rsi_3"] = pta.rsi(informative_1h["close"], length=3, fillna=0.0)
+    informative_1h["rsi_14"] = pta.rsi(informative_1h["close"], length=14, fillna=0.0)
 
     # EMA
     informative_1h["ema_12"] = ta.EMA(informative_1h, timeperiod=12)
@@ -34104,7 +34111,6 @@ class NostalgiaForInfinityX3(IStrategy):
         # Condition #25 - Pump mode (Long).
         if index == 25:
           # Protections
-          long_entry_logic.append(df["protections_long_global"] == True)
           long_entry_logic.append(df["global_protections_long_pump"] == True)
           long_entry_logic.append(df["global_protections_long_dump"] == True)
           long_entry_logic.append(df["btc_pct_close_max_24_5m"] < 0.03)
