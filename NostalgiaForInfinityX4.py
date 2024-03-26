@@ -18039,7 +18039,7 @@ class NostalgiaForInfinityX4(IStrategy):
     )
 
     # CTI
-    informative_1d["cti_20"] = pta.cti(informative_1d["close"], length=20, fillna=0.0)
+    informative_1d["cti_20"] = pta.cti(informative_1d["close"], length=20)
 
     informative_1d["cti_20_dec_3"] = informative_1d["cti_20"] < informative_1d["cti_20"].shift(3)
 
