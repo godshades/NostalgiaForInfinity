@@ -72,7 +72,7 @@ class NostalgiaForInfinityX4(IStrategy):
   INTERFACE_VERSION = 3
 
   def version(self) -> str:
-    return "v14.1.442"
+    return "v14.1.467"
 
   stoploss = -0.99
 
@@ -158,9 +158,9 @@ class NostalgiaForInfinityX4(IStrategy):
   short_rapid_mode_name = "short_rapid"
 
   is_futures_mode = False
-  futures_mode_leverage = 5.0
-  futures_mode_leverage_rebuy_mode = 5.0
-  futures_mode_leverage_grind_mode = 5.0
+  futures_mode_leverage = 10.0
+  futures_mode_leverage_rebuy_mode = 10.0
+  futures_mode_leverage_grind_mode = 10.0
 
   # Stop thresholds. 0: Doom Bull, 1: Doom Bear, 2: u_e Bull, 3: u_e Bear, 4: u_e mins Bull, 5: u_e mins Bear.
   # 6: u_e ema % Bull, 7: u_e ema % Bear, 8: u_e RSI diff Bull, 9: u_e RSI diff Bear.
@@ -185,7 +185,7 @@ class NostalgiaForInfinityX4(IStrategy):
 
   # Grinding
   grind_derisk_spot = -0.40
-  grind_derisk_futures = -0.30
+  grind_derisk_futures = -0.20
 
   grind_1_stop_grinds_spot = -0.10
   grind_1_profit_threshold_spot = 0.018
@@ -1586,7 +1586,7 @@ class NostalgiaForInfinityX4(IStrategy):
   entry_106_r_480_4h_min = DecimalParameter(-100.0, -70.0, default=-100.0, decimals=0, space="buy", optimize=False)
   entry_106_r_480_4h_max = DecimalParameter(-40.0, -0.0, default=-0.0, decimals=0, space="buy", optimize=False)
   entry_106_cti_20_max = DecimalParameter(-0.9, 0.0, default=-0.7, decimals=1, space="buy", optimize=False)
-  entry_106_ewo_50_200_max = DecimalParameter(-2.0, -10.0, default=-8.0, decimals=1, space="buy", optimize=True)
+  entry_106_ewo_50_200_max = DecimalParameter(-10.0, -2.0, default=-8.0, decimals=1, space="buy", optimize=True)
   entry_106_sma_offset = DecimalParameter(0.980, 0.999, default=0.986, decimals=3, space="buy", optimize=True)
 
   entry_107_close_max_12 = DecimalParameter(00.50, 0.95, default=0.80, decimals=2, space="buy", optimize=False)
@@ -1814,7 +1814,7 @@ class NostalgiaForInfinityX4(IStrategy):
   entry_110_r_480_4h_min = DecimalParameter(-100.0, -70.0, default=-100.0, decimals=0, space="buy", optimize=False)
   entry_110_r_480_4h_max = DecimalParameter(-40.0, -0.0, default=-0.0, decimals=0, space="buy", optimize=False)
   entry_110_cti_20_max = DecimalParameter(-0.99, -0.50, default=-0.95, decimals=1, space="buy", optimize=False)
-  entry_110_ewo_50_200_max = DecimalParameter(-2.0, -10.0, default=-3.0, decimals=1, space="buy", optimize=True)
+  entry_110_ewo_50_200_max = DecimalParameter(-10.0, -2.0, default=-3.0, decimals=1, space="buy", optimize=True)
   entry_110_ema_offset = DecimalParameter(0.980, 0.999, default=0.994, decimals=3, space="buy", optimize=True)
 
   #############################################################
@@ -1856,6 +1856,8 @@ class NostalgiaForInfinityX4(IStrategy):
       self.regular_mode_derisk_spot = self.config["regular_mode_derisk_spot"]
     if "regular_mode_derisk_futures" in self.config:
       self.regular_mode_derisk_futures = self.config["regular_mode_derisk_futures"]
+    if "grind_mode_max_slots" in self.config:
+      self.grind_mode_max_slots = self.config["grind_mode_max_slots"]
     if "grind_mode_coins" in self.config:
       self.grind_mode_coins = self.config["grind_mode_coins"]
     if "max_slippage" in self.config:
@@ -18690,6 +18692,9 @@ class NostalgiaForInfinityX4(IStrategy):
     # RSI
     informative_1h["rsi_3"] = pta.rsi(informative_1h["close"], length=3, fillna=0.0)
     informative_1h["rsi_14"] = pta.rsi(informative_1h["close"], length=14, fillna=0.0)
+
+    informative_1h["rsi_14_max_3"] = informative_1h["rsi_14"].rolling(3).max()
+    informative_1h["rsi_14_max_6"] = informative_1h["rsi_14"].rolling(6).max()
 
     # EMA
     informative_1h["ema_12"] = ta.EMA(informative_1h, timeperiod=12)
