@@ -72,7 +72,7 @@ class NostalgiaForInfinityX4(IStrategy):
   INTERFACE_VERSION = 3
 
   def version(self) -> str:
-    return "v14.1.486"
+    return "v14.1.495"
 
   stoploss = -0.99
 
@@ -113,7 +113,7 @@ class NostalgiaForInfinityX4(IStrategy):
   startup_candle_count: int = 800
 
   # Long Normal mode tags
-  long_normal_mode_tags = ["force_entry", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13"]
+  long_normal_mode_tags = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13"]
   # Long Pump mode tags
   long_pump_mode_tags = ["21", "22", "23", "24", "25", "26"]
   # Long Quick mode tags
@@ -149,6 +149,8 @@ class NostalgiaForInfinityX4(IStrategy):
   short_mode_tags = ["581", "582"]
   # Short rapid mode tags
   short_rapid_mode_tags = ["601", "602", "603", "604", "605", "606", "607", "608", "609", "610"]
+  # Short grind mode tags
+  short_grind_mode_tags = ["620"]
 
   short_normal_mode_name = "short_normal"
   short_pump_mode_name = "short_pump"
@@ -558,7 +560,7 @@ class NostalgiaForInfinityX4(IStrategy):
     [-0.03, -0.10, -0.12, -0.14, -0.16, -0.18],
   ]
   regular_mode_grind_5_profit_threshold_spot = 0.048
-  regular_mode_derisk_spot = -0.30
+  regular_mode_derisk_spot = -0.40
   regular_mode_derisk_spot_old = -0.80
 
   regular_mode_rebuy_stakes_futures = [
@@ -15444,17 +15446,26 @@ class NostalgiaForInfinityX4(IStrategy):
     for entry in filled_entries:
       entry_stake = entry.safe_filled * entry.safe_price * (1 + trade.fee_open)
       total_stake += entry_stake
-      total_profit -= entry_stake
+      if trade.is_short:
+        total_profit += entry_stake
+      else:
+        total_profit -= entry_stake
     for exit in filled_exits:
       exit_stake = exit.safe_filled * exit.safe_price * (1 - trade.fee_close)
-      total_profit += exit_stake
+      if trade.is_short:
+        total_profit -= exit_stake
+      else:
+        total_profit += exit_stake
     current_stake = trade.amount * exit_rate * (1 - trade.fee_close)
     if self.is_futures_mode:
       if trade.is_short:
         current_stake -= trade.funding_fees
       else:
         current_stake += trade.funding_fees
-    total_profit += current_stake
+    if trade.is_short:
+      total_profit -= current_stake
+    else:
+      total_profit += current_stake
     total_profit_ratio = total_profit / total_stake
     current_profit_ratio = total_profit / current_stake
     init_profit_ratio = total_profit / filled_entries[0].cost
@@ -15854,6 +15865,47 @@ class NostalgiaForInfinityX4(IStrategy):
     ):
       # use normal mode for such trades
       sell, signal_name = self.long_exit_normal(
+        pair,
+        current_rate,
+        profit_stake,
+        profit_ratio,
+        profit_current_stake_ratio,
+        profit_init_ratio,
+        max_profit,
+        max_loss,
+        filled_entries,
+        filled_exits,
+        last_candle,
+        previous_candle_1,
+        previous_candle_2,
+        previous_candle_3,
+        previous_candle_4,
+        previous_candle_5,
+        trade,
+        current_time,
+        enter_tags,
+      )
+      if sell and (signal_name is not None):
+        return f"{signal_name} ( {enter_tag})"
+
+    # Trades not opened by X4
+    if trade.is_short and (
+      not any(
+        c
+        in (
+          self.short_normal_mode_tags
+          + self.short_pump_mode_tags
+          + self.short_quick_mode_tags
+          + self.short_rebuy_mode_tags
+          + self.short_mode_tags
+          + self.short_rapid_mode_tags
+          + self.short_grind_mode_tags
+        )
+        for c in enter_tags
+      )
+    ):
+      # use normal mode for such trades
+      sell, signal_name = self.short_exit_normal(
         pair,
         current_rate,
         profit_stake,
@@ -19622,15 +19674,18 @@ class NostalgiaForInfinityX4(IStrategy):
           long_entry_logic.append(df["close"].lt(df["bb40_2_low"].shift()))
           long_entry_logic.append(df["close"].le(df["close"].shift()))
 
-        # Condition #81 - Long mode bull.
+        # Condition #81 - High profit mode (log)
         if index == 81:
+          # Protections
+          long_entry_logic.append(df["num_empty_288"] < allowed_empty_candles)
+
           # Logic
-          long_entry_logic.append(df["bb40_2_delta"].gt(df["close"] * 0.052))
-          long_entry_logic.append(df["close_delta"].gt(df["close"] * 0.024))
-          long_entry_logic.append(df["bb40_2_tail"].lt(df["bb40_2_delta"] * 0.2))
+          long_entry_logic.append(df["rsi_14"] < 36.0)
+          long_entry_logic.append(df["bb40_2_delta"].gt(df["close"] * 0.025))
+          long_entry_logic.append(df["close_delta"].gt(df["close"] * 0.02))
+          long_entry_logic.append(df["bb40_2_tail"].lt(df["bb40_2_delta"] * 0.4))
           long_entry_logic.append(df["close"].lt(df["bb40_2_low"].shift()))
           long_entry_logic.append(df["close"].le(df["close"].shift()))
-          long_entry_logic.append(df["rsi_14"] < 30.0)
 
         # Condition #82 - Long mode bull.
         if index == 82:
@@ -19651,7 +19706,7 @@ class NostalgiaForInfinityX4(IStrategy):
         # Condition #102 - Long mode rapid
         if index == 102:
           # Logic
-          long_entry_logic.append(df["rsi_14"] < self.entry_46_rsi_14_max.value)
+          long_entry_logic.append(df["rsi_14"] < self.entry_102_rsi_14_max.value)
           long_entry_logic.append(df["close"] < (df["ema_16"] * self.entry_102_ema_offset.value))
           long_entry_logic.append(df["close"] < (df["bb20_2_low"] * self.entry_102_bb_offset.value))
 
