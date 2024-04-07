@@ -19504,69 +19504,69 @@ class NostalgiaForInfinityX4(IStrategy):
     # Momentum Indicators - Short
     # ------------------------------------
     # RSI
-    # df["rsi"] = ta.RSI(df)
+    df["rsi"] = ta.RSI(df)
     # Stochastic Slow
-    # df["stoch"] = ta.STOCH(df)["slowk"]
+    df["stoch"] = ta.STOCH(df)["slowk"]
     # ROC
-    # df["roc"] = ta.ROC(df)
+    df["roc"] = ta.ROC(df)
     # Ultimate Oscillator
-    # df["uo"] = ta.ULTOSC(df)
+    df["uo"] = ta.ULTOSC(df)
     # Awesome Oscillator
-    # df["ao"] = qtpylib.awesome_oscillator(df)
+    df["ao"] = qtpylib.awesome_oscillator(df)
     # MACD
-    # df["macd"] = ta.MACD(df)["macd"]
+    df["macd"] = ta.MACD(df)["macd"]
     # Commodity Channel Index
-    # df["cci"] = ta.CCI(df)
+    df["cci"] = ta.CCI(df)
     # # CMF
-    # df["cmf"] = chaikin_money_flow(df, 20)
+    df["cmf"] = chaikin_money_flow(df, 20)
     # # OBV
-    # df["obv"] = ta.OBV(df)
+    df["obv"] = ta.OBV(df)
     # # MFI
-    # df["mfi"] = ta.MFI(df)
+    df["mfi"] = ta.MFI(df)
     # # ADX
-    # df["adx"] = ta.ADX(df)
+    df["adx"] = ta.ADX(df)
     # # ATR
-    # df["atr"] = qtpylib.atr(df, window=14, exp=False)
-    # # Keltner Channel
-    # keltner = qtpylib.keltner_channel(df, window=20, atrs=1)
-    # keltner = emaKeltner(df)
-    # df["kc_upperband"] = keltner["upper"]
-    # df["kc_middleband"] = keltner["mid"]
-    # df["kc_lowerband"] = keltner["lower"]
-    # # Bollinger Bands
-    # bollinger = qtpylib.bollinger_bands(qtpylib.typical_price(df), window=20, stds=2)
-    # df["bollinger_upperband"] = bollinger["upper"]
-    # df["bollinger_middleband"] = bollinger["mid"]
-    # df["bollinger_lowerband"] = bollinger["lower"]
-    # # EMA - Exponential Moving Average
-    # df["ema9"] = ta.EMA(df, timeperiod=9)
-    # df["ema20"] = ta.EMA(df, timeperiod=20)
-    # df["ema50"] = ta.EMA(df, timeperiod=50)
-    # df["ema200"] = ta.EMA(df, timeperiod=200)
-    # # TEMA - Triple Exponential Moving Average
-    # df["tema"] = ta.TEMA(df, timeperiod=9)
+    df["atr"] = qtpylib.atr(df, window=14, exp=False)
+    # Keltner Channel
+    keltner = qtpylib.keltner_channel(df, window=20, atrs=1)
+    keltner = emaKeltner(df)
+    df["kc_upperband"] = keltner["upper"]
+    df["kc_middleband"] = keltner["mid"]
+    df["kc_lowerband"] = keltner["lower"]
+    # Bollinger Bands
+    bollinger = qtpylib.bollinger_bands(qtpylib.typical_price(df), window=20, stds=2)
+    df["bollinger_upperband"] = bollinger["upper"]
+    df["bollinger_middleband"] = bollinger["mid"]
+    df["bollinger_lowerband"] = bollinger["lower"]
+    # EMA - Exponential Moving Average
+    df["ema9"] = ta.EMA(df, timeperiod=9)
+    df["ema20"] = ta.EMA(df, timeperiod=20)
+    df["ema50"] = ta.EMA(df, timeperiod=50)
+    df["ema200"] = ta.EMA(df, timeperiod=200)
+    # TEMA - Triple Exponential Moving Average
+    df["tema"] = ta.TEMA(df, timeperiod=9)
     
-    # # SAR - Parabolic SAR
-    # df["sar"] = ta.SAR(df)
+    # SAR - Parabolic SAR
+    df["sar"] = ta.SAR(df)
     
-    # #Pivots
-    # pivots = pivot_points_S(df)
-    # df["pivot_lows"] = pivots["pivot_lows"]
-    # df["pivot_highs"] = pivots["pivot_highs"]
+    #Pivots
+    pivots = pivot_points_S(df)
+    df["pivot_lows"] = pivots["pivot_lows"]
+    df["pivot_highs"] = pivots["pivot_highs"]
     
-    # # Add Divergences
-    # initialize_divergences_lists(df)
-    # add_divergences(df, "rsi")
-    # add_divergences(df, "stoch")
-    # add_divergences(df, "roc")
-    # add_divergences(df, "uo")
-    # add_divergences(df, "ao")
-    # add_divergences(df, "macd")
-    # add_divergences(df, "cci")
-    # add_divergences(df, "cmf")
-    # add_divergences(df, "obv")
-    # add_divergences(df, "mfi")
-    # add_divergences(df, "adx")
+    # Add Divergences
+    initialize_divergences_lists(df)
+    add_divergences(df, "rsi")
+    add_divergences(df, "stoch")
+    add_divergences(df, "roc")
+    add_divergences(df, "uo")
+    add_divergences(df, "ao")
+    add_divergences(df, "macd")
+    add_divergences(df, "cci")
+    add_divergences(df, "cmf")
+    add_divergences(df, "obv")
+    add_divergences(df, "mfi")
+    add_divergences(df, "adx")
 
     # Global protections
     # -----------------------------------------------------------------------------------------
