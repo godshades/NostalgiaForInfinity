@@ -20269,9 +20269,9 @@ class NostalgiaForInfinityX4(IStrategy):
           
         if index == 30:
           # Logic
-          short_entry_logic.append(df["high"] > df["high"].shift())
-          short_entry_logic.append(df["total_bullish_divergences"].shift() > 0)
-          short_entry_logic.append(two_bands_check(df))
+          long_entry_logic.append(df["high"] > df["high"].shift())
+          long_entry_logic.append(df["total_bullish_divergences"].shift() > 0)
+          long_entry_logic.append(two_bands_check(df))
 
         # Long Entry Conditions Ends Here
 
