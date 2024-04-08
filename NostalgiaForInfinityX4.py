@@ -828,7 +828,7 @@ class NostalgiaForInfinityX4(IStrategy):
     "long_entry_condition_108_enable": True,
     "long_entry_condition_109_enable": True,
     "long_entry_condition_110_enable": True,
-    "long_entry_condition_120_enable": True,
+    "long_entry_condition_120_enable": False,
   }
 
   short_entry_signal_params = {
@@ -836,7 +836,7 @@ class NostalgiaForInfinityX4(IStrategy):
     # -------------------------------------------------------
     "short_entry_condition_500_enable": False,
     "short_entry_condition_501_enable": False,
-    "short_entry_condition_502_enable": False,
+    "short_entry_condition_502_enable": True,
   }
 
   buy_protection_params = {}
@@ -20317,7 +20317,7 @@ class NostalgiaForInfinityX4(IStrategy):
           
         if short_index == 502:
           # Logic
-          # short_entry_logic.append(num_open_short_mode < self.short_mode_max_slots)
+          short_entry_logic.append(num_open_short_mode < self.short_mode_max_slots)
           short_entry_logic.append(df["low"] < df["low"].shift())
           short_entry_logic.append(df["total_bearish_divergences"].shift() > 0)
           short_entry_logic.append(two_bands_check(df))
