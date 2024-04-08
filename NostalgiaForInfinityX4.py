@@ -828,7 +828,7 @@ class NostalgiaForInfinityX4(IStrategy):
     "long_entry_condition_108_enable": False,
     "long_entry_condition_109_enable": False,
     "long_entry_condition_110_enable": False,
-    "long_entry_condition_120_enable": False,
+    "long_entry_condition_120_enable": True,
   }
 
   short_entry_signal_params = {
@@ -20232,20 +20232,20 @@ class NostalgiaForInfinityX4(IStrategy):
           # Protections
           long_entry_logic.append(num_open_grind_mode < self.grind_mode_max_slots)
           # long_entry_logic.append(is_pair_grind_mode)
-          # long_entry_logic.append(df["btc_pct_close_max_24_5m"] < 0.03)
-          # long_entry_logic.append(df["btc_pct_close_max_72_5m"] < 0.06)
-          # long_entry_logic.append(df["close"] > (df["close_max_12"] * 0.94))
-          # long_entry_logic.append(df["close"] > (df["close_max_24"] * 0.92))
-          # long_entry_logic.append(df["close"] > (df["close_max_48"] * 0.90))
-          # long_entry_logic.append(df["close"] > (df["high_max_12_1h"] * 0.88))
-          # long_entry_logic.append(df["close"] > (df["high_max_24_1h"] * 0.86))
-          # long_entry_logic.append(df["close"] > (df["high_max_6_1d"] * 0.84))
-          # long_entry_logic.append(df["close"] > (df["high_max_12_1d"] * 0.80))
-          # long_entry_logic.append(df["hl_pct_change_6_1h"] < 0.30)
-          # long_entry_logic.append(df["hl_pct_change_12_1h"] < 0.40)
-          # long_entry_logic.append(df["hl_pct_change_24_1h"] < 0.50)
-          # long_entry_logic.append(df["hl_pct_change_48_1h"] < 0.60)
-          # long_entry_logic.append(df["num_empty_288"] < allowed_empty_candles)
+          long_entry_logic.append(df["btc_pct_close_max_24_5m"] < 0.03)
+          long_entry_logic.append(df["btc_pct_close_max_72_5m"] < 0.06)
+          long_entry_logic.append(df["close"] > (df["close_max_12"] * 0.94))
+          long_entry_logic.append(df["close"] > (df["close_max_24"] * 0.92))
+          long_entry_logic.append(df["close"] > (df["close_max_48"] * 0.90))
+          long_entry_logic.append(df["close"] > (df["high_max_12_1h"] * 0.88))
+          long_entry_logic.append(df["close"] > (df["high_max_24_1h"] * 0.86))
+          long_entry_logic.append(df["close"] > (df["high_max_6_1d"] * 0.84))
+          long_entry_logic.append(df["close"] > (df["high_max_12_1d"] * 0.80))
+          long_entry_logic.append(df["hl_pct_change_6_1h"] < 0.30)
+          long_entry_logic.append(df["hl_pct_change_12_1h"] < 0.40)
+          long_entry_logic.append(df["hl_pct_change_24_1h"] < 0.50)
+          long_entry_logic.append(df["hl_pct_change_48_1h"] < 0.60)
+          long_entry_logic.append(df["num_empty_288"] < allowed_empty_candles)
 
           long_entry_logic.append(df["rsi_3"] >= 30.0)
           long_entry_logic.append(df["rsi_3"] <= 60.0)
