@@ -113,7 +113,7 @@ class NostalgiaForInfinityX4(IStrategy):
   startup_candle_count: int = 800
 
   # Long Normal mode tags
-  long_normal_mode_tags = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13","30"]
+  long_normal_mode_tags = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13"]
   # Long Pump mode tags
   long_pump_mode_tags = ["21", "22", "23", "24", "25", "26"]
   # Long Quick mode tags
@@ -121,7 +121,7 @@ class NostalgiaForInfinityX4(IStrategy):
   # Long rebuy mode tags
   long_rebuy_mode_tags = ["61"]
   # Long high profit mode tags
-  long_mode_tags = ["81", "82"]
+  long_mode_tags = ["80", "81", "82"]
   # Long rapid mode tags
   long_rapid_mode_tags = ["101", "102", "103", "104", "105", "106", "107", "108", "109", "110"]
   # Long grind mode tags
@@ -798,7 +798,6 @@ class NostalgiaForInfinityX4(IStrategy):
     "long_entry_condition_11_enable": True,
     "long_entry_condition_12_enable": True,
     "long_entry_condition_13_enable": True,
-    "long_entry_condition_30_enable": True,
     "long_entry_condition_21_enable": True,
     "long_entry_condition_22_enable": True,
     "long_entry_condition_23_enable": True,
@@ -816,6 +815,7 @@ class NostalgiaForInfinityX4(IStrategy):
     "long_entry_condition_49_enable": True,
     "long_entry_condition_50_enable": True,
     "long_entry_condition_61_enable": True,
+    "long_entry_condition_80_enable": True,
     "long_entry_condition_81_enable": True,
     "long_entry_condition_82_enable": True,
     "long_entry_condition_101_enable": True,
@@ -20267,7 +20267,7 @@ class NostalgiaForInfinityX4(IStrategy):
           long_entry_logic.append(df["ema_12"] < df["ema_26"])
           long_entry_logic.append(df["ha_close"] > df["ha_open"])
           
-        if index == 30:
+        if index == 80:
           # Logic
           long_entry_logic.append(df["high"] > df["high"].shift())
           long_entry_logic.append(df["total_bullish_divergences"].shift() > 0)
