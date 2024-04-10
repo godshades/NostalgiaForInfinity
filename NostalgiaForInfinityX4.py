@@ -72,7 +72,7 @@ class NostalgiaForInfinityX4(IStrategy):
   INTERFACE_VERSION = 3
 
   def version(self) -> str:
-    return "v14.1.551"
+    return "v14.1.563"
 
   stoploss = -0.99
 
@@ -817,7 +817,7 @@ class NostalgiaForInfinityX4(IStrategy):
     "long_entry_condition_49_enable": True,
     "long_entry_condition_50_enable": True,
     "long_entry_condition_61_enable": True,
-    "long_entry_condition_80_enable": False,
+    "long_entry_condition_80_enable": True,
     "long_entry_condition_81_enable": True,
     "long_entry_condition_82_enable": True,
     "long_entry_condition_101_enable": True,
@@ -838,7 +838,7 @@ class NostalgiaForInfinityX4(IStrategy):
     # -------------------------------------------------------
     "short_entry_condition_500_enable": False,
     "short_entry_condition_501_enable": False,
-    "short_entry_condition_502_enable": True,
+    "short_entry_condition_502_enable": False,
   }
 
   buy_protection_params = {}
@@ -10245,7 +10245,9 @@ class NostalgiaForInfinityX4(IStrategy):
     buy_tag,
   ) -> tuple:
     if 0.02 > current_profit >= 0.01:
-      if (last_candle["r_14"] <= -99.0) and (last_candle["rsi_14"] < 22.0):
+      if last_candle["r_480"] < -99.8:
+        return True, f"exit_{mode_name}_w_1_1"
+      elif (last_candle["r_14"] <= -99.0) and (last_candle["rsi_14"] < 22.0):
         return True, f"exit_{mode_name}_w_1_2"
       elif (last_candle["r_14"] <= -98.0) and (last_candle["rsi_14"] > 54.0):
         return True, f"exit_{mode_name}_w_1_3"
@@ -10543,7 +10545,7 @@ class NostalgiaForInfinityX4(IStrategy):
       ):
         return True, f"exit_{mode_name}_w_2_20"
     elif 0.04 > current_profit >= 0.03:
-      if last_candle["r_480"] < -0.96:
+      if last_candle["r_480"] < -99.6:
         return True, f"exit_{mode_name}_w_3_1"
       elif (last_candle["r_14"] <= -99.0) and (last_candle["rsi_14"] < 24.0):
         return True, f"exit_{mode_name}_w_3_2"
@@ -15992,6 +15994,8 @@ class NostalgiaForInfinityX4(IStrategy):
             and (last_candle["rsi_3_1h"] > 30.0)
             and (last_candle["rsi_3_4h"] > 30.0)
             and (last_candle["rsi_14"] < 42.0)
+            and (last_candle["close"] < last_candle["res_hlevel_4h"])
+            and (last_candle["close"] > last_candle["sup_level_4h"])
           )
         )
       ):
@@ -16113,8 +16117,7 @@ class NostalgiaForInfinityX4(IStrategy):
           (
             (grind_2_derisk_1_sub_grind_count == 0)
             and (
-              (last_candle["zlma_50_dec_15m"] == False)
-              and (last_candle["close"] < last_candle["res_hlevel_4h"])
+              (last_candle["close"] < last_candle["res_hlevel_4h"])
               and (last_candle["close"] > last_candle["sup_level_4h"])
             )
             and (
@@ -16259,11 +16262,11 @@ class NostalgiaForInfinityX4(IStrategy):
         and (
           is_long_grind_buy
           or (
-            (last_candle["rsi_3"] > 20.0)
-            and (last_candle["rsi_3_15m"] > 30.0)
+            (last_candle["rsi_3"] > 12.0)
+            and (last_candle["rsi_3_15m"] > 16.0)
             and (last_candle["rsi_3_1h"] > 30.0)
             and (last_candle["rsi_3_4h"] > 30.0)
-            and (last_candle["rsi_14"] < 42.0)
+            and (last_candle["rsi_14"] < 46.0)
             and (last_candle["zlma_50_dec_15m"] == False)
             and (last_candle["zlma_50_dec_1h"] == False)
             and (last_candle["zlma_50_dec_4h"] == False)
@@ -16392,11 +16395,11 @@ class NostalgiaForInfinityX4(IStrategy):
         and (
           is_long_grind_buy
           or (
-            (last_candle["rsi_3"] > 20.0)
-            and (last_candle["rsi_3_15m"] > 30.0)
+            (last_candle["rsi_3"] > 12.0)
+            and (last_candle["rsi_3_15m"] > 16.0)
             and (last_candle["rsi_3_1h"] > 30.0)
             and (last_candle["rsi_3_4h"] > 30.0)
-            and (last_candle["rsi_14"] < 42.0)
+            and (last_candle["rsi_14"] < 46.0)
             and (last_candle["zlma_50_dec_15m"] == False)
             and (last_candle["zlma_50_dec_1h"] == False)
             and (last_candle["zlma_50_dec_4h"] == False)
@@ -16525,11 +16528,11 @@ class NostalgiaForInfinityX4(IStrategy):
         and (
           is_long_grind_buy
           or (
-            (last_candle["rsi_3"] > 20.0)
-            and (last_candle["rsi_3_15m"] > 30.0)
+            (last_candle["rsi_3"] > 12.0)
+            and (last_candle["rsi_3_15m"] > 16.0)
             and (last_candle["rsi_3_1h"] > 30.0)
             and (last_candle["rsi_3_4h"] > 30.0)
-            and (last_candle["rsi_14"] < 42.0)
+            and (last_candle["rsi_14"] < 46.0)
             and (last_candle["zlma_50_dec_15m"] == False)
             and (last_candle["zlma_50_dec_1h"] == False)
             and (last_candle["zlma_50_dec_4h"] == False)
@@ -16658,11 +16661,11 @@ class NostalgiaForInfinityX4(IStrategy):
         and (
           is_long_grind_buy
           or (
-            (last_candle["rsi_3"] > 20.0)
-            and (last_candle["rsi_3_15m"] > 30.0)
+            (last_candle["rsi_3"] > 12.0)
+            and (last_candle["rsi_3_15m"] > 16.0)
             and (last_candle["rsi_3_1h"] > 30.0)
             and (last_candle["rsi_3_4h"] > 30.0)
-            and (last_candle["rsi_14"] < 42.0)
+            and (last_candle["rsi_14"] < 46.0)
             and (last_candle["zlma_50_dec_15m"] == False)
             and (last_candle["zlma_50_dec_1h"] == False)
             and (last_candle["zlma_50_dec_4h"] == False)
@@ -16791,11 +16794,11 @@ class NostalgiaForInfinityX4(IStrategy):
         and (
           is_long_grind_buy
           or (
-            (last_candle["rsi_3"] > 20.0)
-            and (last_candle["rsi_3_15m"] > 30.0)
+            (last_candle["rsi_3"] > 12.0)
+            and (last_candle["rsi_3_15m"] > 16.0)
             and (last_candle["rsi_3_1h"] > 30.0)
             and (last_candle["rsi_3_4h"] > 30.0)
-            and (last_candle["rsi_14"] < 42.0)
+            and (last_candle["rsi_14"] < 46.0)
             and (last_candle["zlma_50_dec_15m"] == False)
             and (last_candle["zlma_50_dec_1h"] == False)
             and (last_candle["zlma_50_dec_4h"] == False)
@@ -16933,6 +16936,8 @@ class NostalgiaForInfinityX4(IStrategy):
           (last_candle["zlma_50_dec_15m"] == False)
           and (last_candle["zlma_50_dec_1h"] == False)
           and (last_candle["zlma_50_dec_4h"] == False)
+          and (last_candle["close"] < last_candle["res_hlevel_4h"])
+          and (last_candle["close"] > last_candle["sup_level_4h"])
         )
         and (
           is_long_grind_buy
@@ -19301,6 +19306,8 @@ class NostalgiaForInfinityX4(IStrategy):
     df = self.base_tf_5m_indicators(metadata, df)
 
     df.fillna({"zlma_50_1h": 0.0}, inplace=True)
+    df["cti_20_1d"].infer_objects(copy=False).bfill()
+    df["r_480_4h"].infer_objects(copy=False).bfill()
 
     # Global protections
     tok = time.perf_counter()
@@ -19815,7 +19822,7 @@ class NostalgiaForInfinityX4(IStrategy):
           
         if short_index == 502:
           # Logic
-          # short_entry_logic.append(num_open_short_mode < self.short_mode_max_slots)
+          short_entry_logic.append(num_open_short_mode < self.short_mode_max_slots)
           short_entry_logic.append(df["low"] < df["low"].shift())
           short_entry_logic.append(df["total_bearish_divergences"].shift() > 0)
           short_entry_logic.append(two_bands_check(df))
