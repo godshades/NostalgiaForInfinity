@@ -19798,7 +19798,7 @@ class NostalgiaForInfinityX4(IStrategy):
     # Commodity Channel Index
     df["cci"] = ta.CCI(df)
     # # CMF
-    df["cmf"] = chaikin_money_flow(df, 20)
+    df["cmf"] = pta.cmf(df)
     # # OBV
     df["obv"] = ta.OBV(df)
     # # MFI
@@ -21278,7 +21278,7 @@ def emaKeltner(df):
     keltner["mid"] = ema20
     keltner["lower"] = ema20 - atr
     return keltner
-
+  
 # +---------------------------------------------------------------------------+
 # |                              Classes                                      |
 # +---------------------------------------------------------------------------+
