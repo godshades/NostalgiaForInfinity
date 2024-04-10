@@ -817,7 +817,7 @@ class NostalgiaForInfinityX4(IStrategy):
     "long_entry_condition_49_enable": True,
     "long_entry_condition_50_enable": True,
     "long_entry_condition_61_enable": True,
-    "long_entry_condition_80_enable": True,
+    "long_entry_condition_80_enable": False,
     "long_entry_condition_81_enable": True,
     "long_entry_condition_82_enable": True,
     "long_entry_condition_101_enable": True,
@@ -19798,7 +19798,7 @@ class NostalgiaForInfinityX4(IStrategy):
     # Commodity Channel Index
     df["cci"] = ta.CCI(df)
     # # CMF
-    df["cmf"] = pta.cmf(df)
+    df["cmf"] = chaikin_money_flow(df, 20)
     # # OBV
     df["obv"] = ta.OBV(df)
     # # MFI
@@ -21279,6 +21279,25 @@ def emaKeltner(df):
     keltner["lower"] = ema20 - atr
     return keltner
   
+def chaikin_money_flow(df, n=20, fillna=False) -> Series:
+  """Chaikin Money Flow (CMF)
+  It measures the amount of Money Flow Volume over a specific period.
+  http://stockcharts.com/school/doku.php?id=chart_school:technical_indicators:chaikin_money_flow_cmf
+  Args:
+      df(pandas.Dataframe): df containing ohlcv
+      n(int): n period.
+      fillna(bool): if True, fill nan values.
+  Returns:
+      pandas.Series: New feature generated.
+  """
+  mfv = ((df["close"] - df["low"]) - (df["high"] - df["close"])) / (df["high"] - df["low"])
+  mfv = mfv.fillna(0.0)  # float division by zero
+  mfv *= df["volume"]
+  cmf = mfv.rolling(n, min_periods=0).sum() / df["volume"].rolling(n, min_periods=0).sum()
+  if fillna:
+    cmf = cmf.replace([np.inf, -np.inf], np.nan).fillna(0)
+  return Series(cmf, name="cmf")
+
 # +---------------------------------------------------------------------------+
 # |                              Classes                                      |
 # +---------------------------------------------------------------------------+
