@@ -16747,12 +16747,6 @@ class NostalgiaForInfinityX4(IStrategy):
           or (slice_profit < -0.06)
         )
         and (
-          (last_candle["protections_long_rebuy"] == True)
-          and (last_candle["protections_long_global"] == True)
-          and (last_candle["global_protections_long_pump"] == True)
-          and (last_candle["global_protections_long_dump"] == True)
-        )
-        and (
           (last_candle["close"] > (last_candle["close_max_12"] * 0.96))
           and (last_candle["close"] > (last_candle["close_max_24"] * 0.94))
           and (last_candle["close"] > (last_candle["close_max_48"] * 0.92))
