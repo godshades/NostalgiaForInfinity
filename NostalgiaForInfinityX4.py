@@ -20126,10 +20126,14 @@ def divergence_finder_dataframe(dataframe: DataFrame, indicator_source: str) -> 
         bearish_occurence = bearish_divergence_finder(dataframe, dataframe[indicator_source], high_iterator, index)
         if bearish_occurence != None:
             prev_pivot, current_pivot = bearish_occurence
-            bearish_prev_pivot = dataframe["close"][prev_pivot]
-            bearish_current_pivot = dataframe["close"][current_pivot]
-            bearish_ind_prev_pivot = dataframe[indicator_source][prev_pivot]
-            bearish_ind_current_pivot = dataframe[indicator_source][current_pivot]
+            # bearish_prev_pivot = dataframe["close"][prev_pivot]
+            # bearish_current_pivot = dataframe["close"][current_pivot]
+            # bearish_ind_prev_pivot = dataframe[indicator_source][prev_pivot]
+            # bearish_ind_current_pivot = dataframe[indicator_source][current_pivot]
+            bearish_prev_pivot = dataframe.loc[prev_pivot, "close"]
+            bearish_current_pivot = dataframe.loc[current_pivot, "close"]
+            bearish_ind_prev_pivot = dataframe.loc[prev_pivot, indicator_source]
+            bearish_ind_current_pivot = dataframe.loc[current_pivot, indicator_source]
             length = current_pivot - prev_pivot
             bearish_lines_index = 0
             can_exist = True
@@ -20142,7 +20146,8 @@ def divergence_finder_dataframe(dataframe: DataFrame, indicator_source: str) -> 
                     point = bearish_prev_pivot + (bearish_current_pivot - bearish_prev_pivot) * i / length
                     indicator_point = bearish_ind_prev_pivot + (bearish_ind_current_pivot - bearish_ind_prev_pivot) * i / length
                     if i != 0 and i != length:
-                        if point <= dataframe["close"][prev_pivot + i] or indicator_point <= dataframe[indicator_source][prev_pivot + i]:
+                        # if point <= dataframe["close"][prev_pivot + i] or indicator_point <= dataframe[indicator_source][prev_pivot + i]:
+                        if point <= dataframe.loc[prev_pivot + i, "close"] or indicator_point <= dataframe.loc[prev_pivot + i, indicator_source]:
                             can_exist = False
                     if not np.isnan(actual_bearish_lines[prev_pivot + i]):
                         can_draw = False
@@ -20155,17 +20160,24 @@ def divergence_finder_dataframe(dataframe: DataFrame, indicator_source: str) -> 
                 bearish_lines_index = bearish_lines_index + 1
             if can_exist:
                 bearish_divergences[index] = row.close
-                dataframe["total_bearish_divergences"][index] = row.close
+                # dataframe["total_bearish_divergences"][index] = row.close
+                dataframe.loc[index, "total_bearish_divergences"] = row.close
                 if index > 30:
-                    dataframe["total_bearish_divergences_count"][index - 30] = dataframe["total_bearish_divergences_count"][index - 30] + 1
-                    dataframe["total_bearish_divergences_names"][index - 30] = dataframe["total_bearish_divergences_names"][index - 30] + indicator_source.upper() + "<br>"
+                    # dataframe["total_bearish_divergences_count"][index - 30] = dataframe["total_bearish_divergences_count"][index - 30] + 1
+                    # dataframe["total_bearish_divergences_names"][index - 30] = dataframe["total_bearish_divergences_names"][index - 30] + indicator_source.upper() + "<br>"
+                    dataframe.loc[index - 30, "total_bearish_divergences_count"] = dataframe.loc[index - 30, "total_bearish_divergences_count"] + 1
+                    dataframe.loc[index - 30, "total_bearish_divergences_names"] = dataframe.loc[index - 30, "total_bearish_divergences_names"] + indicator_source.upper() + "<br>"
         bullish_occurence = bullish_divergence_finder(dataframe, dataframe[indicator_source], low_iterator, index)
         if bullish_occurence != None:
             prev_pivot, current_pivot = bullish_occurence
-            bullish_prev_pivot = dataframe["close"][prev_pivot]
-            bullish_current_pivot = dataframe["close"][current_pivot]
-            bullish_ind_prev_pivot = dataframe[indicator_source][prev_pivot]
-            bullish_ind_current_pivot = dataframe[indicator_source][current_pivot]
+            # bullish_prev_pivot = dataframe["close"][prev_pivot]
+            # bullish_current_pivot = dataframe["close"][current_pivot]
+            # bullish_ind_prev_pivot = dataframe[indicator_source][prev_pivot]
+            # bullish_ind_current_pivot = dataframe[indicator_source][current_pivot]
+            bullish_prev_pivot = dataframe.loc[prev_pivot, "close"]
+            bullish_current_pivot = dataframe.loc[current_pivot, "close"]
+            bullish_ind_prev_pivot = dataframe.loc[prev_pivot, indicator_source]
+            bullish_ind_current_pivot = dataframe.loc[current_pivot, indicator_source]
             length = current_pivot - prev_pivot
             bullish_lines_index = 0
             can_exist = True
@@ -20178,7 +20190,8 @@ def divergence_finder_dataframe(dataframe: DataFrame, indicator_source: str) -> 
                     point = bullish_prev_pivot + (bullish_current_pivot - bullish_prev_pivot) * i / length
                     indicator_point = bullish_ind_prev_pivot + (bullish_ind_current_pivot - bullish_ind_prev_pivot) * i / length
                     if i != 0 and i != length:
-                        if point >= dataframe["close"][prev_pivot + i] or indicator_point >= dataframe[indicator_source][prev_pivot + i]:
+                        # if point >= dataframe["close"][prev_pivot + i] or indicator_point >= dataframe[indicator_source][prev_pivot + i]:
+                        if point >= dataframe.loc[prev_pivot + i, "close"] or indicator_point >= dataframe.loc[prev_pivot + i, indicator_source]:
                             can_exist = False
                     if not np.isnan(actual_bullish_lines[prev_pivot + i]):
                         can_draw = False
@@ -20191,10 +20204,13 @@ def divergence_finder_dataframe(dataframe: DataFrame, indicator_source: str) -> 
                 bullish_lines_index = bullish_lines_index + 1
             if can_exist:
                 bullish_divergences[index] = row.close
-                dataframe["total_bullish_divergences"][index] = row.close
+                # dataframe["total_bullish_divergences"][index] = row.close
+                dataframe.loc[index, "total_bullish_divergences"] = row.close
                 if index > 30:
-                    dataframe["total_bullish_divergences_count"][index - 30] = dataframe["total_bullish_divergences_count"][index - 30] + 1
-                    dataframe["total_bullish_divergences_names"][index - 30] = dataframe["total_bullish_divergences_names"][index - 30] + indicator_source.upper() + "<br>"
+                    # dataframe["total_bullish_divergences_count"][index - 30] = dataframe["total_bullish_divergences_count"][index - 30] + 1
+                    # dataframe["total_bullish_divergences_names"][index - 30] = dataframe["total_bullish_divergences_names"][index - 30] + indicator_source.upper() + "<br>"
+                    dataframe.loc[index - 30, "total_bullish_divergences_count"] = dataframe.loc[index - 30, "total_bullish_divergences_count"] + 1
+                    dataframe.loc[index - 30, "total_bullish_divergences_names"] = dataframe.loc[index - 30, "total_bullish_divergences_names"] + indicator_source.upper() + "<br>"
     return (bearish_divergences, bearish_lines, bullish_divergences, bullish_lines)
 
 def bearish_divergence_finder(dataframe, indicator, high_iterator, index):
@@ -20206,7 +20222,8 @@ def bearish_divergence_finder(dataframe, indicator, high_iterator, index):
             prev_pivot = occurences[i]
             if np.isnan(prev_pivot):
                 return
-            if dataframe["pivot_highs"][current_pivot] < dataframe["pivot_highs"][prev_pivot] and indicator[current_pivot] > indicator[prev_pivot] or (dataframe["pivot_highs"][current_pivot] > dataframe["pivot_highs"][prev_pivot] and indicator[current_pivot] < indicator[prev_pivot]):
+            # if dataframe["pivot_highs"][current_pivot] < dataframe["pivot_highs"][prev_pivot] and indicator[current_pivot] > indicator[prev_pivot] or (dataframe["pivot_highs"][current_pivot] > dataframe["pivot_highs"][prev_pivot] and indicator[current_pivot] < indicator[prev_pivot]):
+            if dataframe.loc[current_pivot, "pivot_highs"] < dataframe.loc[prev_pivot, "pivot_highs"] and indicator[current_pivot] > indicator[prev_pivot] or (dataframe.loc[current_pivot, "pivot_highs"] > dataframe.loc[prev_pivot, "pivot_highs"] and indicator[current_pivot] < indicator[prev_pivot]):
                 return (prev_pivot, current_pivot)
     return None
 
@@ -20219,7 +20236,8 @@ def bullish_divergence_finder(dataframe, indicator, low_iterator, index):
             prev_pivot = occurences[i]
             if np.isnan(prev_pivot):
                 return
-            if dataframe["pivot_lows"][current_pivot] < dataframe["pivot_lows"][prev_pivot] and indicator[current_pivot] > indicator[prev_pivot] or (dataframe["pivot_lows"][current_pivot] > dataframe["pivot_lows"][prev_pivot] and indicator[current_pivot] < indicator[prev_pivot]):
+            # if dataframe["pivot_lows"][current_pivot] < dataframe["pivot_lows"][prev_pivot] and indicator[current_pivot] > indicator[prev_pivot] or (dataframe["pivot_lows"][current_pivot] > dataframe["pivot_lows"][prev_pivot] and indicator[current_pivot] < indicator[prev_pivot]):
+            if dataframe.loc[current_pivot, "pivot_lows"] < dataframe.loc[prev_pivot, "pivot_lows"] and indicator[current_pivot] > indicator[prev_pivot] or (dataframe.loc[current_pivot, "pivot_lows"] > dataframe.loc[prev_pivot, "pivot_lows"] and indicator[current_pivot] < indicator[prev_pivot]):
                 return (prev_pivot, current_pivot)
     return None
 
