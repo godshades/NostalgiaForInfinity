@@ -19610,7 +19610,7 @@ class NostalgiaForInfinityX4(IStrategy):
           
         if short_index == 502:
           # Logic
-          short_entry_logic.append(num_open_short_mode < self.short_mode_max_slots)
+          # short_entry_logic.append(num_open_short_mode < self.short_mode_max_slots)
           short_entry_logic.append(df["low"] < df["low"].shift())
           short_entry_logic.append(df["total_bearish_divergences"].shift() > 0)
           short_entry_logic.append(two_bands_check(df))
