@@ -187,7 +187,7 @@ class NostalgiaForInfinityX4(IStrategy):
 
   # Grinding
   grind_derisk_spot = -0.40
-  grind_derisk_futures = -0.20
+  grind_derisk_futures = -0.30
 
   grind_1_stop_grinds_spot = -0.20
   grind_1_profit_threshold_spot = 0.018
@@ -1958,11 +1958,10 @@ class NostalgiaForInfinityX4(IStrategy):
     profit_stake, profit_ratio, profit_current_stake_ratio, profit_init_ratio = self.calc_total_profit(
       trade, filled_entries, filled_exits, current_rate
     )
-    # ratio = self.futures_mode_leverage if self.is_futures_mode else 1.0
-    # profit_current_stake_ratio = current_profit * ratio
+
     max_profit = (trade.max_rate - trade.open_rate) / trade.open_rate
     max_loss = (trade.open_rate - trade.min_rate) / trade.min_rate
-    
+
     count_of_entries = len(filled_entries)
     if count_of_entries > 1:
       initial_entry = filled_entries[0]
@@ -2569,8 +2568,8 @@ class NostalgiaForInfinityX4(IStrategy):
     # Indicators
     # -----------------------------------------------------------------------------------------
     # RSI
-    informative_1d["rsi_3"] = pta.rsi(informative_1d["close"], length=3)
-    informative_1d["rsi_14"] = pta.rsi(informative_1d["close"], length=14)
+    informative_1d["rsi_3"] = pta.rsi(informative_1d["close"], length=3, fillna=0.0)
+    informative_1d["rsi_14"] = pta.rsi(informative_1d["close"], length=14, fillna=0.0)
 
     informative_1d["rsi_14_max_6"] = informative_1d["rsi_14"].rolling(6).max()
 
@@ -3920,6 +3919,7 @@ class NostalgiaForInfinityX4(IStrategy):
           long_entry_logic.append((df["ema_26"].shift() - df["ema_12"].shift()) > (df["open"] / 100.0))
           long_entry_logic.append(df["close"] < (df["ema_20"] * self.entry_10_ema_offset.value))
 
+        # Condition #11 - Normal mode (Long)
         if index == 11:
           # Logic
           long_entry_logic.append(df["rsi_14"] < self.entry_11_rsi_14_max.value)
@@ -4019,7 +4019,6 @@ class NostalgiaForInfinityX4(IStrategy):
           long_entry_logic.append(df["close"] < (df["bb20_2_low"] * 0.996))
           long_entry_logic.append(df["rsi_14"] < 40.0)
 
-
         # Condition #43 - Quick mode bull.
         if index == 43:
           # Logic
@@ -4029,16 +4028,25 @@ class NostalgiaForInfinityX4(IStrategy):
 
         # Condition #44 - Quick mode bull.
         if index == 44:
+          # Protections
+          long_entry_logic.append(df["btc_pct_close_max_24_5m"] < 0.03)
+          long_entry_logic.append(df["btc_pct_close_max_72_5m"] < 0.03)
           long_entry_logic.append(df["close_max_12"] < (df["close"] * 1.2))
           long_entry_logic.append(df["close_max_24"] < (df["close"] * 1.24))
           long_entry_logic.append(df["close_max_48"] < (df["close"] * 1.3))
           long_entry_logic.append(df["high_max_24_1h"] < (df["close"] * 1.5))
           long_entry_logic.append(df["high_max_24_4h"] < (df["close"] * 1.75))
+          long_entry_logic.append(df["hl_pct_change_6_1h"] < 0.4)
+          long_entry_logic.append(df["hl_pct_change_12_1h"] < 0.5)
+          long_entry_logic.append(df["hl_pct_change_24_1h"] < 0.75)
+          long_entry_logic.append(df["hl_pct_change_48_1h"] < 0.9)
           long_entry_logic.append(df["num_empty_288"] < allowed_empty_candles)
+
           long_entry_logic.append(df["cti_20_1h"] < 0.8)
           long_entry_logic.append(df["rsi_14_1h"] < 80.0)
           long_entry_logic.append(df["cti_20_4h"] < 0.8)
           long_entry_logic.append(df["rsi_14_4h"] < 80.0)
+
           long_entry_logic.append(df["close_max_48"] > (df["close"] * 1.1))
                     
           # Logic
