@@ -72,7 +72,7 @@ class NostalgiaForInfinityX4(IStrategy):
   INTERFACE_VERSION = 3
 
   def version(self) -> str:
-    return "v14.1.632"
+    return "v14.1.641"
 
   stoploss = -0.2
 
@@ -433,6 +433,7 @@ class NostalgiaForInfinityX4(IStrategy):
     "long_entry_condition_50_enable": True,
     "long_entry_condition_51_enable": True,
     "long_entry_condition_61_enable": True,
+    "long_entry_condition_62_enable": True,
     "long_entry_condition_81_enable": True,
     "long_entry_condition_82_enable": True,
     "long_entry_condition_101_enable": True,
@@ -451,7 +452,7 @@ class NostalgiaForInfinityX4(IStrategy):
   short_entry_signal_params = {
     # Enable/Disable conditions
     # -------------------------------------------------------
-    "short_entry_condition_500_enable": False,
+    "short_entry_condition_500_enable": True,
     "short_entry_condition_501_enable": False,
     "short_entry_condition_580_enable": False,
   }
@@ -2223,10 +2224,13 @@ class NostalgiaForInfinityX4(IStrategy):
     side: str,
     **kwargs,
   ) -> float:
-    if self.position_adjustment_enable == True:
-      enter_tags = entry_tag.split()
+    enter_tags = entry_tag.split()
+    if side == "long":
       # Rebuy mode
-      if all(c in self.long_rebuy_mode_tags for c in enter_tags):
+      if all(c in self.long_rebuy_mode_tags for c in enter_tags) or (
+        any(c in self.long_rebuy_mode_tags for c in enter_tags)
+        and all(c in (self.long_rebuy_mode_tags + self.long_grind_mode_tags) for c in enter_tags)
+      ):
         stake_multiplier = self.rebuy_mode_stake_multiplier
         # Low stakes, on Binance mostly
         if (proposed_stake * self.rebuy_mode_stake_multiplier) < min_stake:
@@ -2234,6 +2238,35 @@ class NostalgiaForInfinityX4(IStrategy):
         return proposed_stake * stake_multiplier
       # Grind mode
       elif all(c in self.long_grind_mode_tags for c in enter_tags):
+        for _, item in enumerate(
+          self.grind_mode_stake_multiplier_futures if self.is_futures_mode else self.grind_mode_stake_multiplier_spot
+        ):
+          if (proposed_stake * item) > min_stake:
+            stake_multiplier = item
+            return proposed_stake * stake_multiplier
+      else:
+        stake_multiplier = (
+          self.regular_mode_stake_multiplier_futures[0]
+          if self.is_futures_mode
+          else self.regular_mode_stake_multiplier_spot[0]
+        )
+        if (proposed_stake * stake_multiplier) > min_stake:
+          return proposed_stake * stake_multiplier
+        else:
+          return min_stake
+    else:
+      # Rebuy mode
+      if all(c in self.short_rebuy_mode_tags for c in enter_tags) or (
+        any(c in self.short_rebuy_mode_tags for c in enter_tags)
+        and all(c in (self.short_rebuy_mode_tags + self.short_grind_mode_tags) for c in enter_tags)
+      ):
+        stake_multiplier = self.rebuy_mode_stake_multiplier
+        # Low stakes, on Binance mostly
+        if (proposed_stake * self.rebuy_mode_stake_multiplier) < min_stake:
+          stake_multiplier = self.rebuy_mode_stake_multiplier_alt
+        return proposed_stake * stake_multiplier
+      # Grind mode
+      elif all(c in self.short_grind_mode_tags for c in enter_tags):
         for _, item in enumerate(
           self.grind_mode_stake_multiplier_futures if self.is_futures_mode else self.grind_mode_stake_multiplier_spot
         ):
@@ -2277,8 +2310,30 @@ class NostalgiaForInfinityX4(IStrategy):
       enter_tag = trade.enter_tag
     enter_tags = enter_tag.split()
 
-    # Grinding
+    # Rebuy mode
     if not trade.is_short and (
+      all(c in self.long_rebuy_mode_tags for c in enter_tags)
+      or (
+        any(c in self.long_rebuy_mode_tags for c in enter_tags)
+        and all(c in (self.long_rebuy_mode_tags + self.long_grind_mode_tags) for c in enter_tags)
+      )
+    ):
+      return self.long_rebuy_adjust_trade_position(
+        trade,
+        enter_tags,
+        current_time,
+        current_rate,
+        current_profit,
+        min_stake,
+        max_stake,
+        current_entry_rate,
+        current_exit_rate,
+        current_entry_profit,
+        current_exit_profit,
+      )
+
+    # Grinding
+    elif not trade.is_short and (
       any(
         c
         in (
@@ -2319,7 +2374,7 @@ class NostalgiaForInfinityX4(IStrategy):
         current_exit_profit,
       )
 
-    if trade.is_short and (
+    elif trade.is_short and (
       any(
         c
         in (
@@ -2347,22 +2402,6 @@ class NostalgiaForInfinityX4(IStrategy):
       )
     ):
       return self.short_grind_adjust_trade_position(
-        trade,
-        enter_tags,
-        current_time,
-        current_rate,
-        current_profit,
-        min_stake,
-        max_stake,
-        current_entry_rate,
-        current_exit_rate,
-        current_entry_profit,
-        current_exit_profit,
-      )
-
-    # Rebuy mode
-    if all(c in self.long_rebuy_mode_tags for c in enter_tags):
-      return self.long_rebuy_adjust_trade_position(
         trade,
         enter_tags,
         current_time,
@@ -4007,7 +4046,7 @@ class NostalgiaForInfinityX4(IStrategy):
 
           # Logic
           long_entry_logic.append(df["rsi_14"] < 32.0)
-          long_entry_logic.append(df["close"] < (df["ema_26"] * 0.974))  # 0.974
+          long_entry_logic.append(df["close"] < (df["ema_26"] * 0.974))
 
         # Condition #61 - Rebuy mode (Long).
         if index == 61:
@@ -6187,6 +6226,15 @@ class NostalgiaForInfinityX4(IStrategy):
         and (last_candle["ema_200_dec_4_1d"] == True)
       ):
         return True, f"exit_{mode_name}_w_1_22"
+      elif (
+        (last_candle["r_14"] >= -1.0)
+        and (last_candle["rsi_14"] >= 70.0)
+        and (last_candle["rsi_14_1d"] >= 60.0)
+        and (last_candle["rsi_14_max_6_1d"] >= 70.0)
+        and (last_candle["change_pct_1d"] < -0.01)
+        and (last_candle["close"] < (last_candle["high_max_12_1d"] * 0.85))
+      ):
+        return True, f"exit_{mode_name}_w_1_23"
     elif 0.03 > current_profit >= 0.02:
       if last_candle["r_480"] > -0.3:
         return True, f"exit_{mode_name}_w_2_1"
@@ -6353,6 +6401,15 @@ class NostalgiaForInfinityX4(IStrategy):
         and (last_candle["ema_200_dec_4_1d"] == True)
       ):
         return True, f"exit_{mode_name}_w_2_22"
+      elif (
+        (last_candle["r_14"] >= -1.0)
+        and (last_candle["rsi_14"] >= 65.0)
+        and (last_candle["rsi_14_1d"] >= 60.0)
+        and (last_candle["rsi_14_max_6_1d"] >= 70.0)
+        and (last_candle["change_pct_1d"] < -0.01)
+        and (last_candle["close"] < (last_candle["high_max_12_1d"] * 0.85))
+      ):
+        return True, f"exit_{mode_name}_w_2_23"
     elif 0.04 > current_profit >= 0.03:
       if last_candle["r_480"] > -0.4:
         return True, f"exit_{mode_name}_w_3_1"
@@ -6519,6 +6576,15 @@ class NostalgiaForInfinityX4(IStrategy):
         and (last_candle["ema_200_dec_4_1d"] == True)
       ):
         return True, f"exit_{mode_name}_w_3_22"
+      elif (
+        (last_candle["r_14"] >= -1.0)
+        and (last_candle["rsi_14"] >= 50.0)
+        and (last_candle["rsi_14_1d"] >= 60.0)
+        and (last_candle["rsi_14_max_6_1d"] >= 70.0)
+        and (last_candle["change_pct_1d"] < -0.01)
+        and (last_candle["close"] < (last_candle["high_max_12_1d"] * 0.85))
+      ):
+        return True, f"exit_{mode_name}_w_3_23"
     elif 0.05 > current_profit >= 0.04:
       if last_candle["r_480"] > -0.5:
         return True, f"exit_{mode_name}_w_4_1"
@@ -6685,6 +6751,15 @@ class NostalgiaForInfinityX4(IStrategy):
         and (last_candle["ema_200_dec_4_1d"] == True)
       ):
         return True, f"exit_{mode_name}_w_4_22"
+      elif (
+        (last_candle["r_14"] >= -1.0)
+        and (last_candle["rsi_14"] >= 50.0)
+        and (last_candle["rsi_14_1d"] >= 60.0)
+        and (last_candle["rsi_14_max_6_1d"] >= 70.0)
+        and (last_candle["change_pct_1d"] < -0.01)
+        and (last_candle["close"] < (last_candle["high_max_12_1d"] * 0.85))
+      ):
+        return True, f"exit_{mode_name}_w_4_23"
     elif 0.06 > current_profit >= 0.05:
       if last_candle["r_480"] > -0.6:
         return True, f"exit_{mode_name}_w_5_1"
@@ -6851,6 +6926,15 @@ class NostalgiaForInfinityX4(IStrategy):
         and (last_candle["ema_200_dec_4_1d"] == True)
       ):
         return True, f"exit_{mode_name}_w_5_22"
+      elif (
+        (last_candle["r_14"] >= -1.0)
+        and (last_candle["rsi_14"] >= 50.0)
+        and (last_candle["rsi_14_1d"] >= 60.0)
+        and (last_candle["rsi_14_max_6_1d"] >= 70.0)
+        and (last_candle["change_pct_1d"] < -0.01)
+        and (last_candle["close"] < (last_candle["high_max_12_1d"] * 0.85))
+      ):
+        return True, f"exit_{mode_name}_w_5_23"
     elif 0.07 > current_profit >= 0.06:
       if last_candle["r_480"] > -0.7:
         return True, f"exit_{mode_name}_w_6_1"
@@ -7017,6 +7101,15 @@ class NostalgiaForInfinityX4(IStrategy):
         and (last_candle["ema_200_dec_4_1d"] == True)
       ):
         return True, f"exit_{mode_name}_w_6_22"
+      elif (
+        (last_candle["r_14"] >= -1.0)
+        and (last_candle["rsi_14"] >= 60.0)
+        and (last_candle["rsi_14_1d"] >= 60.0)
+        and (last_candle["rsi_14_max_6_1d"] >= 70.0)
+        and (last_candle["change_pct_1d"] < -0.01)
+        and (last_candle["close"] < (last_candle["high_max_12_1d"] * 0.85))
+      ):
+        return True, f"exit_{mode_name}_w_6_23"
     elif 0.08 > current_profit >= 0.07:
       if last_candle["r_480"] > -0.8:
         return True, f"exit_{mode_name}_w_7_1"
@@ -7183,6 +7276,15 @@ class NostalgiaForInfinityX4(IStrategy):
         and (last_candle["ema_200_dec_4_1d"] == True)
       ):
         return True, f"exit_{mode_name}_w_7_22"
+      elif (
+        (last_candle["r_14"] >= -1.0)
+        and (last_candle["rsi_14"] >= 65.0)
+        and (last_candle["rsi_14_1d"] >= 60.0)
+        and (last_candle["rsi_14_max_6_1d"] >= 70.0)
+        and (last_candle["change_pct_1d"] < -0.01)
+        and (last_candle["close"] < (last_candle["high_max_12_1d"] * 0.85))
+      ):
+        return True, f"exit_{mode_name}_w_7_23"
     elif 0.09 > current_profit >= 0.08:
       if last_candle["r_480"] > -0.9:
         return True, f"exit_{mode_name}_w_8_1"
@@ -7349,6 +7451,15 @@ class NostalgiaForInfinityX4(IStrategy):
         and (last_candle["ema_200_dec_4_1d"] == True)
       ):
         return True, f"exit_{mode_name}_w_8_22"
+      elif (
+        (last_candle["r_14"] >= -1.0)
+        and (last_candle["rsi_14"] >= 70.0)
+        and (last_candle["rsi_14_1d"] >= 60.0)
+        and (last_candle["rsi_14_max_6_1d"] >= 70.0)
+        and (last_candle["change_pct_1d"] < -0.01)
+        and (last_candle["close"] < (last_candle["high_max_12_1d"] * 0.85))
+      ):
+        return True, f"exit_{mode_name}_w_8_23"
     elif 0.1 > current_profit >= 0.09:
       if last_candle["r_480"] > -1.0:
         return True, f"exit_{mode_name}_w_9_1"
@@ -7515,6 +7626,15 @@ class NostalgiaForInfinityX4(IStrategy):
         and (last_candle["ema_200_dec_4_1d"] == True)
       ):
         return True, f"exit_{mode_name}_w_9_22"
+      elif (
+        (last_candle["r_14"] >= -1.0)
+        and (last_candle["rsi_14"] >= 72.0)
+        and (last_candle["rsi_14_1d"] >= 60.0)
+        and (last_candle["rsi_14_max_6_1d"] >= 70.0)
+        and (last_candle["change_pct_1d"] < -0.01)
+        and (last_candle["close"] < (last_candle["high_max_12_1d"] * 0.85))
+      ):
+        return True, f"exit_{mode_name}_w_9_23"
     elif 0.12 > current_profit >= 0.1:
       if last_candle["r_480"] > -1.1:
         return True, f"exit_{mode_name}_w_10_1"
@@ -7681,6 +7801,15 @@ class NostalgiaForInfinityX4(IStrategy):
         and (last_candle["ema_200_dec_4_1d"] == True)
       ):
         return True, f"exit_{mode_name}_w_10_22"
+      elif (
+        (last_candle["r_14"] >= -1.0)
+        and (last_candle["rsi_14"] >= 74.0)
+        and (last_candle["rsi_14_1d"] >= 60.0)
+        and (last_candle["rsi_14_max_6_1d"] >= 70.0)
+        and (last_candle["change_pct_1d"] < -0.01)
+        and (last_candle["close"] < (last_candle["high_max_12_1d"] * 0.85))
+      ):
+        return True, f"exit_{mode_name}_w_10_23"
     elif 0.2 > current_profit >= 0.12:
       if last_candle["r_480"] > -0.4:
         return True, f"exit_{mode_name}_w_11_1"
@@ -7847,6 +7976,15 @@ class NostalgiaForInfinityX4(IStrategy):
         and (last_candle["ema_200_dec_4_1d"] == True)
       ):
         return True, f"exit_{mode_name}_w_11_22"
+      elif (
+        (last_candle["r_14"] >= -1.0)
+        and (last_candle["rsi_14"] >= 78.0)
+        and (last_candle["rsi_14_1d"] >= 60.0)
+        and (last_candle["rsi_14_max_6_1d"] >= 70.0)
+        and (last_candle["change_pct_1d"] < -0.01)
+        and (last_candle["close"] < (last_candle["high_max_12_1d"] * 0.85))
+      ):
+        return True, f"exit_{mode_name}_w_11_23"
     elif current_profit >= 0.2:
       if last_candle["r_480"] > -0.2:
         return True, f"exit_{mode_name}_w_12_1"
@@ -8013,6 +8151,15 @@ class NostalgiaForInfinityX4(IStrategy):
         and (last_candle["ema_200_dec_4_1d"] == True)
       ):
         return True, f"exit_{mode_name}_w_12_22"
+      elif (
+        (last_candle["r_14"] >= -1.0)
+        and (last_candle["rsi_14"] >= 80.0)
+        and (last_candle["rsi_14_1d"] >= 60.0)
+        and (last_candle["rsi_14_max_6_1d"] >= 70.0)
+        and (last_candle["change_pct_1d"] < -0.01)
+        and (last_candle["close"] < (last_candle["high_max_12_1d"] * 0.85))
+      ):
+        return True, f"exit_{mode_name}_w_12_23"
 
     return False, None
 
@@ -10972,7 +11119,10 @@ class NostalgiaForInfinityX4(IStrategy):
     current_stake_amount = trade.amount * current_rate
     is_derisk = trade.amount < (filled_entries[0].safe_filled * 0.95)
     is_derisk_calc = False
-    is_rebuy_mode = all(c in self.long_rebuy_mode_tags for c in enter_tags)
+    is_rebuy_mode = all(c in self.long_rebuy_mode_tags for c in enter_tags) or (
+      any(c in self.long_rebuy_mode_tags for c in enter_tags)
+      and all(c in (self.long_rebuy_mode_tags + self.long_grind_mode_tags) for c in enter_tags)
+    )
     is_grind_mode = all(c in self.long_grind_mode_tags for c in enter_tags)
 
     # Rebuy mode
@@ -21230,7 +21380,10 @@ class NostalgiaForInfinityX4(IStrategy):
     current_stake_amount = trade.amount * current_rate
     is_derisk = trade.amount < (filled_entries[0].safe_filled * 0.95)
     is_derisk_calc = False
-    is_rebuy_mode = all(c in self.short_rebuy_mode_tags for c in enter_tags)
+    is_rebuy_mode = all(c in self.short_rebuy_mode_tags for c in enter_tags) or (
+      any(c in self.short_rebuy_mode_tags for c in enter_tags)
+      and all(c in (self.short_rebuy_mode_tags + self.short_grind_mode_tags) for c in enter_tags)
+    )
     is_grind_mode = all(c in self.short_grind_mode_tags for c in enter_tags)
 
     # Rebuy mode
