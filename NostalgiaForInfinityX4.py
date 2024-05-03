@@ -72,7 +72,7 @@ class NostalgiaForInfinityX4(IStrategy):
   INTERFACE_VERSION = 3
 
   def version(self) -> str:
-    return "v14.1.641"
+    return "v14.1.661"
 
   stoploss = -0.2
 
@@ -3383,6 +3383,7 @@ class NostalgiaForInfinityX4(IStrategy):
 
     df["zlma_50_1h"] = df["zlma_50_1h"].astype(np.float64).replace(to_replace=[np.nan, None], value=(0.0))
     df["cti_20_1d"] = df["cti_20_1d"].astype(np.float64).replace(to_replace=[np.nan, None], value=(0.0))
+    df["r_480_1h"] = df["r_480_1h"].astype(np.float64).replace(to_replace=[np.nan, None], value=(-50.0))
     df["r_480_4h"] = df["r_480_4h"].astype(np.float64).replace(to_replace=[np.nan, None], value=(-50.0))
     df["rsi_14_1d"] = df["rsi_14_1d"].astype(np.float64).replace(to_replace=[np.nan, None], value=(50.0))
 
@@ -4046,7 +4047,7 @@ class NostalgiaForInfinityX4(IStrategy):
 
           # Logic
           long_entry_logic.append(df["rsi_14"] < 32.0)
-          long_entry_logic.append(df["close"] < (df["ema_26"] * 0.974))
+          long_entry_logic.append(df["close"] < (df["ema_26"] * 0.972))
 
         # Condition #61 - Rebuy mode (Long).
         if index == 61:
@@ -4090,7 +4091,7 @@ class NostalgiaForInfinityX4(IStrategy):
 
           # Logic
           long_entry_logic.append(df["rsi_14"] < 36.0)
-          long_entry_logic.append(df["close"] < (df["ema_26"] * 0.994))
+          long_entry_logic.append(df["close"] < (df["ema_26"] * 0.992))
 
         # Condition #81 - High profit mode (log)
         if index == 81:
@@ -4099,7 +4100,7 @@ class NostalgiaForInfinityX4(IStrategy):
 
           # Logic
           long_entry_logic.append(df["rsi_14"] < 32.0)
-          long_entry_logic.append(df["bb40_2_delta"].gt(df["close"] * 0.034))
+          long_entry_logic.append(df["bb40_2_delta"].gt(df["close"] * 0.036))
           long_entry_logic.append(df["close_delta"].gt(df["close"] * 0.012))
           long_entry_logic.append(df["bb40_2_tail"].lt(df["bb40_2_delta"] * 0.4))
           long_entry_logic.append(df["close"].lt(df["bb40_2_low"].shift()))
@@ -14634,9 +14635,11 @@ class NostalgiaForInfinityX4(IStrategy):
       if (
         ((0 <= sub_grind_count < max_sub_grinds) and (slice_profit_entry < rebuy_mode_sub_thresholds[sub_grind_count]))
         and (
-          (last_candle["close_max_12"] < (last_candle["close"] * 1.14))
-          and (last_candle["close_max_24"] < (last_candle["close"] * 1.20))
-          and (last_candle["close_max_48"] < (last_candle["close"] * 1.26))
+          (last_candle["close"] > (last_candle["close_max_12"] * 0.94))
+          and (last_candle["close"] > (last_candle["close_max_24"] * 0.92))
+          and (last_candle["close"] > (last_candle["close_max_48"] * 0.90))
+          and (last_candle["close"] > (last_candle["high_max_24_1h"] * 0.88))
+          and (last_candle["close"] > (last_candle["high_max_48_1h"] * 0.86))
           and (last_candle["btc_pct_close_max_72_5m"] < 0.03)
           and (last_candle["btc_pct_close_max_24_5m"] < 0.03)
         )
@@ -14645,7 +14648,8 @@ class NostalgiaForInfinityX4(IStrategy):
           and (last_candle["rsi_3_15m"] > 10.0)
           and (last_candle["rsi_3_1h"] > 10.0)
           and (last_candle["rsi_3_4h"] > 10.0)
-          and (last_candle["rsi_14"] < 46.0)
+          and (last_candle["rsi_14"] < 36.0)
+          and (last_candle["close"] < (last_candle["ema_26"] * 0.988))
         )
       ):
         buy_amount = (
@@ -24688,9 +24692,11 @@ class NostalgiaForInfinityX4(IStrategy):
       if (
         ((0 <= sub_grind_count < max_sub_grinds) and (slice_profit_entry < rebuy_mode_sub_thresholds[sub_grind_count]))
         and (
-          (last_candle["close_min_12"] > (last_candle["close"] * 0.96))
-          and (last_candle["close_min_24"] > (last_candle["close"] * 0.80))
-          and (last_candle["close_min_48"] > (last_candle["close"] * 0.74))
+          (last_candle["close"] > (last_candle["close_min_12"] * 0.94))
+          and (last_candle["close"] > (last_candle["close_min_24"] * 0.92))
+          and (last_candle["close"] > (last_candle["close_min_48"] * 0.90))
+          and (last_candle["close"] > (last_candle["low_min_24_1h"] * 0.88))
+          and (last_candle["close"] > (last_candle["low_min_48_1h"] * 0.86))
           and (last_candle["btc_pct_close_min_72_5m"] > 0.03)
           and (last_candle["btc_pct_close_min_24_5m"] > 0.03)
         )
@@ -24699,7 +24705,8 @@ class NostalgiaForInfinityX4(IStrategy):
           and (last_candle["rsi_3_15m"] < 90.0)
           and (last_candle["rsi_3_1h"] < 90.0)
           and (last_candle["rsi_3_4h"] < 90.0)
-          and (last_candle["rsi_14"] > 54.0)
+          and (last_candle["rsi_14"] > 64.0)
+          and (last_candle["close"] > (last_candle["ema_26"] * 1.012))
         )
       ):
         buy_amount = (
