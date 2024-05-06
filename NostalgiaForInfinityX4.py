@@ -4023,38 +4023,12 @@ class NostalgiaForInfinityX4(IStrategy):
 
         # Condition #51 - Quick mode (Long).
         if index == 51:
-          # Protections
-          long_entry_logic.append(df["close"] > (df["close_max_12"] * 0.94))
-          long_entry_logic.append(df["close"] > (df["close_max_24"] * 0.92))
-          long_entry_logic.append(df["close"] > (df["close_max_48"] * 0.90))
-          long_entry_logic.append(df["close"] > (df["high_max_24_1h"] * 0.88))
-          long_entry_logic.append(df["close"] > (df["high_max_48_1h"] * 0.86))
-          long_entry_logic.append(df["num_empty_288"] < allowed_empty_candles)
-
-          long_entry_logic.append(df["rsi_3"] >= 6.0)
-          long_entry_logic.append(df["rsi_3"] <= 50.0)
-          long_entry_logic.append(df["rsi_3_15m"] >= 10.0)
-          long_entry_logic.append(df["rsi_3_1h"] >= 10.0)
-          long_entry_logic.append(df["rsi_3_4h"] >= 10.0)
-          # long_entry_logic.append(df["rsi_3_1d"] >= 10.0)
-          long_entry_logic.append(df["cti_20_1h"] <= 0.90)
-          long_entry_logic.append(df["rsi_14_1h"] <= 80.0)
-          long_entry_logic.append(df["cti_20_4h"] <= 0.90)
-          long_entry_logic.append(df["rsi_14_4h"] <= 80.0)
-          long_entry_logic.append(df["cti_20_1d"] <= 0.90)
-          long_entry_logic.append(df["rsi_14_1d"] <= 80.0)
-
-          long_entry_logic.append(df["zlma_50_dec_1h"] == False)
-
           # Logic
           long_entry_logic.append(df["rsi_14"] < 32.0)
           long_entry_logic.append(df["close"] < (df["ema_26"] * 0.972))
 
         # Condition #61 - Rebuy mode (Long).
         if index == 61:
-          # Protections
-          long_entry_logic.append(current_free_slots >= self.rebuy_mode_min_free_slots)
-
           # Logic
           long_entry_logic.append(df["rsi_14"] < 40.0)
           long_entry_logic.append(df["bb40_2_delta"].gt(df["close"] * 0.03))
@@ -4065,46 +4039,12 @@ class NostalgiaForInfinityX4(IStrategy):
 
         # Condition #62 - Rebuy mode (Long).
         if index == 62:
-          # Protections
-          long_entry_logic.append(df["close"] > (df["close_max_12"] * 0.94))
-          long_entry_logic.append(df["close"] > (df["close_max_24"] * 0.92))
-          long_entry_logic.append(df["close"] > (df["close_max_48"] * 0.90))
-          long_entry_logic.append(df["close"] > (df["high_max_24_1h"] * 0.88))
-          long_entry_logic.append(df["close"] > (df["high_max_48_1h"] * 0.86))
-          long_entry_logic.append(df["close"] > (df["high_max_6_1d"] * 0.84))
-          long_entry_logic.append(df["close"] > (df["high_max_12_1d"] * 0.82))
-          long_entry_logic.append(df["num_empty_288"] < allowed_empty_candles)
-
-          long_entry_logic.append(df["rsi_3"] >= 30.0)
-          long_entry_logic.append(df["rsi_3"] <= 50.0)
-          long_entry_logic.append(df["rsi_3_15m"] >= 30.0)
-          long_entry_logic.append(df["rsi_3_1h"] >= 30.0)
-          long_entry_logic.append(df["rsi_3_4h"] >= 30.0)
-          long_entry_logic.append(df["rsi_3_1d"] >= 30.0)
-          long_entry_logic.append(df["cti_20_1h"] <= 0.90)
-          long_entry_logic.append(df["rsi_14_1h"] <= 80.0)
-          long_entry_logic.append(df["cti_20_4h"] <= 0.90)
-          long_entry_logic.append(df["rsi_14_4h"] <= 80.0)
-          long_entry_logic.append(df["cti_20_1d"] <= 0.90)
-          long_entry_logic.append(df["rsi_14_1d"] <= 80.0)
-          long_entry_logic.append(df["r_480_1h"] <= -5.0)
-          long_entry_logic.append(df["r_480_4h"] <= -5.0)
-
-          long_entry_logic.append(df["close"] > df["ema_200_1h"])
-
-          long_entry_logic.append(
-            (df["change_pct_1h"] > -0.01) | (df["ema_200_dec_24_4h"] == False) | (df["ema_200_dec_4_1d"] == False)
-          )
-
           # Logic
           long_entry_logic.append(df["rsi_14"] < 36.0)
           long_entry_logic.append(df["close"] < (df["ema_26"] * 0.992))
 
         # Condition #81 - High profit mode (log)
         if index == 81:
-          # Protections
-          long_entry_logic.append(df["num_empty_288"] < allowed_empty_candles)
-
           # Logic
           long_entry_logic.append(df["rsi_14"] < 32.0)
           long_entry_logic.append(df["bb40_2_delta"].gt(df["close"] * 0.036))
