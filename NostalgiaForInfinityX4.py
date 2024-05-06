@@ -72,7 +72,7 @@ class NostalgiaForInfinityX4(IStrategy):
   INTERFACE_VERSION = 3
 
   def version(self) -> str:
-    return "v14.1.661"
+    return "v14.1.674"
 
   stoploss = -0.2
 
@@ -434,6 +434,7 @@ class NostalgiaForInfinityX4(IStrategy):
     "long_entry_condition_51_enable": True,
     "long_entry_condition_61_enable": True,
     "long_entry_condition_62_enable": True,
+    "long_entry_condition_80_enable": True,
     "long_entry_condition_81_enable": True,
     "long_entry_condition_82_enable": True,
     "long_entry_condition_101_enable": True,
@@ -4086,8 +4087,14 @@ class NostalgiaForInfinityX4(IStrategy):
           long_entry_logic.append(df["rsi_14_4h"] <= 80.0)
           long_entry_logic.append(df["cti_20_1d"] <= 0.90)
           long_entry_logic.append(df["rsi_14_1d"] <= 80.0)
+          long_entry_logic.append(df["r_480_1h"] <= -5.0)
+          long_entry_logic.append(df["r_480_4h"] <= -5.0)
 
           long_entry_logic.append(df["close"] > df["ema_200_1h"])
+
+          long_entry_logic.append(
+            (df["change_pct_1h"] > -0.01) | (df["ema_200_dec_24_4h"] == False) | (df["ema_200_dec_4_1d"] == False)
+          )
 
           # Logic
           long_entry_logic.append(df["rsi_14"] < 36.0)
@@ -22017,15 +22024,15 @@ class NostalgiaForInfinityX4(IStrategy):
           or (current_time - timedelta(hours=6) > filled_orders[-1].order_filled_utc)
           or (slice_profit > 0.06)
         )
-        and ((num_open_grinds == 0) or (slice_profit > 0.02))
+        # and ((num_open_grinds == 0) or (slice_profit > 0.02))
         and (
           (last_candle["close"] < (last_candle["close_min_12"] * 1.06))
-          and (last_candle["close"] > (last_candle["close_min_24"] * 1.08))
-          and (last_candle["close"] > (last_candle["close_min_48"] * 1.10))
-          and (last_candle["close"] > (last_candle["low_min_24_1h"] * 1.12))
-          and (last_candle["close"] > (last_candle["low_min_48_1h"] * 1.14))
-          and (last_candle["close"] > (last_candle["low_min_6_1d"] * 1.16))
-          and (last_candle["close"] > (last_candle["low_min_12_1d"] * 1.18))
+          and (last_candle["close"] < (last_candle["close_min_24"] * 1.08))
+          and (last_candle["close"] < (last_candle["close_min_48"] * 1.10))
+          and (last_candle["close"] < (last_candle["low_min_24_1h"] * 1.12))
+          and (last_candle["close"] < (last_candle["low_min_48_1h"] * 1.14))
+          and (last_candle["close"] < (last_candle["low_min_6_1d"] * 1.16))
+          and (last_candle["close"] < (last_candle["low_min_12_1d"] * 1.18))
         )
         and (
           (last_candle["zlma_50_dec_15m"] == True)
@@ -22148,13 +22155,13 @@ class NostalgiaForInfinityX4(IStrategy):
           or (current_time - timedelta(hours=6) > filled_orders[-1].order_filled_utc)
           or (slice_profit > 0.06)
         )
-        and ((num_open_grinds == 0) or (slice_profit > 0.02))
+        # and ((num_open_grinds == 0) or (slice_profit > 0.02))
         and (
-          (last_candle["close"] > (last_candle["close_min_12"] * 0.94))
-          and (last_candle["close"] > (last_candle["close_min_24"] * 0.92))
-          and (last_candle["close"] > (last_candle["close_min_48"] * 0.90))
-          and (last_candle["close"] > (last_candle["low_min_24_1h"] * 0.88))
-          and (last_candle["close"] > (last_candle["low_min_48_1h"] * 0.86))
+          (last_candle["close"] < (last_candle["close_min_12"] * 1.06))
+          and (last_candle["close"] < (last_candle["close_min_24"] * 1.08))
+          and (last_candle["close"] < (last_candle["close_min_48"] * 1.10))
+          and (last_candle["close"] < (last_candle["low_min_24_1h"] * 1.12))
+          and (last_candle["close"] < (last_candle["low_min_48_1h"] * 1.14))
         )
         and (
           (
@@ -22288,15 +22295,15 @@ class NostalgiaForInfinityX4(IStrategy):
           or (current_time - timedelta(hours=6) > filled_orders[-1].order_filled_utc)
           or (slice_profit > 0.06)
         )
-        and ((num_open_grinds == 0) or (slice_profit > 0.02))
+        # and ((num_open_grinds == 0) or (slice_profit > 0.02))
         and (
           (
             (
-              (last_candle["close"] > (last_candle["close_min_12"] * 0.94))
-              and (last_candle["close"] > (last_candle["close_min_24"] * 0.92))
-              and (last_candle["close"] > (last_candle["close_min_48"] * 0.90))
-              and (last_candle["close"] > (last_candle["low_min_24_1h"] * 0.88))
-              and (last_candle["close"] > (last_candle["low_min_48_1h"] * 0.86))
+              (last_candle["close"] < (last_candle["close_min_12"] * 1.06))
+              and (last_candle["close"] < (last_candle["close_min_24"] * 1.08))
+              and (last_candle["close"] < (last_candle["close_min_48"] * 1.10))
+              and (last_candle["close"] < (last_candle["low_min_24_1h"] * 1.12))
+              and (last_candle["close"] < (last_candle["low_min_48_1h"] * 1.14))
             )
             and (
               (
@@ -22444,15 +22451,15 @@ class NostalgiaForInfinityX4(IStrategy):
           or (current_time - timedelta(hours=6) > filled_orders[-1].order_filled_utc)
           or (slice_profit > 0.06)
         )
-        and ((num_open_grinds == 0) or (slice_profit > 0.02))
+        # and ((num_open_grinds == 0) or (slice_profit > 0.02))
         and (
           (
             (
-              (last_candle["close"] > (last_candle["close_min_12"] * 0.94))
-              and (last_candle["close"] > (last_candle["close_min_24"] * 0.92))
-              and (last_candle["close"] > (last_candle["close_min_48"] * 0.90))
-              and (last_candle["close"] > (last_candle["low_min_24_1h"] * 0.88))
-              and (last_candle["close"] > (last_candle["low_min_48_1h"] * 0.86))
+              (last_candle["close"] < (last_candle["close_min_12"] * 1.06))
+              and (last_candle["close"] < (last_candle["close_min_24"] * 1.08))
+              and (last_candle["close"] < (last_candle["close_min_48"] * 1.10))
+              and (last_candle["close"] < (last_candle["low_min_24_1h"] * 1.12))
+              and (last_candle["close"] < (last_candle["low_min_48_1h"] * 1.14))
             )
             and (
               (
@@ -22600,15 +22607,15 @@ class NostalgiaForInfinityX4(IStrategy):
           or (current_time - timedelta(hours=6) > filled_orders[-1].order_filled_utc)
           or (slice_profit > 0.06)
         )
-        and ((num_open_grinds == 0) or (slice_profit > 0.02))
+        # and ((num_open_grinds == 0) or (slice_profit > 0.02))
         and (
           (
             (
-              (last_candle["close"] > (last_candle["close_min_12"] * 0.94))
-              and (last_candle["close"] > (last_candle["close_min_24"] * 0.92))
-              and (last_candle["close"] > (last_candle["close_min_48"] * 0.90))
-              and (last_candle["close"] > (last_candle["low_min_24_1h"] * 0.88))
-              and (last_candle["close"] > (last_candle["low_min_48_1h"] * 0.86))
+              (last_candle["close"] < (last_candle["close_min_12"] * 1.06))
+              and (last_candle["close"] < (last_candle["close_min_24"] * 1.08))
+              and (last_candle["close"] < (last_candle["close_min_48"] * 1.10))
+              and (last_candle["close"] < (last_candle["low_min_24_1h"] * 1.12))
+              and (last_candle["close"] < (last_candle["low_min_48_1h"] * 1.14))
             )
             and (
               (
@@ -22756,15 +22763,15 @@ class NostalgiaForInfinityX4(IStrategy):
           or (current_time - timedelta(hours=6) > filled_orders[-1].order_filled_utc)
           or (slice_profit > 0.06)
         )
-        and ((num_open_grinds == 0) or (slice_profit > 0.02))
+        # and ((num_open_grinds == 0) or (slice_profit > 0.02))
         and (
           (
             (
-              (last_candle["close"] > (last_candle["close_min_12"] * 0.94))
-              and (last_candle["close"] > (last_candle["close_min_24"] * 0.92))
-              and (last_candle["close"] > (last_candle["close_min_48"] * 0.90))
-              and (last_candle["close"] > (last_candle["low_min_24_1h"] * 0.88))
-              and (last_candle["close"] > (last_candle["low_min_48_1h"] * 0.86))
+              (last_candle["close"] < (last_candle["close_min_12"] * 1.06))
+              and (last_candle["close"] < (last_candle["close_min_24"] * 1.08))
+              and (last_candle["close"] < (last_candle["close_min_48"] * 1.10))
+              and (last_candle["close"] < (last_candle["low_min_24_1h"] * 1.12))
+              and (last_candle["close"] < (last_candle["low_min_48_1h"] * 1.14))
             )
             and (
               (
@@ -22912,15 +22919,15 @@ class NostalgiaForInfinityX4(IStrategy):
           or (current_time - timedelta(hours=6) > filled_orders[-1].order_filled_utc)
           or (slice_profit > 0.06)
         )
-        and ((num_open_grinds == 0) or (slice_profit > 0.02))
+        # and ((num_open_grinds == 0) or (slice_profit > 0.02))
         and (
           (
             (
-              (last_candle["close"] > (last_candle["close_min_12"] * 0.94))
-              and (last_candle["close"] > (last_candle["close_min_24"] * 0.92))
-              and (last_candle["close"] > (last_candle["close_min_48"] * 0.90))
-              and (last_candle["close"] > (last_candle["low_min_24_1h"] * 0.88))
-              and (last_candle["close"] > (last_candle["low_min_48_1h"] * 0.86))
+              (last_candle["close"] < (last_candle["close_min_12"] * 1.06))
+              and (last_candle["close"] < (last_candle["close_min_24"] * 1.08))
+              and (last_candle["close"] < (last_candle["close_min_48"] * 1.10))
+              and (last_candle["close"] < (last_candle["low_min_24_1h"] * 1.12))
+              and (last_candle["close"] < (last_candle["low_min_48_1h"] * 1.14))
             )
             and (
               (
@@ -23072,11 +23079,11 @@ class NostalgiaForInfinityX4(IStrategy):
         and (
           (
             (
-              (last_candle["close"] > (last_candle["close_min_12"] * 0.94))
-              and (last_candle["close"] > (last_candle["close_min_24"] * 0.92))
-              and (last_candle["close"] > (last_candle["close_min_48"] * 0.90))
-              and (last_candle["close"] > (last_candle["low_min_24_1h"] * 0.88))
-              and (last_candle["close"] > (last_candle["low_min_48_1h"] * 0.86))
+              (last_candle["close"] < (last_candle["close_min_12"] * 1.06))
+              and (last_candle["close"] < (last_candle["close_min_24"] * 1.08))
+              and (last_candle["close"] < (last_candle["close_min_48"] * 1.10))
+              and (last_candle["close"] < (last_candle["low_min_24_1h"] * 1.12))
+              and (last_candle["close"] < (last_candle["low_min_48_1h"] * 1.14))
             )
             and (
               (
@@ -23230,15 +23237,15 @@ class NostalgiaForInfinityX4(IStrategy):
           or (current_time - timedelta(hours=6) > filled_orders[-1].order_filled_utc)
           or (slice_profit > 0.06)
         )
-        and ((num_open_grinds == 0) or (slice_profit > 0.02))
+        # # and ((num_open_grinds == 0) or (slice_profit > 0.02))
         and (
-          (last_candle["close"] > (last_candle["close_min_12"] * 0.94))
-          and (last_candle["close"] > (last_candle["close_min_24"] * 0.92))
-          and (last_candle["close"] > (last_candle["close_min_48"] * 0.90))
-          and (last_candle["close"] > (last_candle["low_min_24_1h"] * 0.88))
-          and (last_candle["close"] > (last_candle["low_min_48_1h"] * 0.86))
-          and (last_candle["close"] > (last_candle["low_min_6_1d"] * 0.84))
-          and (last_candle["close"] > (last_candle["low_min_12_1d"] * 0.82))
+          (last_candle["close"] < (last_candle["close_min_12"] * 1.06))
+          and (last_candle["close"] < (last_candle["close_min_24"] * 1.08))
+          and (last_candle["close"] < (last_candle["close_min_48"] * 1.10))
+          and (last_candle["close"] < (last_candle["low_min_24_1h"] * 1.12))
+          and (last_candle["close"] < (last_candle["low_min_48_1h"] * 1.14))
+          and (last_candle["close"] < (last_candle["low_min_6_1d"] * 1.16))
+          and (last_candle["close"] < (last_candle["low_min_12_1d"] * 1.18))
         )
         and (
           (last_candle["zlma_50_dec_15m"] == True)
@@ -24103,7 +24110,7 @@ class NostalgiaForInfinityX4(IStrategy):
           or (current_time - timedelta(hours=6) > filled_orders[-1].order_filled_utc)
           or (slice_profit > 0.06)
         )
-        and ((num_open_grinds == 0) or (slice_profit > 0.02))
+        # and ((num_open_grinds == 0) or (slice_profit > 0.02))
         and (
           (last_candle["close"] < (last_candle["close_min_12"] * 1.08))
           and (last_candle["close"] < (last_candle["close_min_24"] * 1.10))
@@ -24185,15 +24192,15 @@ class NostalgiaForInfinityX4(IStrategy):
           or (current_time - timedelta(hours=6) > filled_orders[-1].order_filled_utc)
           or (slice_profit > 0.06)
         )
-        and ((num_open_grinds == 0) or (slice_profit > 0.02))
+        # and ((num_open_grinds == 0) or (slice_profit > 0.02))
         and (
-          (last_candle["close"] > (last_candle["close_min_12"] * 1.08))
-          and (last_candle["close"] > (last_candle["close_min_24"] * 1.10))
-          and (last_candle["close"] > (last_candle["close_min_48"] * 1.12))
-          and (last_candle["close"] > (last_candle["low_min_24_1h"] * 1.14))
-          and (last_candle["close"] > (last_candle["low_min_48_1h"] * 1.16))
-          and (last_candle["close"] > (last_candle["low_min_6_1d"] * 1.24))
-          and (last_candle["close"] > (last_candle["low_min_12_1d"] * 1.30))
+          (last_candle["close"] < (last_candle["close_min_12"] * 1.08))
+          and (last_candle["close"] < (last_candle["close_min_24"] * 1.10))
+          and (last_candle["close"] < (last_candle["close_min_48"] * 1.12))
+          and (last_candle["close"] < (last_candle["low_min_24_1h"] * 1.14))
+          and (last_candle["close"] < (last_candle["low_min_48_1h"] * 1.16))
+          and (last_candle["close"] < (last_candle["low_min_6_1d"] * 1.24))
+          and (last_candle["close"] < (last_candle["low_min_12_1d"] * 1.30))
         )
         and (
           is_short_grind_buy
@@ -24267,17 +24274,17 @@ class NostalgiaForInfinityX4(IStrategy):
           or (current_time - timedelta(hours=6) > filled_orders[-1].order_filled_utc)
           or (slice_profit > 0.06)
         )
-        and ((num_open_grinds == 0) or (slice_profit > 0.02))
+        # and ((num_open_grinds == 0) or (slice_profit > 0.02))
         and (
           (
             (
-              (last_candle["close"] > (last_candle["close_min_12"] * 1.08))
-              and (last_candle["close"] > (last_candle["close_min_24"] * 1.10))
-              and (last_candle["close"] > (last_candle["close_min_48"] * 1.12))
-              and (last_candle["close"] > (last_candle["low_min_24_1h"] * 1.14))
-              and (last_candle["close"] > (last_candle["low_min_48_1h"] * 1.16))
-              and (last_candle["close"] > (last_candle["low_min_6_1d"] * 1.24))
-              and (last_candle["close"] > (last_candle["low_min_12_1d"] * 1.30))
+              (last_candle["close"] < (last_candle["close_min_12"] * 1.08))
+              and (last_candle["close"] < (last_candle["close_min_24"] * 1.10))
+              and (last_candle["close"] < (last_candle["close_min_48"] * 1.12))
+              and (last_candle["close"] < (last_candle["low_min_24_1h"] * 1.14))
+              and (last_candle["close"] < (last_candle["low_min_48_1h"] * 1.16))
+              and (last_candle["close"] < (last_candle["low_min_6_1d"] * 1.24))
+              and (last_candle["close"] < (last_candle["low_min_12_1d"] * 1.30))
             )
             and (
               is_short_grind_buy
@@ -24361,17 +24368,17 @@ class NostalgiaForInfinityX4(IStrategy):
           or (current_time - timedelta(hours=6) > filled_orders[-1].order_filled_utc)
           or (slice_profit > 0.06)
         )
-        and ((num_open_grinds == 0) or (slice_profit > 0.02))
+        # and ((num_open_grinds == 0) or (slice_profit > 0.02))
         and (
           (
             (
-              (last_candle["close"] > (last_candle["close_min_12"] * 1.08))
-              and (last_candle["close"] > (last_candle["close_min_24"] * 1.10))
-              and (last_candle["close"] > (last_candle["close_min_48"] * 1.12))
-              and (last_candle["close"] > (last_candle["low_min_24_1h"] * 1.14))
-              and (last_candle["close"] > (last_candle["low_min_48_1h"] * 1.16))
-              and (last_candle["close"] > (last_candle["low_min_6_1d"] * 1.24))
-              and (last_candle["close"] > (last_candle["low_min_12_1d"] * 1.30))
+              (last_candle["close"] < (last_candle["close_min_12"] * 1.08))
+              and (last_candle["close"] < (last_candle["close_min_24"] * 1.10))
+              and (last_candle["close"] < (last_candle["close_min_48"] * 1.12))
+              and (last_candle["close"] < (last_candle["low_min_24_1h"] * 1.14))
+              and (last_candle["close"] < (last_candle["low_min_48_1h"] * 1.16))
+              and (last_candle["close"] < (last_candle["low_min_6_1d"] * 1.24))
+              and (last_candle["close"] < (last_candle["low_min_12_1d"] * 1.30))
             )
             and (
               is_short_grind_buy
@@ -24455,17 +24462,17 @@ class NostalgiaForInfinityX4(IStrategy):
           or (current_time - timedelta(hours=6) > filled_orders[-1].order_filled_utc)
           or (slice_profit > 0.06)
         )
-        and ((num_open_grinds == 0) or (slice_profit > 0.02))
+        # and ((num_open_grinds == 0) or (slice_profit > 0.02))
         and (
           (
             (
-              (last_candle["close"] > (last_candle["close_min_12"] * 1.08))
-              and (last_candle["close"] > (last_candle["close_min_24"] * 1.10))
-              and (last_candle["close"] > (last_candle["close_min_48"] * 1.12))
-              and (last_candle["close"] > (last_candle["low_min_24_1h"] * 1.14))
-              and (last_candle["close"] > (last_candle["low_min_48_1h"] * 1.16))
-              and (last_candle["close"] > (last_candle["low_min_6_1d"] * 1.24))
-              and (last_candle["close"] > (last_candle["low_min_12_1d"] * 1.30))
+              (last_candle["close"] < (last_candle["close_min_12"] * 1.08))
+              and (last_candle["close"] < (last_candle["close_min_24"] * 1.10))
+              and (last_candle["close"] < (last_candle["close_min_48"] * 1.12))
+              and (last_candle["close"] < (last_candle["low_min_24_1h"] * 1.14))
+              and (last_candle["close"] < (last_candle["low_min_48_1h"] * 1.16))
+              and (last_candle["close"] < (last_candle["low_min_6_1d"] * 1.24))
+              and (last_candle["close"] < (last_candle["low_min_12_1d"] * 1.30))
             )
             and (
               is_short_grind_buy
@@ -24692,11 +24699,11 @@ class NostalgiaForInfinityX4(IStrategy):
       if (
         ((0 <= sub_grind_count < max_sub_grinds) and (slice_profit_entry < rebuy_mode_sub_thresholds[sub_grind_count]))
         and (
-          (last_candle["close"] > (last_candle["close_min_12"] * 0.94))
-          and (last_candle["close"] > (last_candle["close_min_24"] * 0.92))
-          and (last_candle["close"] > (last_candle["close_min_48"] * 0.90))
-          and (last_candle["close"] > (last_candle["low_min_24_1h"] * 0.88))
-          and (last_candle["close"] > (last_candle["low_min_48_1h"] * 0.86))
+          (last_candle["close"] < (last_candle["close_min_12"] * 1.06))
+          and (last_candle["close"] < (last_candle["close_min_24"] * 1.08))
+          and (last_candle["close"] < (last_candle["close_min_48"] * 1.10))
+          and (last_candle["close"] < (last_candle["low_min_24_1h"] * 1.12))
+          and (last_candle["close"] < (last_candle["low_min_48_1h"] * 1.14))
           and (last_candle["btc_pct_close_min_72_5m"] > 0.03)
           and (last_candle["btc_pct_close_min_24_5m"] > 0.03)
         )
