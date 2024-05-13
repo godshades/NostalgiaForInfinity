@@ -74,7 +74,7 @@ class NostalgiaForInfinityX4(IStrategy):
   def version(self) -> str:
     return "v14.1.705"
 
-  stoploss = -0.99
+  stoploss = -0.2
 
   # Trailing stoploss (not used)
   trailing_stop = False
