@@ -74,7 +74,7 @@ class NostalgiaForInfinityX4(IStrategy):
   def version(self) -> str:
     return "v14.1.686"
 
-  stoploss = -0.2
+  stoploss = -0.99
 
   # Trailing stoploss (not used)
   trailing_stop = False
@@ -434,7 +434,7 @@ class NostalgiaForInfinityX4(IStrategy):
     "long_entry_condition_51_enable": True,
     "long_entry_condition_61_enable": True,
     "long_entry_condition_62_enable": True,
-    "long_entry_condition_80_enable": True,
+    "long_entry_condition_80_enable": False,
     "long_entry_condition_81_enable": True,
     "long_entry_condition_82_enable": True,
     "long_entry_condition_101_enable": True,
@@ -455,7 +455,7 @@ class NostalgiaForInfinityX4(IStrategy):
     # -------------------------------------------------------
     "short_entry_condition_500_enable": True,
     "short_entry_condition_501_enable": False,
-    "short_entry_condition_580_enable": False,
+    "short_entry_condition_580_enable": True,
   }
 
   buy_protection_params = {}
@@ -23292,11 +23292,7 @@ class NostalgiaForInfinityX4(IStrategy):
   # ---------------------------------------------------------------------------------------------
   def short_grind_buy(self, last_candle: Series, previous_candle: Series, slice_profit: float) -> float:
     if (
-      (last_candle["protections_short_global"] == True)
-      and (last_candle["protections_short_rebuy"] == True)
-      and (last_candle["global_protections_short_pump"] == True)
-      and (last_candle["global_protections_short_dump"] == True)
-      and (
+      (
         (last_candle["close"] < (last_candle["close_min_12"] * 1.12))
         and (last_candle["close"] < (last_candle["close_min_24"] * 1.18))
         and (last_candle["close"] < (last_candle["close_min_48"] * 1.24))
