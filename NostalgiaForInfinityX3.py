@@ -68,7 +68,7 @@ class NostalgiaForInfinityX3(IStrategy):
   INTERFACE_VERSION = 3
 
   def version(self) -> str:
-    return "v13.1.686"
+    return "v13.1.705"
 
   stoploss = -0.99
 
@@ -113,7 +113,7 @@ class NostalgiaForInfinityX3(IStrategy):
   # Long Pump mode tags
   long_pump_mode_tags = ["21", "22", "23", "24", "25", "26"]
   # Long Quick mode tags
-  long_quick_mode_tags = ["41", "42", "43", "44", "45", "46", "47", "48", "49", "50", "51"]
+  long_quick_mode_tags = ["41", "42", "43", "44", "45", "46", "47", "48", "49", "50", "51", "52"]
   # Long rebuy mode tags
   long_rebuy_mode_tags = ["61", "62"]
   # Long high profit mode tags
@@ -185,62 +185,62 @@ class NostalgiaForInfinityX3(IStrategy):
   grind_derisk_spot = -0.40
   grind_derisk_futures = -0.50
 
-  grind_1_stop_grinds_spot = -0.50
+  grind_1_stop_grinds_spot = -0.70
   grind_1_profit_threshold_spot = 0.018
   grind_1_stakes_spot = [0.20, 0.20, 0.20]
   grind_1_sub_thresholds_spot = [-0.10, -0.11, -0.12]
 
-  grind_1_stop_grinds_futures = -0.50
+  grind_1_stop_grinds_futures = -0.70
   grind_1_profit_threshold_futures = 0.018
   grind_1_stakes_futures = [0.20, 0.20, 0.20]
   grind_1_sub_thresholds_futures = [-0.10, -0.11, -0.12]
 
-  grind_2_stop_grinds_spot = -0.50
+  grind_2_stop_grinds_spot = -0.70
   grind_2_profit_threshold_spot = 0.018
   grind_2_stakes_spot = [0.15, 0.25, 0.30]
   grind_2_sub_thresholds_spot = [-0.10, -0.11, -0.12]
 
-  grind_2_stop_grinds_futures = -0.50
+  grind_2_stop_grinds_futures = -0.70
   grind_2_profit_threshold_futures = 0.018
   grind_2_stakes_futures = [0.15, 0.25, 0.30]
   grind_2_sub_thresholds_futures = [-0.10, -0.11, -0.12]
 
-  grind_3_stop_grinds_spot = -0.50
+  grind_3_stop_grinds_spot = -0.70
   grind_3_profit_threshold_spot = 0.018
   grind_3_stakes_spot = [0.10, 0.10, 0.10]
   grind_3_sub_thresholds_spot = [-0.10, -0.11, -0.12]
 
-  grind_3_stop_grinds_futures = -0.50
+  grind_3_stop_grinds_futures = -0.70
   grind_3_profit_threshold_futures = 0.018
   grind_3_stakes_futures = [0.10, 0.10, 0.10]
   grind_3_sub_thresholds_futures = [-0.10, -0.11, -0.12]
 
-  grind_4_stop_grinds_spot = -0.50
+  grind_4_stop_grinds_spot = -0.70
   grind_4_profit_threshold_spot = 0.018
   grind_4_stakes_spot = [0.10, 0.10, 0.10]
   grind_4_sub_thresholds_spot = [-0.10, -0.11, -0.12]
 
-  grind_4_stop_grinds_futures = -0.50
+  grind_4_stop_grinds_futures = -0.70
   grind_4_profit_threshold_futures = 0.018
   grind_4_stakes_futures = [0.10, 0.10, 0.10]
   grind_4_sub_thresholds_futures = [-0.10, -0.11, -0.12]
 
-  grind_5_stop_grinds_spot = -0.50
+  grind_5_stop_grinds_spot = -0.70
   grind_5_profit_threshold_spot = 0.048
   grind_5_stakes_spot = [0.10, 0.10, 0.10]
   grind_5_sub_thresholds_spot = [-0.10, -0.11, -0.12]
 
-  grind_5_stop_grinds_futures = -0.50
+  grind_5_stop_grinds_futures = -0.70
   grind_5_profit_threshold_futures = 0.048
   grind_5_stakes_futures = [0.10, 0.10, 0.10]
   grind_5_sub_thresholds_futures = [-0.10, -0.11, -0.12]
 
-  grind_6_stop_grinds_spot = -0.50
+  grind_6_stop_grinds_spot = -0.70
   grind_6_profit_threshold_spot = 0.018
   grind_6_stakes_spot = [0.05, 0.06, 0.07, 0.08, 0.09]
   grind_6_sub_thresholds_spot = [-0.05, -0.06, -0.07, -0.08, -0.09]
 
-  grind_6_stop_grinds_futures = -0.50
+  grind_6_stop_grinds_futures = -0.70
   grind_6_profit_threshold_futures = 0.018
   grind_6_stakes_futures = [0.05, 0.06, 0.07, 0.08, 0.09]
   grind_6_sub_thresholds_futures = [-0.05, -0.06, -0.07, -0.08, -0.09]
@@ -255,12 +255,12 @@ class NostalgiaForInfinityX3(IStrategy):
   grind_1_derisk_1_stakes_futures = [0.50]
   grind_1_derisk_1_sub_thresholds_futures = [-0.10]
 
-  grind_2_derisk_1_stop_grinds_spot = -0.50
+  grind_2_derisk_1_stop_grinds_spot = -0.70
   grind_2_derisk_1_profit_threshold_spot = 0.018
   grind_2_derisk_1_stakes_spot = [0.15, 0.20, 0.25]
   grind_2_derisk_1_sub_thresholds_spot = [-0.10, -0.11, -0.12]
 
-  grind_2_derisk_1_stop_grinds_futures = -0.50
+  grind_2_derisk_1_stop_grinds_futures = -0.70
   grind_2_derisk_1_profit_threshold_futures = 0.018
   grind_2_derisk_1_stakes_futures = [0.15, 0.20, 0.25]
   grind_2_derisk_1_sub_thresholds_futures = [-0.10, -0.11, -0.12]
@@ -425,6 +425,7 @@ class NostalgiaForInfinityX3(IStrategy):
     "long_entry_condition_49_enable": True,
     "long_entry_condition_50_enable": True,
     "long_entry_condition_51_enable": True,
+    "long_entry_condition_52_enable": True,
     "long_entry_condition_61_enable": True,
     "long_entry_condition_62_enable": True,
     "long_entry_condition_81_enable": True,
@@ -438,7 +439,7 @@ class NostalgiaForInfinityX3(IStrategy):
     "long_entry_condition_107_enable": True,
     "long_entry_condition_108_enable": True,
     "long_entry_condition_109_enable": True,
-    "long_entry_condition_110_enable": False,
+    "long_entry_condition_110_enable": True,
     "long_entry_condition_120_enable": True,
   }
 
@@ -1338,59 +1339,6 @@ class NostalgiaForInfinityX3(IStrategy):
   entry_108_bb_offset = DecimalParameter(0.970, 0.999, default=0.999, decimals=3, space="buy", optimize=False)
   entry_108_ema_open_offset = DecimalParameter(0.0100, 0.0400, default=0.0200, decimals=4, space="buy", optimize=False)
 
-  entry_110_close_max_12 = DecimalParameter(00.50, 0.95, default=0.80, decimals=2, space="buy", optimize=False)
-  entry_110_close_max_24 = DecimalParameter(00.50, 0.95, default=0.75, decimals=2, space="buy", optimize=False)
-  entry_110_close_max_48 = DecimalParameter(00.50, 0.95, default=0.70, decimals=2, space="buy", optimize=False)
-  entry_110_high_max_24_1h = DecimalParameter(00.40, 0.90, default=0.65, decimals=2, space="buy", optimize=False)
-  entry_110_high_max_24_4h = DecimalParameter(00.40, 0.85, default=0.60, decimals=2, space="buy", optimize=False)
-  entry_110_high_max_6_1d = DecimalParameter(00.30, 0.80, default=0.55, decimals=2, space="buy", optimize=False)
-  entry_110_hl_pct_change_6_1h = DecimalParameter(00.30, 0.90, default=0.5, decimals=2, space="buy", optimize=False)
-  entry_110_hl_pct_change_12_1h = DecimalParameter(00.40, 1.00, default=0.75, decimals=2, space="buy", optimize=False)
-  entry_110_hl_pct_change_24_1h = DecimalParameter(00.50, 1.20, default=0.90, decimals=2, space="buy", optimize=False)
-  entry_110_hl_pct_change_48_1h = DecimalParameter(00.60, 1.60, default=1.00, decimals=2, space="buy", optimize=False)
-  entry_110_sup_level_1h_enabled = CategoricalParameter([True, False], default=False, space="buy", optimize=False)
-  entry_110_res_level_1h_enabled = CategoricalParameter([True, False], default=False, space="buy", optimize=False)
-  entry_110_sup_level_4h_enabled = CategoricalParameter([True, False], default=False, space="buy", optimize=False)
-  entry_110_res_level_4h_enabled = CategoricalParameter([True, False], default=False, space="buy", optimize=False)
-  entry_110_sup_level_1d_enabled = CategoricalParameter([True, False], default=False, space="buy", optimize=False)
-  entry_110_res_level_1d_enabled = CategoricalParameter([True, False], default=False, space="buy", optimize=False)
-  entry_110_ema_200_not_dec_1h_enabled = CategoricalParameter(
-    [True, False], default=False, space="buy", optimize=False
-  )
-  entry_110_ema_200_not_dec_4h_enabled = CategoricalParameter(
-    [True, False], default=False, space="buy", optimize=False
-  )
-  entry_110_ema_200_not_dec_1d_enabled = CategoricalParameter(
-    [True, False], default=False, space="buy", optimize=False
-  )
-  entry_110_not_downtrend_15m_enabled = CategoricalParameter([True, False], default=False, space="buy", optimize=False)
-  entry_110_not_downtrend_1h_enabled = CategoricalParameter([True, False], default=False, space="buy", optimize=False)
-  entry_110_not_downtrend_4h_enabled = CategoricalParameter([True, False], default=False, space="buy", optimize=False)
-  entry_110_not_downtrend_1d_enabled = CategoricalParameter([True, False], default=False, space="buy", optimize=False)
-  entry_110_rsi_3_min = DecimalParameter(00.0, 30.0, default=2.0, decimals=0, space="buy", optimize=False)
-  entry_110_rsi_3_max = DecimalParameter(30.0, 60.0, default=60.0, decimals=0, space="buy", optimize=False)
-  entry_110_rsi_3_15m_min = DecimalParameter(00.0, 30.0, default=8.0, decimals=0, space="buy", optimize=False)
-  entry_110_rsi_3_1h_min = DecimalParameter(00.0, 30.0, default=16.0, decimals=0, space="buy", optimize=False)
-  entry_110_rsi_3_4h_min = DecimalParameter(00.0, 30.0, default=10.0, decimals=0, space="buy", optimize=False)
-  entry_110_rsi_3_1d_min = DecimalParameter(00.0, 30.0, default=10.0, decimals=0, space="buy", optimize=False)
-  entry_110_cti_20_1h_max = DecimalParameter(0.0, 0.99, default=0.9, decimals=2, space="buy", optimize=False)
-  entry_110_rsi_14_1h_max = DecimalParameter(50.0, 90.0, default=80.0, decimals=0, space="buy", optimize=False)
-  entry_110_cti_20_4h_max = DecimalParameter(0.0, 0.99, default=0.9, decimals=2, space="buy", optimize=False)
-  entry_110_rsi_14_4h_max = DecimalParameter(50.0, 90.0, default=80.0, decimals=0, space="buy", optimize=False)
-  entry_110_cti_20_1d_max = DecimalParameter(0.0, 0.99, default=0.9, decimals=2, space="buy", optimize=False)
-  entry_110_rsi_14_1d_max = DecimalParameter(50.0, 90.0, default=80.0, decimals=0, space="buy", optimize=False)
-  entry_110_r_14_1h_min = DecimalParameter(-100.0, -70.0, default=-100.0, decimals=0, space="buy", optimize=False)
-  entry_110_r_14_1h_max = DecimalParameter(-40.0, -0.0, default=-0.0, decimals=0, space="buy", optimize=False)
-  entry_110_r_14_4h_min = DecimalParameter(-100.0, -70.0, default=-100.0, decimals=0, space="buy", optimize=False)
-  entry_110_r_14_4h_max = DecimalParameter(-40.0, -0.0, default=-0.0, decimals=0, space="buy", optimize=False)
-  entry_110_r_480_1h_min = DecimalParameter(-100.0, -70.0, default=-100.0, decimals=0, space="buy", optimize=False)
-  entry_110_r_480_1h_max = DecimalParameter(-40.0, -0.0, default=-0.0, decimals=0, space="buy", optimize=False)
-  entry_110_r_480_4h_min = DecimalParameter(-100.0, -70.0, default=-100.0, decimals=0, space="buy", optimize=False)
-  entry_110_r_480_4h_max = DecimalParameter(-40.0, -0.0, default=-0.0, decimals=0, space="buy", optimize=False)
-  entry_110_cti_20_max = DecimalParameter(-0.99, -0.50, default=-0.95, decimals=1, space="buy", optimize=False)
-  entry_110_ewo_50_200_max = DecimalParameter(-10.0, -2.0, default=-3.0, decimals=1, space="buy", optimize=True)
-  entry_110_ema_offset = DecimalParameter(0.980, 0.999, default=0.994, decimals=3, space="buy", optimize=True)
-
   #############################################################
   # CACHES
 
@@ -1473,6 +1421,67 @@ class NostalgiaForInfinityX3(IStrategy):
       self.regular_mode_derisk_futures = self.config["regular_mode_derisk_futures"]
     if "regular_mode_derisk_futures_old" in self.config:
       self.regular_mode_derisk_futures_old = self.config["regular_mode_derisk_futures_old"]
+
+    if "futures_mode_leverage" in self.config:
+      self.futures_mode_leverage = self.config["futures_mode_leverage"]
+    if "futures_mode_leverage_rebuy_mode" in self.config:
+      self.futures_mode_leverage_rebuy_mode = self.config["futures_mode_leverage_rebuy_mode"]
+    if "futures_mode_leverage_grind_mode" in self.config:
+      self.futures_mode_leverage_grind_mode = self.config["futures_mode_leverage_grind_mode"]
+
+    if "grind_1_profit_threshold_spot" in self.config:
+      self.grind_1_profit_threshold_spot = self.config["grind_1_profit_threshold_spot"]
+    if "grind_1_profit_threshold_futures" in self.config:
+      self.grind_1_profit_threshold_futures = self.config["grind_1_profit_threshold_futures"]
+    if "grind_2_profit_threshold_spot" in self.config:
+      self.grind_2_profit_threshold_spot = self.config["grind_2_profit_threshold_spot"]
+    if "grind_2_profit_threshold_futures" in self.config:
+      self.grind_2_profit_threshold_futures = self.config["grind_2_profit_threshold_futures"]
+    if "grind_3_profit_threshold_spot" in self.config:
+      self.grind_3_profit_threshold_spot = self.config["grind_3_profit_threshold_spot"]
+    if "grind_3_profit_threshold_futures" in self.config:
+      self.grind_3_profit_threshold_futures = self.config["grind_3_profit_threshold_futures"]
+    if "grind_4_profit_threshold_spot" in self.config:
+      self.grind_4_profit_threshold_spot = self.config["grind_4_profit_threshold_spot"]
+    if "grind_4_profit_threshold_futures" in self.config:
+      self.grind_4_profit_threshold_futures = self.config["grind_4_profit_threshold_futures"]
+    if "grind_5_profit_threshold_spot" in self.config:
+      self.grind_5_profit_threshold_spot = self.config["grind_5_profit_threshold_spot"]
+    if "grind_5_profit_threshold_futures" in self.config:
+      self.grind_5_profit_threshold_futures = self.config["grind_5_profit_threshold_futures"]
+    if "grind_6_profit_threshold_spot" in self.config:
+      self.grind_6_profit_threshold_spot = self.config["grind_6_profit_threshold_spot"]
+    if "grind_6_profit_threshold_futures" in self.config:
+      self.grind_6_profit_threshold_futures = self.config["grind_6_profit_threshold_futures"]
+    if "grind_1_derisk_1_profit_threshold_spot" in self.config:
+      self.grind_1_derisk_1_profit_threshold_spot = self.config["grind_1_derisk_1_profit_threshold_spot"]
+    if "grind_1_derisk_1_profit_threshold_futures" in self.config:
+      self.grind_1_derisk_1_profit_threshold_futures = self.config["grind_1_derisk_1_profit_threshold_futures"]
+    if "grind_2_derisk_1_profit_threshold_spot" in self.config:
+      self.grind_2_derisk_1_profit_threshold_spot = self.config["grind_2_derisk_1_profit_threshold_spot"]
+    if "grind_2_derisk_1_profit_threshold_futures" in self.config:
+      self.grind_2_derisk_1_profit_threshold_futures = self.config["grind_2_derisk_1_profit_threshold_futures"]
+    if "regular_mode_grind_1_profit_threshold_spot" in self.config:
+      self.regular_mode_grind_1_profit_threshold_spot = self.config["regular_mode_grind_1_profit_threshold_spot"]
+    if "regular_mode_grind_1_profit_threshold_futures" in self.config:
+      self.regular_mode_grind_1_profit_threshold_futures = self.config["regular_mode_grind_1_profit_threshold_futures"]
+    if "regular_mode_grind_2_profit_threshold_spot" in self.config:
+      self.regular_mode_grind_2_profit_threshold_spot = self.config["regular_mode_grind_2_profit_threshold_spot"]
+    if "regular_mode_grind_2_profit_threshold_futures" in self.config:
+      self.regular_mode_grind_2_profit_threshold_futures = self.config["regular_mode_grind_2_profit_threshold_futures"]
+    if "regular_mode_grind_3_profit_threshold_spot" in self.config:
+      self.regular_mode_grind_3_profit_threshold_spot = self.config["regular_mode_grind_3_profit_threshold_spot"]
+    if "regular_mode_grind_3_profit_threshold_futures" in self.config:
+      self.regular_mode_grind_3_profit_threshold_futures = self.config["regular_mode_grind_3_profit_threshold_futures"]
+    if "regular_mode_grind_4_profit_threshold_spot" in self.config:
+      self.regular_mode_grind_4_profit_threshold_spot = self.config["regular_mode_grind_4_profit_threshold_spot"]
+    if "regular_mode_grind_4_profit_threshold_futures" in self.config:
+      self.regular_mode_grind_4_profit_threshold_futures = self.config["regular_mode_grind_4_profit_threshold_futures"]
+    if "regular_mode_grind_5_profit_threshold_spot" in self.config:
+      self.regular_mode_grind_5_profit_threshold_spot = self.config["regular_mode_grind_5_profit_threshold_spot"]
+    if "regular_mode_grind_5_profit_threshold_futures" in self.config:
+      self.regular_mode_grind_5_profit_threshold_futures = self.config["regular_mode_grind_5_profit_threshold_futures"]
+
     if "grind_mode_max_slots" in self.config:
       self.grind_mode_max_slots = self.config["grind_mode_max_slots"]
     if "grind_mode_coins" in self.config:
@@ -12013,6 +12022,92 @@ class NostalgiaForInfinityX3(IStrategy):
         | (df["r_480_4h"] < -25.0)
         | (df["close"] > df["sup_level_4h"])
       )
+      & (
+        (df["rsi_14"] > df["rsi_14"].shift(12))
+        | (df["rsi_14_15m"] > df["rsi_14_15m"].shift(12))
+        | (df["rsi_3"] > 4.0)
+        | (df["rsi_3_15m"] > 12.0)
+        | (df["rsi_14_1h"] < 46.0)
+        | (df["rsi_14_4h"] < 60.0)
+        | (df["r_480_1h"] < -35.0)
+        | (df["r_480_4h"] < -25.0)
+        | (df["close"] > df["sup_level_1h"])
+        | (((df["close"] - df["low_min_6_1d"]) / df["low_min_6_1d"]) < (df["hl_pct_change_6_1d"] * 0.38))
+      )
+      & (
+        (df["change_pct_1d"] < 0.06)
+        | (df["top_wick_pct_1d"] < 0.06)
+        | (df["rsi_14"] > df["rsi_14"].shift(12))
+        | (df["rsi_3"] > 20.0)
+        | (df["rsi_14_15m"] < 40.0)
+        | (df["rsi_14_1h"] < 50.0)
+        | (df["rsi_14_4h"] < 60.0)
+        | (df["rsi_14_max_6_4h"] < 70.0)
+        | (df["r_480_4h"] < -35.0)
+        | (df["close"] < df["res_hlevel_4h"])
+        | (df["ema_200_dec_4_1d"] == False)
+        | (((df["close"] - df["low_min_48_1h"]) / df["low_min_48_1h"]) < (df["hl_pct_change_48_1h"] * 0.38))
+      )
+      & (
+        (df["change_pct_1d"] < 0.04)
+        | (df["not_downtrend_1h"])
+        | (df["rsi_14"] > df["rsi_14"].shift(12))
+        | (df["rsi_14_15m"] > df["rsi_14_15m"].shift(12))
+        | (df["rsi_3_15m"] > 20.0)
+        | (df["rsi_3_1h"] > 30.0)
+        | (df["rsi_14_1h"] < 40.0)
+        | (df["rsi_14_4h"] < 50.0)
+        | (df["rsi_14_max_6_4h"] < 65.0)
+        | (df["r_480_1h"] < -30.0)
+        | (df["close"] > df["sup_level_1h"])
+        | (df["close"] > df["sup_level_4h"])
+        | (df["close"] < df["res_hlevel_1d"])
+      )
+      & (
+        (df["change_pct_1d"] < 0.02)
+        | (df["top_wick_pct_1d"] < 0.02)
+        | (df["change_pct_1h"] > -0.00)
+        | (df["change_pct_1h"].shift(12) < 0.01)
+        | (df["rsi_14"] > df["rsi_14"].shift(12))
+        | (df["rsi_14_15m"] > df["rsi_14_15m"].shift(12))
+        | (df["rsi_3"] > 20.0)
+        | (df["rsi_3_15m"] > 30.0)
+        | (df["rsi_14_1h"] < 46.0)
+        | (df["rsi_14_1d"] < 50.0)
+        | (df["r_480_1h"] < -20.0)
+        | (df["close"] < df["res_hlevel_1d"])
+        | (((df["close"] - df["low_min_6_1d"]) / df["low_min_6_1d"]) < (df["hl_pct_change_6_1d"] * 0.38))
+      )
+      & (
+        (df["change_pct_4h"] > -0.01)
+        | (df["change_pct_4h"].shift(48) < 0.04)
+        | (df["change_pct_1h"] > -0.01)
+        | (df["rsi_14"] > df["rsi_14"].shift(12))
+        | (df["rsi_14_15m"] > df["rsi_14_15m"].shift(12))
+        | (df["rsi_14_15m"] < 40.0)
+        | (df["rsi_14_1h"] < 60.0)
+        | (df["rsi_14_max_6_1h"] < 70.0)
+        | (df["rsi_14_4h"] < 60.0)
+        | (df["r_480_1h"] < -20.0)
+        | (df["r_480_4h"] < -35.0)
+        | (df["close"] > df["sup_level_4h"])
+        | (((df["close"] - df["low_min_48_1h"]) / df["low_min_48_1h"]) < (df["hl_pct_change_48_1h"] * 0.38))
+      )
+      & (
+        (df["not_downtrend_1h"])
+        | (df["rsi_14"] > df["rsi_14"].shift(12))
+        | (df["rsi_14_15m"] > df["rsi_14_15m"].shift(12))
+        | (df["rsi_3"] > 26.0)
+        | (df["rsi_3_15m"] > 16.0)
+        | (df["rsi_3_1h"] > 30.0)
+        | (df["rsi_14_1h"] < 40.0)
+        | (df["rsi_14_4h"] < 60.0)
+        | (df["rsi_14_1d"] < 65.0)
+        | (df["r_480_4h"] < -30.0)
+        | (df["close"] > df["sup_level_1h"])
+        | (df["close"] < df["res_hlevel_4h"])
+        | (((df["close"] - df["low_min_48_1h"]) / df["low_min_48_1h"]) < (df["hl_pct_change_48_1h"] * 0.38))
+      )
     )
 
     df["global_protections_long_dump"] = (
@@ -13787,6 +13882,112 @@ class NostalgiaForInfinityX3(IStrategy):
         | (df["rsi_14_1h"] < 40.0)
         | (df["rsi_14_4h"] < 46.0)
         | (df["close"] > df["sup_level_1h"])
+      )
+      & (
+        (df["not_downtrend_1h"])
+        | (df["rsi_14"] > df["rsi_14"].shift(12))
+        | (df["rsi_14_15m"] > df["rsi_14_15m"].shift(12))
+        | (df["rsi_14_15m"] < 40.0)
+        | (df["rsi_14_1h"] < 40.0)
+        | (df["rsi_14_4h"] < 50.0)
+        | (df["r_480_4h"] > -70.0)
+        | (df["close"] > df["sup_level_1h"])
+        | (df["close"] > df["sup_level_4h"])
+        | (df["ema_200_dec_24_4h"] == False)
+      )
+      & (
+        (df["not_downtrend_1h"])
+        | (df["rsi_14"] > df["rsi_14"].shift(12))
+        | (df["rsi_14_15m"] > df["rsi_14_15m"].shift(12))
+        | (df["rsi_3"] > 8.0)
+        | (df["rsi_3_15m"] > 16.0)
+        | (df["rsi_3_1h"] > 26.0)
+        | (df["rsi_14_4h"] < 46.0)
+        | (df["r_480_4h"] > -70.0)
+        | (df["close"] > df["sup_level_1h"])
+        | (df["close"] > df["sup_level_4h"])
+        | (df["ema_200_dec_4_1d"] == False)
+      )
+      & (
+        (df["rsi_14"] > df["rsi_14"].shift(12))
+        | (df["rsi_14_15m"] > df["rsi_14_15m"].shift(12))
+        | (df["rsi_3"] > 6.0)
+        | (df["rsi_3_15m"] > 26.0)
+        | (df["rsi_14_15m"] < 40.0)
+        | (df["rsi_14_1h"] < 46.0)
+        | (df["rsi_14_4h"] < 46.0)
+        | (df["r_480_4h"] > -65.0)
+        | (df["ema_200_dec_48_1h"] == False)
+        | (df["ema_200_dec_4_1d"] == False)
+      )
+      & (
+        (df["not_downtrend_15m"])
+        | (df["rsi_14"] > df["rsi_14"].shift(12))
+        | (df["rsi_14_15m"] > df["rsi_14_15m"].shift(12))
+        | (df["rsi_3"] > 6.0)
+        | (df["rsi_3_15m"] > 26.0)
+        | (df["rsi_14_1h"] < 46.0)
+        | (df["rsi_14_4h"] < 50.0)
+        | (df["rsi_14_max_6_4h"] < 70.0)
+        | (df["r_480_4h"] > -70.0)
+        | (df["ema_200_dec_24_4h"] == False)
+      )
+      & (
+        (df["rsi_14"] > df["rsi_14"].shift(12))
+        | (df["rsi_14_15m"] > df["rsi_14_15m"].shift(12))
+        | (df["rsi_3"] > 20.0)
+        | (df["rsi_14_15m"] < 36.0)
+        | (df["rsi_14_1h"] < 46.0)
+        | (df["rsi_14_1d"] < 46.0)
+        | (df["rsi_14_max_6_1d"] < 65.0)
+        | (df["r_480_1h"] > -65.0)
+        | (df["r_480_4h"] > -75.0)
+        | (df["close"] > df["sup_level_1h"])
+        | (df["close"] > df["sup_level_1d"])
+        | (df["ema_200_dec_48_1h"] == False)
+        | (df["close"] > (df["high_max_6_1d"] * 0.80))
+      )
+      & (
+        (df["change_pct_4h"] < 0.04)
+        | (df["top_wick_pct_4h"] < 0.02)
+        | (df["not_downtrend_1d"])
+        | (df["rsi_14"] > df["rsi_14"].shift(12))
+        | (df["rsi_14_15m"] > df["rsi_14_15m"].shift(12))
+        | (df["rsi_14_15m"] < 36.0)
+        | (df["rsi_14_1h"] < 50.0)
+        | (df["rsi_14_4h"] < 60.0)
+        | (df["close"] > df["sup_level_1h"])
+        | (df["ema_200_dec_24_4h"] == False)
+        | (((df["close"] - df["low_min_48_1h"]) / df["low_min_48_1h"]) < (df["hl_pct_change_48_1h"] * 0.38))
+      )
+      & (
+        (df["not_downtrend_1h"])
+        | (df["rsi_14"] > df["rsi_14"].shift(12))
+        | (df["rsi_14_15m"] > df["rsi_14_15m"].shift(12))
+        | (df["rsi_14_15m"] < 30.0)
+        | (df["rsi_14_1h"] < 40.0)
+        | (df["rsi_14_4h"] < 46.0)
+        | (df["r_480_4h"] > -80.0)
+        | (df["close"] > df["sup_level_1h"])
+        | (df["close"] > df["sup_level_4h"])
+        | (df["close"] > df["sup_level_1d"])
+        | (df["ema_200_dec_24_4h"] == False)
+        | (df["ema_200_dec_4_1d"] == False)
+      )
+      & (
+        (df["not_downtrend_15m"])
+        | (df["not_downtrend_4h"])
+        | (df["rsi_14"] > df["rsi_14"].shift(12))
+        | (df["rsi_14_15m"] > df["rsi_14_15m"].shift(12))
+        | (df["rsi_3"] > 16.0)
+        | (df["rsi_3_15m"] > 20.0)
+        | (df["rsi_14_1h"] < 40.0)
+        | (df["rsi_14_4h"] < 40.0)
+        | (df["r_480_4h"] > -70.0)
+        | (df["close"] > df["sup_level_1h"])
+        | (df["close"] > df["sup_level_4h"])
+        | (df["close"] > df["sup_level_1d"])
+        | (df["ema_200_dec_24_4h"] == False)
       )
     )
 
@@ -25035,6 +25236,28 @@ class NostalgiaForInfinityX3(IStrategy):
           long_entry_logic.append(df["rsi_14"] < 32.0)
           long_entry_logic.append(df["close"] < (df["ema_26"] * 0.972))
 
+        # Condition #52 - Quick mode (Long).
+        if index == 52:
+          # Protections
+          long_entry_logic.append(df["hl_pct_change_6_1h"] < 0.60)
+          long_entry_logic.append(df["hl_pct_change_12_1h"] < 0.70)
+          long_entry_logic.append(df["hl_pct_change_24_1h"] < 0.80)
+          long_entry_logic.append(df["hl_pct_change_48_1h"] < 0.90)
+          long_entry_logic.append(df["num_empty_288"] < allowed_empty_candles)
+
+          long_entry_logic.append(df["rsi_3_15m"] >= 4.0)
+          long_entry_logic.append(df["rsi_3_1h"] >= 4.0)
+          long_entry_logic.append(df["rsi_14_1h"] <= 70.0)
+          long_entry_logic.append(df["rsi_14_4h"] <= 70.0)
+          long_entry_logic.append(df["rsi_14_1d"] <= 75.0)
+
+          # Logic
+          long_entry_logic.append(df["rsi_14"] < 36.0)
+          long_entry_logic.append(df["close"] < (df["bb20_2_low"] * 0.988))
+          long_entry_logic.append(df["ema_26"] > df["ema_12"])
+          long_entry_logic.append((df["ema_26"] - df["ema_12"]) > (df["open"] * 0.028))
+          long_entry_logic.append((df["ema_26"].shift() - df["ema_12"].shift()) > (df["open"] / 100.0))
+
         # Condition #61 - Rebuy mode (Long).
         if index == 61:
           # Protections
@@ -25138,7 +25361,7 @@ class NostalgiaForInfinityX3(IStrategy):
 
           # Logic
           long_entry_logic.append(df["rsi_14"] < 36.0)
-          long_entry_logic.append(df["close"] < (df["ema_26"] * 0.992))
+          long_entry_logic.append(df["close"] < (df["ema_26"] * 0.988))
 
         # Condition #81 - High profit mode (log)
         if index == 81:
@@ -25762,70 +25985,30 @@ class NostalgiaForInfinityX3(IStrategy):
           long_entry_logic.append(df["global_protections_long_dump"] == True)
           long_entry_logic.append(df["btc_pct_close_max_24_5m"] < 0.03)
           long_entry_logic.append(df["btc_pct_close_max_72_5m"] < 0.03)
-          long_entry_logic.append(df["close"] > (df["close_max_12"] * self.entry_110_close_max_12.value))
-          long_entry_logic.append(df["close"] > (df["close_max_24"] * self.entry_110_close_max_24.value))
-          long_entry_logic.append(df["close"] > (df["close_max_48"] * self.entry_110_close_max_48.value))
-          long_entry_logic.append(df["close"] > (df["high_max_24_1h"] * self.entry_110_high_max_24_1h.value))
-          long_entry_logic.append(df["close"] > (df["high_max_24_4h"] * self.entry_110_high_max_24_4h.value))
-          long_entry_logic.append(df["close"] > (df["high_max_6_1d"] * self.entry_110_high_max_6_1d.value))
-          long_entry_logic.append(df["hl_pct_change_6_1h"] < self.entry_110_hl_pct_change_6_1h.value)
-          long_entry_logic.append(df["hl_pct_change_12_1h"] < self.entry_110_hl_pct_change_12_1h.value)
-          long_entry_logic.append(df["hl_pct_change_24_1h"] < self.entry_110_hl_pct_change_24_1h.value)
-          long_entry_logic.append(df["hl_pct_change_48_1h"] < self.entry_110_hl_pct_change_48_1h.value)
+          long_entry_logic.append(df["close"] > (df["close_max_12"] * 0.84))
+          long_entry_logic.append(df["close"] > (df["close_max_24"] * 0.80))
+          long_entry_logic.append(df["close"] > (df["close_max_48"] * 0.76))
+          long_entry_logic.append(df["close"] > (df["high_max_24_1h"] * 0.70))
+          long_entry_logic.append(df["close"] > (df["high_max_24_4h"] * 0.66))
+          long_entry_logic.append(df["close"] > (df["high_max_6_1d"] * 0.60))
+          long_entry_logic.append(df["hl_pct_change_6_1h"] < 0.60)
+          long_entry_logic.append(df["hl_pct_change_12_1h"] < 0.70)
+          long_entry_logic.append(df["hl_pct_change_24_1h"] < 0.80)
+          long_entry_logic.append(df["hl_pct_change_48_1h"] < 0.90)
           long_entry_logic.append(df["num_empty_288"] < allowed_empty_candles)
 
-          long_entry_logic.append(df["rsi_3"] > self.entry_110_rsi_3_min.value)
-          long_entry_logic.append(df["rsi_3"] < self.entry_110_rsi_3_max.value)
-          long_entry_logic.append(df["rsi_3_15m"] > self.entry_110_rsi_3_15m_min.value)
-          long_entry_logic.append(df["rsi_3_1h"] > self.entry_110_rsi_3_1h_min.value)
-          long_entry_logic.append(df["rsi_3_4h"] > self.entry_110_rsi_3_4h_min.value)
-          long_entry_logic.append(df["rsi_3_1d"] > self.entry_110_rsi_3_1d_min.value)
-          long_entry_logic.append(df["cti_20_1h"] < self.entry_110_cti_20_1h_max.value)
-          long_entry_logic.append(df["rsi_14_1h"] < self.entry_110_rsi_14_1h_max.value)
-          long_entry_logic.append(df["cti_20_4h"] < self.entry_110_cti_20_4h_max.value)
-          long_entry_logic.append(df["rsi_14_4h"] < self.entry_110_rsi_14_4h_max.value)
-          long_entry_logic.append(df["cti_20_1d"] < self.entry_110_cti_20_1d_max.value)
-          long_entry_logic.append(df["rsi_14_1d"] < self.entry_110_rsi_14_1d_max.value)
-          long_entry_logic.append(df["r_14_1h"] >= self.entry_110_r_14_1h_min.value)
-          long_entry_logic.append(df["r_14_1h"] <= self.entry_110_r_14_1h_max.value)
-          long_entry_logic.append(df["r_14_4h"] >= self.entry_110_r_14_4h_min.value)
-          long_entry_logic.append(df["r_14_4h"] <= self.entry_110_r_14_4h_max.value)
-          long_entry_logic.append(df["r_480_1h"] >= self.entry_110_r_480_1h_min.value)
-          long_entry_logic.append(df["r_480_1h"] <= self.entry_110_r_480_1h_max.value)
-          long_entry_logic.append(df["r_480_4h"] >= self.entry_110_r_480_4h_min.value)
-          long_entry_logic.append(df["r_480_4h"] <= self.entry_110_r_480_4h_max.value)
-
-          if self.entry_110_sup_level_1h_enabled.value:
-            long_entry_logic.append(df["close"] > df["sup_level_1h"])
-          if self.entry_110_res_level_1h_enabled.value:
-            long_entry_logic.append(df["close"] < df["res_level_1h"])
-          if self.entry_110_sup_level_4h_enabled.value:
-            long_entry_logic.append(df["close"] > df["sup_level_4h"])
-          if self.entry_110_res_level_4h_enabled.value:
-            long_entry_logic.append(df["close"] < df["res_level_4h"])
-          if self.entry_110_sup_level_1d_enabled.value:
-            long_entry_logic.append(df["close"] > df["sup_level_1d"])
-          if self.entry_110_res_level_1d_enabled.value:
-            long_entry_logic.append(df["close"] < df["res_level_1h"])
-          if self.entry_110_ema_200_not_dec_1h_enabled.value:
-            long_entry_logic.append(df["ema_200_dec_48_1h"] == False)
-          if self.entry_110_ema_200_not_dec_4h_enabled.value:
-            long_entry_logic.append(df["ema_200_dec_24_4h"] == False)
-          if self.entry_110_ema_200_not_dec_1d_enabled.value:
-            long_entry_logic.append(df["ema_200_dec_4_1d"] == False)
-          if self.entry_110_not_downtrend_15m_enabled.value:
-            long_entry_logic.append(df["not_downtrend_15m"])
-          if self.entry_110_not_downtrend_1h_enabled.value:
-            long_entry_logic.append(df["not_downtrend_1h"])
-          if self.entry_110_not_downtrend_4h_enabled.value:
-            long_entry_logic.append(df["not_downtrend_4h"])
-          if self.entry_110_not_downtrend_1d_enabled.value:
-            long_entry_logic.append(df["not_downtrend_1d"])
+          long_entry_logic.append(df["rsi_3"] > 2.0)
+          long_entry_logic.append(df["rsi_3"] < 60.0)
+          long_entry_logic.append(df["rsi_3_15m"] > 8.0)
+          long_entry_logic.append(df["rsi_3_1h"] > 12.0)
+          long_entry_logic.append(df["rsi_3_4h"] > 12.0)
+          long_entry_logic.append(df["rsi_3_1d"] > 12.0)
 
           # Logic
-          long_entry_logic.append(df["cti_20"] < self.entry_110_cti_20_max.value)
-          long_entry_logic.append(df["ewo_50_200"] < self.entry_110_ewo_50_200_max.value)
-          long_entry_logic.append(df["close"] < (df["ema_20"] * self.entry_110_ema_offset.value))
+          long_entry_logic.append(df["rsi_14"] < 36.0)
+          long_entry_logic.append(df["cti_20"] < -0.75)
+          long_entry_logic.append(df["ewo_50_200"] < -6.0)
+          long_entry_logic.append(df["close"] < (df["ema_20"] * 0.988))
 
         # Condition #120 - Grind mode (Long).
         if index == 120:
