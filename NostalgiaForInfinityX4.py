@@ -456,7 +456,7 @@ class NostalgiaForInfinityX4(IStrategy):
     # -------------------------------------------------------
     "short_entry_condition_500_enable": True,
     "short_entry_condition_501_enable": False,
-    "short_entry_condition_580_enable": True,
+    "short_entry_condition_580_enable": False,
   }
 
   buy_protection_params = {}
