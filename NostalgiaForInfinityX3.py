@@ -68,7 +68,7 @@ class NostalgiaForInfinityX3(IStrategy):
   INTERFACE_VERSION = 3
 
   def version(self) -> str:
-    return "v13.1.723"
+    return "v13.1.740"
 
   stoploss = -0.99
 
@@ -12164,6 +12164,29 @@ class NostalgiaForInfinityX3(IStrategy):
         | (df["close"] > (df["high_max_48_1h"] * 0.80))
         | (df["hl_pct_change_6_1d"] < 0.7)
       )
+      & (
+        (df["not_downtrend_15m"])
+        | (df["rsi_14"] > df["rsi_14"].shift(12))
+        | (df["rsi_14_15m"] > df["rsi_14_15m"].shift(12))
+        | (df["rsi_3"] > 8.0)
+        | (df["rsi_3_15m"] > 16.0)
+        | (df["rsi_14_1h"] < 70.0)
+        | (df["rsi_14_max_6_1h"] < 80.0)
+        | (df["rsi_14_4h"] < 70.0)
+        | (df["r_480_1h"] < -35.0)
+        | (((df["close"] - df["low_min_48_1h"]) / df["low_min_48_1h"]) < (df["hl_pct_change_48_1h"] * 0.38))
+      )
+      & (
+        (df["change_pct_1d"] > -0.01)
+        | (df["top_wick_pct_1d"] < 0.16)
+        | (df["change_pct_4h"] > -0.08)
+        | (df["change_pct_1h"] > -0.04)
+        | (df["not_downtrend_1h"])
+        | (df["rsi_3_15m"] > 30.0)
+        | (df["rsi_3_1h"] > 16.0)
+        | (df["close"] > df["sup_level_1h"])
+        | (((df["close"] - df["low_min_6_1d"]) / df["low_min_6_1d"]) < (df["hl_pct_change_6_1d"] * 0.38))
+      )
     )
 
     df["global_protections_long_dump"] = (
@@ -14123,6 +14146,39 @@ class NostalgiaForInfinityX3(IStrategy):
         | (df["close"] > (df["high_max_6_1d"] * 0.70))
         | (df["hl_pct_change_6_1d"] < 1.2)
         | (df["ema_200_dec_4_1d"] == False)
+      )
+      & (
+        (df["not_downtrend_1h"])
+        | (df["not_downtrend_4h"])
+        | (df["not_downtrend_1d"])
+        | (df["rsi_14"] > df["rsi_14"].shift(12))
+        | (df["rsi_14_15m"] > df["rsi_14_15m"].shift(12))
+        | (df["rsi_3_15m"] > 30.0)
+        | (df["rsi_3_4h"] > 20.0)
+        | (df["r_480_1h"] > -90.0)
+        | (df["close"] > df["sup_level_4h"])
+        | (df["ema_200_dec_48_1h"] == False)
+        | (df["close"] > (df["high_max_12_1d"] * 0.50))
+      )
+      & (
+        (df["change_pct_4h"] < 0.04)
+        | (df["rsi_3"] > 10.0)
+        | (df["rsi_14_15m"] < 46.0)
+        | (df["rsi_14_1h"] < 50.0)
+        | (df["rsi_14_4h"] < 50.0)
+        | (df["ema_200_dec_4_1d"] == False)
+        | (((df["close"] - df["low_min_48_1h"]) / df["low_min_48_1h"]) < (df["hl_pct_change_48_1h"] * 0.38))
+      )
+      & (
+        (df["change_pct_1d"] < 0.16)
+        | (df["top_wick_pct_1d"] < 0.16)
+        | (df["change_pct_4h"] > -0.02)
+        | (df["rsi_3_15m"] > 20.0)
+        | (df["rsi_14_1h"] < 46.0)
+        | (df["rsi_14_4h"] < 46.0)
+        | (df["r_480_4h"] > -70.0)
+        | (df["ema_200_dec_24_4h"] == False)
+        | (((df["close"] - df["low_min_48_1h"]) / df["low_min_48_1h"]) < (df["hl_pct_change_48_1h"] * 0.38))
       )
     )
 
@@ -25374,6 +25430,8 @@ class NostalgiaForInfinityX3(IStrategy):
         # Condition #52 - Quick mode (Long).
         if index == 52:
           # Protections
+          long_entry_logic.append(df["global_protections_long_pump"] == True)
+          long_entry_logic.append(df["global_protections_long_dump"] == True)
           long_entry_logic.append(df["hl_pct_change_6_1h"] < 0.60)
           long_entry_logic.append(df["hl_pct_change_12_1h"] < 0.70)
           long_entry_logic.append(df["hl_pct_change_24_1h"] < 0.80)
@@ -25400,6 +25458,13 @@ class NostalgiaForInfinityX3(IStrategy):
             | (df["rsi_3"] > 12.0)
             | (df["rsi_3_15m"] > 12.0)
           )
+          long_entry_logic.append(
+            (df["not_downtrend_15m"])
+            | (df["rsi_3"] > 20.0)
+            | (df["rsi_3_15m"] >= 20.0)
+            | (df["rsi_14_max_6_1h"] < 70.0)
+            | (df["ema_200_dec_4_1d"] == False)
+          )
 
           # Logic
           long_entry_logic.append(df["rsi_14"] < 36.0)
@@ -25411,6 +25476,8 @@ class NostalgiaForInfinityX3(IStrategy):
         # Condition #53 - Quick mode (Long).
         if index == 53:
           # Protections
+          long_entry_logic.append(df["global_protections_long_pump"] == True)
+          long_entry_logic.append(df["global_protections_long_dump"] == True)
           long_entry_logic.append(df["hl_pct_change_6_1h"] < 0.60)
           long_entry_logic.append(df["hl_pct_change_12_1h"] < 0.70)
           long_entry_logic.append(df["hl_pct_change_24_1h"] < 0.80)
@@ -25430,13 +25497,83 @@ class NostalgiaForInfinityX3(IStrategy):
             | (df["hl_pct_change_6_1d"] < 1.2)
             | (df["ema_200_dec_4_1d"] == False)
           )
+          long_entry_logic.append(
+            (df["not_downtrend_15m"])
+            | (df["close"] > df["sup_level_1h"])
+            | (df["close"] > df["sup_level_4h"])
+            | (df["ema_200_dec_24_4h"] == False)
+            | (df["ema_200_dec_4_1d"] == False)
+          )
+          long_entry_logic.append(
+            (df["rsi_3"] >= 12.0)
+            | (df["rsi_14_15m"] < 50.0)
+            | (df["rsi_14_max_6_1h"] < 75.0)
+            | (df["close"] < df["res_hlevel_1h"])
+          )
+          long_entry_logic.append(
+            (df["not_downtrend_15m"])
+            | (df["not_downtrend_1h"])
+            | (df["rsi_3_15m"] >= 16.0)
+            | (df["rsi_14_max_6_1h"] < 70.0)
+            | (df["close"] > df["sup_level_1h"])
+          )
+          long_entry_logic.append(
+            (df["not_downtrend_15m"])
+            | (df["rsi_14_15m"] < 40.0)
+            | (df["rsi_14_max_6_4h"] < 70.0)
+            | (df["ema_200_dec_24_4h"] == False)
+            | (df["ema_200_dec_4_1d"] == False)
+          )
+          long_entry_logic.append(
+            (df["not_downtrend_15m"])
+            | (df["rsi_14_15m"] < 40.0)
+            | (df["rsi_14_max_6_1h"] < 70.0)
+            | (df["ema_200_dec_24_4h"] == False)
+            | (df["ema_200_dec_4_1d"] == False)
+          )
+          long_entry_logic.append(
+            (df["not_downtrend_15m"])
+            | (df["not_downtrend_1d"])
+            | (df["rsi_3_15m"] >= 20.0)
+            | (df["r_480_4h"] > -70.0)
+            | (df["ema_200_dec_48_1h"] == False)
+            | (df["ema_200_dec_4_1d"] == False)
+          )
+          long_entry_logic.append(
+            (df["not_downtrend_15m"])
+            | (df["rsi_3_15m"] >= 20.0)
+            | (df["rsi_14_max_6_1h"] < 70.0)
+            | (df["rsi_14_max_6_4h"] < 70.0)
+            | (df["ema_200_dec_4_1d"] == False)
+          )
+          long_entry_logic.append(
+            (df["not_downtrend_15m"])
+            | (df["rsi_3_15m"] >= 20.0)
+            | (df["rsi_14_max_6_4h"] < 75.0)
+            | (df["close"] > df["sup_level_1h"])
+            | (df["hl_pct_change_48_1h"] < 0.5)
+          )
+          long_entry_logic.append(
+            (df["not_downtrend_15m"])
+            | (df["rsi_3_15m"] >= 20.0)
+            | (df["rsi_14_max_6_1h"] < 70.0)
+            | (df["close"] < df["res_hlevel_1h"])
+            | (df["close"] < df["res_hlevel_4h"])
+            | (df["ema_200_dec_4_1d"] == False)
+          )
+          long_entry_logic.append(
+            (df["change_pct_1h"] > -0.08)
+            | (df["change_pct_1h"].shift(12) < 0.08)
+            | (df["rsi_14_1h"].shift(12) < 70.0)
+            | (df["r_480_4h"] < -35.0)
+          )
 
           # Logic
           long_entry_logic.append(df["rsi_3"] < 46.0)
           long_entry_logic.append(df["rsi_14"] > 35.0)
           long_entry_logic.append(df["rsi_20"] < df["rsi_20"].shift(1))
           long_entry_logic.append(df["cti_20"] < -0.60)
-          long_entry_logic.append(df["close"] < (df["sma_16"] * 0.958))
+          long_entry_logic.append(df["close"] < (df["sma_16"] * 0.956))
 
         # Condition #61 - Rebuy mode (Long).
         if index == 61:
@@ -34538,7 +34675,7 @@ class NostalgiaForInfinityX3(IStrategy):
       self.is_futures_mode
       and has_order_tags
       and (not partial_sell)
-      and slice_profit < (-0.7 / trade.leverage)
+      and slice_profit < (-0.65 / trade.leverage)
       and (is_derisk or is_derisk_calc or is_grind_mode)
     ):
       buy_amount = (
@@ -36432,7 +36569,7 @@ class NostalgiaForInfinityX3(IStrategy):
         order_tag = "g1"
         return buy_amount, order_tag, is_derisk
 
-    if self.is_futures_mode and has_order_tags and (not partial_sell) and slice_profit < (-0.7 / trade.leverage):
+    if self.is_futures_mode and has_order_tags and (not partial_sell) and slice_profit < (-0.65 / trade.leverage):
       buy_amount = (
         slice_amount
         * regular_mode_grind_1_stakes[grind_1_sub_grind_count]
@@ -45369,7 +45506,7 @@ class NostalgiaForInfinityX3(IStrategy):
       self.is_futures_mode
       and has_order_tags
       and (not partial_sell)
-      and slice_profit > (0.7 / trade.leverage)
+      and slice_profit > (0.65 / trade.leverage)
       and (is_derisk or is_derisk_calc or is_grind_mode)
     ):
       buy_amount = (
@@ -47245,7 +47382,7 @@ class NostalgiaForInfinityX3(IStrategy):
         order_tag = "g1"
         return buy_amount, order_tag, is_derisk
 
-    if self.is_futures_mode and has_order_tags and (not partial_sell) and slice_profit > (0.7 / trade.leverage):
+    if self.is_futures_mode and has_order_tags and (not partial_sell) and slice_profit > (0.65 / trade.leverage):
       buy_amount = (
         slice_amount
         * regular_mode_grind_1_stakes[grind_1_sub_grind_count]

@@ -72,7 +72,7 @@ class NostalgiaForInfinityX4(IStrategy):
   INTERFACE_VERSION = 3
 
   def version(self) -> str:
-    return "v14.1.723"
+    return "v14.1.740"
 
   stoploss = -0.2
 
@@ -3995,7 +3995,7 @@ class NostalgiaForInfinityX4(IStrategy):
           long_entry_logic.append(df["rsi_14"] > 35.0)
           long_entry_logic.append(df["rsi_20"] < df["rsi_20"].shift(1))
           long_entry_logic.append(df["cti_20"] < -0.60)
-          long_entry_logic.append(df["close"] < (df["sma_16"] * 0.958))
+          long_entry_logic.append(df["close"] < (df["sma_16"] * 0.956))
 
         # Condition #61 - Rebuy mode (Long).
         if index == 61:
@@ -4009,6 +4009,60 @@ class NostalgiaForInfinityX4(IStrategy):
 
         # Condition #62 - Rebuy mode (Long).
         if index == 62:
+          # Protections
+          long_entry_logic.append(df["btc_pct_close_max_24_5m"] < 0.03)
+          long_entry_logic.append(df["btc_pct_close_max_72_5m"] < 0.03)
+          long_entry_logic.append(df["close"] > (df["close_max_12"] * 0.94))
+          long_entry_logic.append(df["close"] > (df["close_max_24"] * 0.92))
+          long_entry_logic.append(df["close"] > (df["close_max_48"] * 0.90))
+          long_entry_logic.append(df["close"] > (df["high_max_24_1h"] * 0.88))
+          long_entry_logic.append(df["close"] > (df["high_max_48_1h"] * 0.86))
+          long_entry_logic.append(df["close"] > (df["high_max_6_1d"] * 0.84))
+          long_entry_logic.append(df["close"] > (df["high_max_12_1d"] * 0.82))
+          long_entry_logic.append(df["hl_pct_change_6_1h"] < 0.60)
+          long_entry_logic.append(df["hl_pct_change_12_1h"] < 0.70)
+          long_entry_logic.append(df["hl_pct_change_24_1h"] < 0.80)
+          long_entry_logic.append(df["hl_pct_change_48_1h"] < 0.90)
+          long_entry_logic.append(df["num_empty_288"] < allowed_empty_candles)
+
+          long_entry_logic.append(df["rsi_3"] >= 30.0)
+          long_entry_logic.append(df["rsi_3"] <= 50.0)
+          long_entry_logic.append(df["rsi_3_15m"] >= 30.0)
+          long_entry_logic.append(df["rsi_3_1h"] >= 30.0)
+          long_entry_logic.append(df["rsi_3_4h"] >= 30.0)
+          long_entry_logic.append(df["rsi_3_1d"] >= 30.0)
+          long_entry_logic.append(df["cti_20_1h"] <= 0.90)
+          long_entry_logic.append(df["rsi_14_1h"] <= 80.0)
+          long_entry_logic.append(df["cti_20_4h"] <= 0.90)
+          long_entry_logic.append(df["rsi_14_4h"] <= 80.0)
+          long_entry_logic.append(df["cti_20_1d"] <= 0.90)
+          long_entry_logic.append(df["rsi_14_1d"] <= 80.0)
+          long_entry_logic.append(df["r_480_1h"] <= -5.0)
+          long_entry_logic.append(df["r_480_4h"] <= -5.0)
+
+          long_entry_logic.append(df["close"] > df["ema_200_1h"])
+
+          long_entry_logic.append(
+            (df["change_pct_1h"] > -0.01) | (df["ema_200_dec_24_4h"] == False) | (df["ema_200_dec_4_1d"] == False)
+          )
+          long_entry_logic.append(
+            (df["r_480_1h"] < -30.0)
+            | (df["r_480_4h"] < -25.0)
+            | (df["close"] < df["res_hlevel_4h"])
+            | (df["close"] < df["res_hlevel_1d"])
+            | (df["ema_200_dec_4_1d"] == False)
+            | (((df["close"] - df["low_min_48_1h"]) / df["low_min_48_1h"]) < (df["hl_pct_change_48_1h"] * 0.38))
+          )
+          long_entry_logic.append(
+            (df["rsi_14"] > df["rsi_14"].shift(12))
+            | (df["rsi_14_15m"] > df["rsi_14_15m"].shift(12))
+            | (df["r_480_1h"] < -25.0)
+            | (df["r_480_4h"] < -30.0)
+            | (df["close"] < df["res_hlevel_4h"])
+            | (df["close"] < df["res_hlevel_1d"])
+            | (((df["close"] - df["low_min_48_1h"]) / df["low_min_48_1h"]) < (df["hl_pct_change_48_1h"] * 0.38))
+          )
+
           # Logic
           long_entry_logic.append(df["rsi_14"] < 36.0)
           long_entry_logic.append(df["close"] < (df["ema_26"] * 0.988))
@@ -12036,7 +12090,7 @@ class NostalgiaForInfinityX4(IStrategy):
       self.is_futures_mode
       and has_order_tags
       and (not partial_sell)
-      and slice_profit < (-0.7 / trade.leverage)
+      and slice_profit < (-0.65 / trade.leverage)
       and (is_derisk or is_derisk_calc or is_grind_mode)
     ):
       buy_amount = (
@@ -13883,7 +13937,7 @@ class NostalgiaForInfinityX4(IStrategy):
         order_tag = "g1"
         return buy_amount, order_tag, is_derisk
 
-    if self.is_futures_mode and has_order_tags and (not partial_sell) and slice_profit < (-0.7 / trade.leverage):
+    if self.is_futures_mode and has_order_tags and (not partial_sell) and slice_profit < (-0.65 / trade.leverage):
       buy_amount = (
         slice_amount
         * regular_mode_grind_1_stakes[grind_1_sub_grind_count]
@@ -22366,7 +22420,7 @@ class NostalgiaForInfinityX4(IStrategy):
       self.is_futures_mode
       and has_order_tags
       and (not partial_sell)
-      and slice_profit > (0.7 / trade.leverage)
+      and slice_profit > (0.65 / trade.leverage)
       and (is_derisk or is_derisk_calc or is_grind_mode)
     ):
       buy_amount = (
@@ -24190,7 +24244,7 @@ class NostalgiaForInfinityX4(IStrategy):
         order_tag = "g1"
         return buy_amount, order_tag, is_derisk
 
-    if self.is_futures_mode and has_order_tags and (not partial_sell) and slice_profit > (0.7 / trade.leverage):
+    if self.is_futures_mode and has_order_tags and (not partial_sell) and slice_profit > (0.65 / trade.leverage):
       buy_amount = (
         slice_amount
         * regular_mode_grind_1_stakes[grind_1_sub_grind_count]
