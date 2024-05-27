@@ -72,7 +72,7 @@ class NostalgiaForInfinityX4(IStrategy):
   INTERFACE_VERSION = 3
 
   def version(self) -> str:
-    return "v14.1.740"
+    return "v14.1.770"
 
   stoploss = -0.2
 
@@ -191,52 +191,52 @@ class NostalgiaForInfinityX4(IStrategy):
 
   grind_1_stop_grinds_spot = -0.70
   grind_1_profit_threshold_spot = 0.018
-  grind_1_stakes_spot = [0.20, 0.20, 0.20]
+  grind_1_stakes_spot = [0.22, 0.24, 0.26]
   grind_1_sub_thresholds_spot = [-0.10, -0.11, -0.12]
 
   grind_1_stop_grinds_futures = -0.70
   grind_1_profit_threshold_futures = 0.018
-  grind_1_stakes_futures = [0.20, 0.20, 0.20]
+  grind_1_stakes_futures = [0.22, 0.24, 0.26]
   grind_1_sub_thresholds_futures = [-0.10, -0.11, -0.12]
 
   grind_2_stop_grinds_spot = -0.70
   grind_2_profit_threshold_spot = 0.018
-  grind_2_stakes_spot = [0.15, 0.25, 0.30]
+  grind_2_stakes_spot = [0.16, 0.26, 0.32]
   grind_2_sub_thresholds_spot = [-0.10, -0.11, -0.12]
 
   grind_2_stop_grinds_futures = -0.70
   grind_2_profit_threshold_futures = 0.018
-  grind_2_stakes_futures = [0.15, 0.25, 0.30]
+  grind_2_stakes_futures = [0.16, 0.26, 0.32]
   grind_2_sub_thresholds_futures = [-0.10, -0.11, -0.12]
 
   grind_3_stop_grinds_spot = -0.70
   grind_3_profit_threshold_spot = 0.018
-  grind_3_stakes_spot = [0.10, 0.10, 0.10]
+  grind_3_stakes_spot = [0.16, 0.18, 0.20]
   grind_3_sub_thresholds_spot = [-0.10, -0.11, -0.12]
 
   grind_3_stop_grinds_futures = -0.70
   grind_3_profit_threshold_futures = 0.018
-  grind_3_stakes_futures = [0.10, 0.10, 0.10]
+  grind_3_stakes_futures = [0.16, 0.18, 0.20]
   grind_3_sub_thresholds_futures = [-0.10, -0.11, -0.12]
 
   grind_4_stop_grinds_spot = -0.70
   grind_4_profit_threshold_spot = 0.018
-  grind_4_stakes_spot = [0.10, 0.10, 0.10]
+  grind_4_stakes_spot = [0.16, 0.18, 0.20]
   grind_4_sub_thresholds_spot = [-0.10, -0.11, -0.12]
 
   grind_4_stop_grinds_futures = -0.70
   grind_4_profit_threshold_futures = 0.018
-  grind_4_stakes_futures = [0.10, 0.10, 0.10]
+  grind_4_stakes_futures = [0.16, 0.18, 0.20]
   grind_4_sub_thresholds_futures = [-0.10, -0.11, -0.12]
 
   grind_5_stop_grinds_spot = -0.70
   grind_5_profit_threshold_spot = 0.048
-  grind_5_stakes_spot = [0.10, 0.10, 0.10]
+  grind_5_stakes_spot = [0.16, 0.18, 0.20]
   grind_5_sub_thresholds_spot = [-0.10, -0.11, -0.12]
 
   grind_5_stop_grinds_futures = -0.70
   grind_5_profit_threshold_futures = 0.048
-  grind_5_stakes_futures = [0.10, 0.10, 0.10]
+  grind_5_stakes_futures = [0.16, 0.18, 0.20]
   grind_5_sub_thresholds_futures = [-0.10, -0.11, -0.12]
 
   grind_6_stop_grinds_spot = -0.70
@@ -276,23 +276,23 @@ class NostalgiaForInfinityX4(IStrategy):
 
   regular_mode_rebuy_stakes_spot = [0.10, 0.10, 0.10]
   regular_mode_rebuy_thresholds_spot = [-0.12, -0.14, -0.16]
-  regular_mode_grind_1_stakes_spot = [0.20, 0.20, 0.20]
+  regular_mode_grind_1_stakes_spot = [0.22, 0.24, 0.26]
   regular_mode_grind_1_thresholds_spot = [-0.06, -0.12, -0.14]
   regular_mode_grind_1_stop_grinds_spot = -0.20
   regular_mode_grind_1_profit_threshold_spot = 0.018
-  regular_mode_grind_2_stakes_spot = [0.10, 0.15, 0.20]
+  regular_mode_grind_2_stakes_spot = [0.14, 0.20, 0.26]
   regular_mode_grind_2_thresholds_spot = [-0.04, -0.10, -0.12]
   regular_mode_grind_2_stop_grinds_spot = -0.20
   regular_mode_grind_2_profit_threshold_spot = 0.018
-  regular_mode_grind_3_stakes_spot = [0.12, 0.13, 0.14]
+  regular_mode_grind_3_stakes_spot = [0.18, 0.20, 0.22]
   regular_mode_grind_3_thresholds_spot = [-0.03, -0.10, -0.12]
   regular_mode_grind_3_stop_grinds_spot = -0.20
   regular_mode_grind_3_profit_threshold_spot = 0.018
-  regular_mode_grind_4_stakes_spot = [0.12, 0.13, 0.14]
+  regular_mode_grind_4_stakes_spot = [0.18, 0.20, 0.22]
   regular_mode_grind_4_thresholds_spot = [-0.03, -0.10, -0.12]
   regular_mode_grind_4_stop_grinds_spot = -0.20
   regular_mode_grind_4_profit_threshold_spot = 0.018
-  regular_mode_grind_5_stakes_spot = [0.12, 0.13, 0.14]
+  regular_mode_grind_5_stakes_spot = [0.18, 0.20, 0.22]
   regular_mode_grind_5_thresholds_spot = [-0.03, -0.10, -0.12]
   regular_mode_grind_5_stop_grinds_spot = -0.20
   regular_mode_grind_5_profit_threshold_spot = 0.048
@@ -304,23 +304,23 @@ class NostalgiaForInfinityX4(IStrategy):
 
   regular_mode_rebuy_stakes_futures = [0.10, 0.10, 0.10]
   regular_mode_rebuy_thresholds_futures = [-0.12, -0.14, -0.16]
-  regular_mode_grind_1_stakes_futures = [0.20, 0.20, 0.20]
+  regular_mode_grind_1_stakes_futures = [0.22, 0.24, 0.26]
   regular_mode_grind_1_thresholds_futures = [-0.06, -0.12, -0.14]
   regular_mode_grind_1_stop_grinds_futures = -0.20
   regular_mode_grind_1_profit_threshold_futures = 0.018
-  regular_mode_grind_2_stakes_futures = [0.10, 0.15, 0.20]
+  regular_mode_grind_2_stakes_futures = [0.14, 0.20, 0.26]
   regular_mode_grind_2_thresholds_futures = [-0.04, -0.10, -0.12]
   regular_mode_grind_2_stop_grinds_futures = -0.20
   regular_mode_grind_2_profit_threshold_futures = 0.018
-  regular_mode_grind_3_stakes_futures = [0.12, 0.13, 0.14]
+  regular_mode_grind_3_stakes_futures = [0.18, 0.20, 0.22]
   regular_mode_grind_3_thresholds_futures = [-0.03, -0.10, -0.12]
   regular_mode_grind_3_stop_grinds_futures = -0.20
   regular_mode_grind_3_profit_threshold_futures = 0.018
-  regular_mode_grind_4_stakes_futures = [0.12, 0.13, 0.14]
+  regular_mode_grind_4_stakes_futures = [0.18, 0.20, 0.22]
   regular_mode_grind_4_thresholds_futures = [-0.03, -0.10, -0.12]
   regular_mode_grind_4_stop_grinds_futures = -0.20
   regular_mode_grind_4_profit_threshold_futures = 0.018
-  regular_mode_grind_5_stakes_futures = [0.12, 0.13, 0.14]
+  regular_mode_grind_5_stakes_futures = [0.18, 0.20, 0.22]
   regular_mode_grind_5_thresholds_futures = [-0.03, -0.10, -0.12]
   regular_mode_grind_5_stop_grinds_futures = -0.20
   regular_mode_grind_5_profit_threshold_futures = 0.048
@@ -463,150 +463,6 @@ class NostalgiaForInfinityX4(IStrategy):
   buy_protection_params = {}
 
   #############################################################
-
-  entry_10_close_max_12 = DecimalParameter(00.50, 0.95, default=0.80, decimals=2, space="buy", optimize=False)
-  entry_10_close_max_24 = DecimalParameter(00.50, 0.95, default=0.75, decimals=2, space="buy", optimize=False)
-  entry_10_close_max_48 = DecimalParameter(00.50, 0.95, default=0.70, decimals=2, space="buy", optimize=False)
-  entry_10_high_max_24_1h = DecimalParameter(00.40, 0.95, default=0.60, decimals=2, space="buy", optimize=False)
-  entry_10_high_max_24_4h = DecimalParameter(00.40, 0.95, default=0.50, decimals=2, space="buy", optimize=False)
-  entry_10_high_max_6_1d = DecimalParameter(00.30, 0.95, default=0.45, decimals=2, space="buy", optimize=False)
-  entry_10_hl_pct_change_6_1h = DecimalParameter(00.30, 0.90, default=0.80, decimals=2, space="buy", optimize=False)
-  entry_10_hl_pct_change_12_1h = DecimalParameter(00.40, 1.00, default=0.90, decimals=2, space="buy", optimize=False)
-  entry_10_hl_pct_change_24_1h = DecimalParameter(00.50, 1.20, default=0.95, decimals=2, space="buy", optimize=False)
-  entry_10_hl_pct_change_48_1h = DecimalParameter(00.60, 1.60, default=1.00, decimals=2, space="buy", optimize=False)
-  entry_10_sup_level_1h_enabled = CategoricalParameter([True, False], default=False, space="buy", optimize=False)
-  entry_10_res_level_1h_enabled = CategoricalParameter([True, False], default=False, space="buy", optimize=False)
-  entry_10_sup_level_4h_enabled = CategoricalParameter([True, False], default=False, space="buy", optimize=False)
-  entry_10_res_level_4h_enabled = CategoricalParameter([True, False], default=False, space="buy", optimize=False)
-  entry_10_sup_level_1d_enabled = CategoricalParameter([True, False], default=False, space="buy", optimize=False)
-  entry_10_res_level_1d_enabled = CategoricalParameter([True, False], default=False, space="buy", optimize=False)
-  entry_10_ema_200_not_dec_1h_enabled = CategoricalParameter([True, False], default=False, space="buy", optimize=False)
-  entry_10_ema_200_not_dec_4h_enabled = CategoricalParameter([True, False], default=False, space="buy", optimize=False)
-  entry_10_ema_200_not_dec_1d_enabled = CategoricalParameter([True, False], default=False, space="buy", optimize=False)
-  entry_10_not_downtrend_15m_enabled = CategoricalParameter([True, False], default=False, space="buy", optimize=False)
-  entry_10_not_downtrend_1h_enabled = CategoricalParameter([True, False], default=False, space="buy", optimize=False)
-  entry_10_not_downtrend_4h_enabled = CategoricalParameter([True, False], default=False, space="buy", optimize=False)
-  entry_10_not_downtrend_1d_enabled = CategoricalParameter([True, False], default=False, space="buy", optimize=False)
-  entry_10_rsi_3_min = DecimalParameter(00.0, 30.0, default=4.0, decimals=0, space="buy", optimize=False)
-  entry_10_rsi_3_max = DecimalParameter(30.0, 70.0, default=46.0, decimals=0, space="buy", optimize=False)
-  entry_10_rsi_3_15m_min = DecimalParameter(00.0, 36.0, default=6.0, decimals=0, space="buy", optimize=False)
-  entry_10_rsi_3_1h_min = DecimalParameter(00.0, 36.0, default=8.0, decimals=0, space="buy", optimize=False)
-  entry_10_rsi_3_4h_min = DecimalParameter(00.0, 36.0, default=8.0, decimals=0, space="buy", optimize=False)
-  entry_10_rsi_3_1d_min = DecimalParameter(00.0, 30.0, default=8.0, decimals=0, space="buy", optimize=False)
-  entry_10_cti_20_1h_max = DecimalParameter(0.0, 0.99, default=0.90, decimals=2, space="buy", optimize=False)
-  entry_10_rsi_14_1h_max = DecimalParameter(50.0, 90.0, default=80.0, decimals=0, space="buy", optimize=False)
-  entry_10_cti_20_4h_max = DecimalParameter(0.0, 0.99, default=0.90, decimals=2, space="buy", optimize=False)
-  entry_10_rsi_14_4h_max = DecimalParameter(50.0, 90.0, default=80.0, decimals=0, space="buy", optimize=False)
-  entry_10_cti_20_1d_max = DecimalParameter(0.0, 0.99, default=0.95, decimals=2, space="buy", optimize=False)
-  entry_10_rsi_14_1d_max = DecimalParameter(50.0, 90.0, default=80.0, decimals=0, space="buy", optimize=False)
-  entry_10_r_14_1h_max = DecimalParameter(-40.0, -0.0, default=-0.0, decimals=0, space="buy", optimize=False)
-  entry_10_r_14_4h_max = DecimalParameter(-40.0, -0.0, default=-0.0, decimals=0, space="buy", optimize=False)
-  entry_10_r_480_1h_max = DecimalParameter(-40.0, -0.0, default=-0.0, decimals=0, space="buy", optimize=False)
-  entry_10_r_480_4h_max = DecimalParameter(-40.0, -0.0, default=-0.0, decimals=0, space="buy", optimize=False)
-  entry_10_rsi_14_max = DecimalParameter(20.0, 60.0, default=30.0, decimals=0, space="buy", optimize=False)
-  entry_10_ema_offset = DecimalParameter(0.940, 0.972, default=0.952, decimals=3, space="buy", optimize=False)
-  entry_10_ema_open_offset = DecimalParameter(0.0100, 0.0400, default=0.0200, decimals=4, space="buy", optimize=False)
-
-  entry_11_close_max_12 = DecimalParameter(00.50, 0.95, default=0.80, decimals=2, space="buy", optimize=False)
-  entry_11_close_max_24 = DecimalParameter(00.50, 0.95, default=0.75, decimals=2, space="buy", optimize=False)
-  entry_11_close_max_48 = DecimalParameter(00.50, 0.95, default=0.70, decimals=2, space="buy", optimize=False)
-  entry_11_high_max_24_1h = DecimalParameter(00.40, 0.95, default=0.60, decimals=2, space="buy", optimize=False)
-  entry_11_high_max_24_4h = DecimalParameter(00.40, 0.95, default=0.50, decimals=2, space="buy", optimize=False)
-  entry_11_high_max_6_1d = DecimalParameter(00.30, 0.95, default=0.45, decimals=2, space="buy", optimize=False)
-  entry_11_hl_pct_change_6_1h = DecimalParameter(00.30, 0.90, default=0.80, decimals=2, space="buy", optimize=False)
-  entry_11_hl_pct_change_12_1h = DecimalParameter(00.40, 1.00, default=0.90, decimals=2, space="buy", optimize=False)
-  entry_11_hl_pct_change_24_1h = DecimalParameter(00.50, 1.20, default=0.95, decimals=2, space="buy", optimize=False)
-  entry_11_hl_pct_change_48_1h = DecimalParameter(00.60, 1.60, default=1.00, decimals=2, space="buy", optimize=False)
-  entry_11_sup_level_1h_enabled = CategoricalParameter([True, False], default=False, space="buy", optimize=False)
-  entry_11_res_level_1h_enabled = CategoricalParameter([True, False], default=False, space="buy", optimize=False)
-  entry_11_sup_level_4h_enabled = CategoricalParameter([True, False], default=False, space="buy", optimize=False)
-  entry_11_res_level_4h_enabled = CategoricalParameter([True, False], default=False, space="buy", optimize=False)
-  entry_11_sup_level_1d_enabled = CategoricalParameter([True, False], default=False, space="buy", optimize=False)
-  entry_11_res_level_1d_enabled = CategoricalParameter([True, False], default=False, space="buy", optimize=False)
-  entry_11_ema_200_not_dec_1h_enabled = CategoricalParameter([True, False], default=False, space="buy", optimize=False)
-  entry_11_ema_200_not_dec_4h_enabled = CategoricalParameter([True, False], default=False, space="buy", optimize=False)
-  entry_11_ema_200_not_dec_1d_enabled = CategoricalParameter([True, False], default=False, space="buy", optimize=False)
-  entry_11_not_downtrend_15m_enabled = CategoricalParameter([True, False], default=False, space="buy", optimize=False)
-  entry_11_not_downtrend_1h_enabled = CategoricalParameter([True, False], default=False, space="buy", optimize=False)
-  entry_11_not_downtrend_4h_enabled = CategoricalParameter([True, False], default=False, space="buy", optimize=False)
-  entry_11_not_downtrend_1d_enabled = CategoricalParameter([True, False], default=False, space="buy", optimize=False)
-  entry_11_ema_100_over_ema_200_enabled = CategoricalParameter(
-    [True, False], default=True, space="buy", optimize=False
-  )
-  entry_11_ema_12_1h_over_ema_200_1h_enabled = CategoricalParameter(
-    [True, False], default=True, space="buy", optimize=False
-  )
-  entry_11_rsi_3_min = DecimalParameter(00.0, 30.0, default=2.0, decimals=0, space="buy", optimize=False)
-  entry_11_rsi_3_max = DecimalParameter(30.0, 70.0, default=46.0, decimals=0, space="buy", optimize=False)
-  entry_11_rsi_3_15m_min = DecimalParameter(00.0, 36.0, default=16.0, decimals=0, space="buy", optimize=False)
-  entry_11_rsi_3_1h_min = DecimalParameter(00.0, 36.0, default=8.0, decimals=0, space="buy", optimize=False)
-  entry_11_rsi_3_4h_min = DecimalParameter(00.0, 36.0, default=8.0, decimals=0, space="buy", optimize=False)
-  entry_11_rsi_3_1d_min = DecimalParameter(00.0, 30.0, default=8.0, decimals=0, space="buy", optimize=False)
-  entry_11_cti_20_1h_max = DecimalParameter(0.0, 0.99, default=0.95, decimals=2, space="buy", optimize=False)
-  entry_11_rsi_14_1h_max = DecimalParameter(50.0, 90.0, default=85.0, decimals=0, space="buy", optimize=False)
-  entry_11_cti_20_4h_max = DecimalParameter(0.0, 0.99, default=0.95, decimals=2, space="buy", optimize=False)
-  entry_11_rsi_14_4h_max = DecimalParameter(50.0, 90.0, default=85.0, decimals=0, space="buy", optimize=False)
-  entry_11_cti_20_1d_max = DecimalParameter(0.0, 0.99, default=0.95, decimals=2, space="buy", optimize=False)
-  entry_11_rsi_14_1d_max = DecimalParameter(50.0, 90.0, default=85.0, decimals=0, space="buy", optimize=False)
-  entry_11_r_14_1h_max = DecimalParameter(-40.0, -0.0, default=-0.0, decimals=0, space="buy", optimize=False)
-  entry_11_r_14_4h_max = DecimalParameter(-40.0, -0.0, default=-0.0, decimals=0, space="buy", optimize=False)
-  entry_11_r_480_1h_max = DecimalParameter(-40.0, -0.0, default=-0.0, decimals=0, space="buy", optimize=False)
-  entry_11_r_480_4h_max = DecimalParameter(-40.0, -0.0, default=-0.0, decimals=0, space="buy", optimize=False)
-  entry_11_rsi_14_max = DecimalParameter(20.0, 60.0, default=45.0, decimals=0, space="buy", optimize=False)
-  entry_11_cti_20_max = DecimalParameter(-0.99, -0.60, default=-0.50, decimals=2, space="buy", optimize=False)
-  entry_11_ema_open_offset = DecimalParameter(0.0200, 0.0400, default=0.0260, decimals=4, space="buy", optimize=False)
-  entry_11_sma_offset = DecimalParameter(0.940, 0.988, default=0.978, decimals=3, space="buy", optimize=False)
-
-  entry_12_close_max_12 = DecimalParameter(00.50, 0.95, default=0.80, decimals=2, space="buy", optimize=False)
-  entry_12_close_max_24 = DecimalParameter(00.50, 0.95, default=0.75, decimals=2, space="buy", optimize=False)
-  entry_12_close_max_48 = DecimalParameter(00.50, 0.95, default=0.70, decimals=2, space="buy", optimize=False)
-  entry_12_high_max_24_1h = DecimalParameter(00.40, 0.95, default=0.60, decimals=2, space="buy", optimize=False)
-  entry_12_high_max_24_4h = DecimalParameter(00.40, 0.95, default=0.50, decimals=2, space="buy", optimize=False)
-  entry_12_high_max_6_1d = DecimalParameter(00.30, 0.95, default=0.45, decimals=2, space="buy", optimize=False)
-  entry_12_hl_pct_change_6_1h = DecimalParameter(00.30, 0.90, default=0.80, decimals=2, space="buy", optimize=False)
-  entry_12_hl_pct_change_12_1h = DecimalParameter(00.40, 1.00, default=0.90, decimals=2, space="buy", optimize=False)
-  entry_12_hl_pct_change_24_1h = DecimalParameter(00.50, 1.20, default=1.10, decimals=2, space="buy", optimize=False)
-  entry_12_hl_pct_change_48_1h = DecimalParameter(00.60, 1.60, default=1.20, decimals=2, space="buy", optimize=False)
-  entry_12_sup_level_1h_enabled = CategoricalParameter([True, False], default=False, space="buy", optimize=False)
-  entry_12_res_level_1h_enabled = CategoricalParameter([True, False], default=False, space="buy", optimize=False)
-  entry_12_sup_level_4h_enabled = CategoricalParameter([True, False], default=False, space="buy", optimize=False)
-  entry_12_res_level_4h_enabled = CategoricalParameter([True, False], default=False, space="buy", optimize=False)
-  entry_12_sup_level_1d_enabled = CategoricalParameter([True, False], default=False, space="buy", optimize=False)
-  entry_12_res_level_1d_enabled = CategoricalParameter([True, False], default=False, space="buy", optimize=False)
-  entry_12_ema_200_not_dec_1h_enabled = CategoricalParameter([True, False], default=False, space="buy", optimize=False)
-  entry_12_ema_200_not_dec_4h_enabled = CategoricalParameter([True, False], default=False, space="buy", optimize=False)
-  entry_12_ema_200_not_dec_1d_enabled = CategoricalParameter([True, False], default=False, space="buy", optimize=False)
-  entry_12_not_downtrend_15m_enabled = CategoricalParameter([True, False], default=False, space="buy", optimize=False)
-  entry_12_not_downtrend_1h_enabled = CategoricalParameter([True, False], default=False, space="buy", optimize=False)
-  entry_12_not_downtrend_4h_enabled = CategoricalParameter([True, False], default=False, space="buy", optimize=False)
-  entry_12_not_downtrend_1d_enabled = CategoricalParameter([True, False], default=False, space="buy", optimize=False)
-  entry_12_ema_50_1h_over_ema_200_1h_enabled = CategoricalParameter(
-    [True, False], default=True, space="buy", optimize=False
-  )
-  entry_12_rsi_3_min = DecimalParameter(00.0, 30.0, default=2.0, decimals=0, space="buy", optimize=False)
-  entry_12_rsi_3_max = DecimalParameter(30.0, 70.0, default=46.0, decimals=0, space="buy", optimize=False)
-  entry_12_rsi_3_15m_min = DecimalParameter(00.0, 36.0, default=12.0, decimals=0, space="buy", optimize=False)
-  entry_12_rsi_3_1h_min = DecimalParameter(00.0, 36.0, default=20.0, decimals=0, space="buy", optimize=False)
-  entry_12_rsi_3_4h_min = DecimalParameter(00.0, 36.0, default=20.0, decimals=0, space="buy", optimize=False)
-  entry_12_rsi_3_1d_min = DecimalParameter(00.0, 30.0, default=20.0, decimals=0, space="buy", optimize=False)
-  # entry_12_cti_20_1h_min = DecimalParameter(-0.9, -0.0, default=-0.50, decimals=2, space="buy", optimize=False)
-  entry_12_cti_20_1h_max = DecimalParameter(0.0, 0.99, default=0.95, decimals=2, space="buy", optimize=False)
-  entry_12_rsi_14_1h_max = DecimalParameter(50.0, 90.0, default=90.0, decimals=0, space="buy", optimize=False)
-  entry_12_cti_20_4h_max = DecimalParameter(0.0, 0.99, default=0.95, decimals=2, space="buy", optimize=False)
-  entry_12_rsi_14_4h_max = DecimalParameter(50.0, 90.0, default=90.0, decimals=0, space="buy", optimize=False)
-  entry_12_cti_20_1d_max = DecimalParameter(0.0, 0.99, default=0.95, decimals=2, space="buy", optimize=False)
-  entry_12_rsi_14_1d_max = DecimalParameter(50.0, 90.0, default=90.0, decimals=0, space="buy", optimize=False)
-  entry_12_r_14_1h_min = DecimalParameter(-100.0, -70.0, default=-100.0, decimals=0, space="buy", optimize=False)
-  entry_12_r_14_1h_max = DecimalParameter(-40.0, -0.0, default=-0.0, decimals=0, space="buy", optimize=False)
-  entry_12_r_14_4h_min = DecimalParameter(-100.0, -70.0, default=-100.0, decimals=0, space="buy", optimize=False)
-  entry_12_r_14_4h_max = DecimalParameter(-40.0, -0.0, default=-0.0, decimals=0, space="buy", optimize=False)
-  entry_12_r_480_1h_min = DecimalParameter(-100.0, -70.0, default=-100.0, decimals=0, space="buy", optimize=False)
-  entry_12_r_480_1h_max = DecimalParameter(-40.0, -0.0, default=-0.0, decimals=0, space="buy", optimize=False)
-  entry_12_r_480_4h_min = DecimalParameter(-100.0, -70.0, default=-100.0, decimals=0, space="buy", optimize=False)
-  entry_12_r_480_4h_max = DecimalParameter(-40.0, -0.0, default=-0.0, decimals=0, space="buy", optimize=False)
-  entry_12_r_14_max = DecimalParameter(-100.0, 80.0, default=-88.0, decimals=0, space="buy", optimize=False)
-  entry_12_bb_offset = DecimalParameter(0.970, 0.999, default=0.984, decimals=3, space="buy", optimize=False)
-  entry_12_sma_offset = DecimalParameter(0.930, 0.960, default=0.940, decimals=3, space="buy", optimize=False)
 
   entry_24_close_max_12 = DecimalParameter(00.50, 0.95, default=0.80, decimals=2, space="buy", optimize=True)
   entry_24_close_max_24 = DecimalParameter(00.50, 0.95, default=0.75, decimals=2, space="buy", optimize=True)
@@ -3724,7 +3580,7 @@ class NostalgiaForInfinityX4(IStrategy):
           long_entry_logic.append(df["ha_close"] > df["ha_open"])
           long_entry_logic.append((df["ema_26"] - df["ema_12"]) > (df["open"] * 0.020))
 
-        # Condition #4 - Normal mode bull.
+        # Condition #4 - Normal mode (Long).
         if index == 4:
           # Logic
           long_entry_logic.append(df["ema_26"] > df["ema_12"])
@@ -3732,7 +3588,7 @@ class NostalgiaForInfinityX4(IStrategy):
           long_entry_logic.append((df["ema_26"].shift() - df["ema_12"].shift()) > (df["open"] / 100))
           long_entry_logic.append(df["close"] < (df["bb20_2_low"] * 0.996))
 
-        # Condition #5 - Normal mode bull.
+        # Condition #5 - Normal mode (Long).
         if index == 5:
           # Logic
           long_entry_logic.append(df["ema_26"] > df["ema_12"])
@@ -3740,27 +3596,27 @@ class NostalgiaForInfinityX4(IStrategy):
           long_entry_logic.append((df["ema_26"].shift() - df["ema_12"].shift()) > (df["open"] / 100))
           long_entry_logic.append(df["rsi_14"] < 36.0)
 
-        # Condition #6 - Normal mode bull.
+        # Condition #6 - Normal mode (Long).
         if index == 6:
           # Logic
           long_entry_logic.append(df["close"] < (df["ema_26"] * 0.94))
           long_entry_logic.append(df["close"] < (df["bb20_2_low"] * 0.996))
 
-        # Condition #7 Normal mode.
+        # Condition #7 Normal mode (long).
         if index == 7:
           # Logic
           long_entry_logic.append(df["close"] < (df["ema_16"] * 0.974))
           long_entry_logic.append(df["ewo_50_200"] > 2.0)
           long_entry_logic.append(df["rsi_14"] < 30.0)
 
-        # Condition #8 Normal mode.
+        # Condition #8 Normal mode (Long).
         if index == 8:
           # Logic
           long_entry_logic.append(df["close"] < (df["ema_16"] * 0.944))
           long_entry_logic.append(df["ewo_50_200"] < -4.0)
           long_entry_logic.append(df["rsi_14"] < 30.0)
 
-        # Condition #9 - Normal mode.
+        # Condition #9 - Normal mode (Long).
         if index == 9:
           # Logic
           long_entry_logic.append(df["ema_26_15m"] > df["ema_12_15m"])
@@ -3771,31 +3627,28 @@ class NostalgiaForInfinityX4(IStrategy):
         # Condition #10 - Normal mode (Long)
         if index == 10:
           # Logic
-          long_entry_logic.append(df["rsi_14"] < self.entry_10_rsi_14_max.value)
+          long_entry_logic.append(df["rsi_14"] < 30.0)
           long_entry_logic.append(df["ema_26"] > df["ema_12"])
-          long_entry_logic.append((df["ema_26"] - df["ema_12"]) > (df["open"] * self.entry_10_ema_open_offset.value))
+          long_entry_logic.append((df["ema_26"] - df["ema_12"]) > (df["open"] * 0.0200))
           long_entry_logic.append((df["ema_26"].shift() - df["ema_12"].shift()) > (df["open"] / 100.0))
-          long_entry_logic.append(df["close"] < (df["ema_20"] * self.entry_10_ema_offset.value))
+          long_entry_logic.append(df["close"] < (df["ema_20"] * 0.952))
 
         # Condition #11 - Normal mode (Long)
         if index == 11:
           # Logic
-          long_entry_logic.append(df["rsi_14"] < self.entry_11_rsi_14_max.value)
-          long_entry_logic.append(df["cti_20"] < self.entry_11_cti_20_max.value)
+          long_entry_logic.append(df["rsi_14"] < 45.0)
+          long_entry_logic.append(df["cti_20"] < -0.50)
           long_entry_logic.append(df["ema_26"] > df["ema_12"])
-          long_entry_logic.append((df["ema_26"] - df["ema_12"]) > (df["open"] * self.entry_11_ema_open_offset.value))
+          long_entry_logic.append((df["ema_26"] - df["ema_12"]) > (df["open"] * 0.0260))
           long_entry_logic.append((df["ema_26"].shift() - df["ema_12"].shift()) > (df["open"] / 100.0))
-          long_entry_logic.append(df["close"] < (df["sma_30"] * self.entry_11_sma_offset.value))
+          long_entry_logic.append(df["close"] < (df["sma_30"] * 0.978))
 
         # Condition #12 - Normal mode (Long)
         if index == 12:
           # Logic
-          # long_entry_logic.append(df["rsi_14"] > self.entry_12_rsi_14_min.value)
-          # long_entry_logic.append(df["rsi_14"] < self.entry_12_rsi_14_max.value)
-          # long_entry_logic.append(df["cti_20"] < self.entry_12_cti_20_max.value)
-          long_entry_logic.append(df["r_14"] < self.entry_12_r_14_max.value)
-          long_entry_logic.append(df["close"] < (df["bb20_2_low"] * self.entry_12_bb_offset.value))
-          long_entry_logic.append(df["close"] < (df["sma_30"] * self.entry_12_sma_offset.value))
+          long_entry_logic.append(df["r_14"] < -88.0)
+          long_entry_logic.append(df["close"] < (df["bb20_2_low"] * 0.984))
+          long_entry_logic.append(df["close"] < (df["sma_30"] * 0.940))
 
         # Condition #13 - Normal mode (Long)
         if index == 13:
@@ -3805,11 +3658,11 @@ class NostalgiaForInfinityX4(IStrategy):
           long_entry_logic.append((df["ema_26"].shift() - df["ema_12"].shift()) > (df["open"] / 100))
           long_entry_logic.append(df["close"] < (df["bb20_2_low"] * 0.994))
 
-        # Condition #21 - Pump mode bull.
+        # Condition #21 - Pump mode (Long).
         if index == 21:
           # Logic
           long_entry_logic.append(df["ema_26"] > df["ema_12"])
-          long_entry_logic.append((df["ema_26"] - df["ema_12"]) > (df["open"] * 0.016))
+          long_entry_logic.append((df["ema_26"] - df["ema_12"]) > (df["open"] * 0.020))
           long_entry_logic.append((df["ema_26"].shift() - df["ema_12"].shift()) > (df["open"] / 100))
           long_entry_logic.append(df["rsi_14"] < 36.0)
 
@@ -11525,7 +11378,7 @@ class NostalgiaForInfinityX4(IStrategy):
             is_derisk_1_found = True
             is_derisk_1 = True
             derisk_1_order = order
-        elif order_tag in ["p", "r", "d", "dd0", "partial_exit", ""]:
+        elif order_tag in ["p", "r", "d", "dd0", "partial_exit", "force_exit", ""]:
           if order_tag in ["d"]:
             is_derisk_found = True
             is_derisk = True
@@ -12035,6 +11888,14 @@ class NostalgiaForInfinityX4(IStrategy):
                     # and (last_candle["zlma_50_dec_4h"] == False)
                     and (last_candle["close"] < (last_candle["ema_26"] * 0.988))
                   )
+                  or (
+                    (last_candle["rsi_14"] < 36.0)
+                    and (previous_candle["rsi_3"] > 10.0)
+                    and (last_candle["rsi_3_15m"] > 10.0)
+                    and (last_candle["rsi_3_1h"] > 10.0)
+                    and (last_candle["rsi_3_4h"] > 10.0)
+                    and (last_candle["close"] < (last_candle["sma_16"] * 0.988))
+                  )
                 )
               )
               or (
@@ -12092,6 +11953,7 @@ class NostalgiaForInfinityX4(IStrategy):
       and (not partial_sell)
       and slice_profit < (-0.65 / trade.leverage)
       and (is_derisk or is_derisk_calc or is_grind_mode)
+      and (grind_1_sub_grind_count < grind_1_max_sub_grinds)
     ):
       buy_amount = (
         slice_amount * grind_1_stakes[grind_1_sub_grind_count] / (trade.leverage if self.is_futures_mode else 1.0)
@@ -12221,6 +12083,14 @@ class NostalgiaForInfinityX4(IStrategy):
                     # and (last_candle["zlma_50_dec_1h"] == False)
                     # and (last_candle["zlma_50_dec_4h"] == False)
                     and (last_candle["close"] < (last_candle["ema_26"] * 0.988))
+                  )
+                  or (
+                    (last_candle["rsi_14"] < 36.0)
+                    and (previous_candle["rsi_3"] > 10.0)
+                    and (last_candle["rsi_3_15m"] > 10.0)
+                    and (last_candle["rsi_3_1h"] > 10.0)
+                    and (last_candle["rsi_3_4h"] > 10.0)
+                    and (last_candle["close"] < (last_candle["sma_16"] * 0.988))
                   )
                 )
               )
@@ -12378,6 +12248,14 @@ class NostalgiaForInfinityX4(IStrategy):
                     # and (last_candle["zlma_50_dec_4h"] == False)
                     and (last_candle["close"] < (last_candle["ema_26"] * 0.988))
                   )
+                  or (
+                    (last_candle["rsi_14"] < 36.0)
+                    and (previous_candle["rsi_3"] > 10.0)
+                    and (last_candle["rsi_3_15m"] > 10.0)
+                    and (last_candle["rsi_3_1h"] > 10.0)
+                    and (last_candle["rsi_3_4h"] > 10.0)
+                    and (last_candle["close"] < (last_candle["sma_16"] * 0.988))
+                  )
                 )
               )
               or (
@@ -12533,6 +12411,14 @@ class NostalgiaForInfinityX4(IStrategy):
                     # and (last_candle["zlma_50_dec_1h"] == False)
                     # and (last_candle["zlma_50_dec_4h"] == False)
                     and (last_candle["close"] < (last_candle["ema_26"] * 0.988))
+                  )
+                  or (
+                    (last_candle["rsi_14"] < 36.0)
+                    and (previous_candle["rsi_3"] > 10.0)
+                    and (last_candle["rsi_3_15m"] > 10.0)
+                    and (last_candle["rsi_3_1h"] > 10.0)
+                    and (last_candle["rsi_3_4h"] > 10.0)
+                    and (last_candle["close"] < (last_candle["sma_16"] * 0.988))
                   )
                 )
               )
@@ -12695,6 +12581,14 @@ class NostalgiaForInfinityX4(IStrategy):
                     # and (last_candle["zlma_50_dec_4h"] == False)
                     and (last_candle["close"] < (last_candle["ema_26"] * 0.988))
                   )
+                  or (
+                    (last_candle["rsi_14"] < 36.0)
+                    and (previous_candle["rsi_3"] > 10.0)
+                    and (last_candle["rsi_3_15m"] > 10.0)
+                    and (last_candle["rsi_3_1h"] > 10.0)
+                    and (last_candle["rsi_3_4h"] > 10.0)
+                    and (last_candle["close"] < (last_candle["sma_16"] * 0.988))
+                  )
                 )
               )
               or (
@@ -12850,6 +12744,14 @@ class NostalgiaForInfinityX4(IStrategy):
                     # and (last_candle["zlma_50_dec_1h"] == False)
                     # and (last_candle["zlma_50_dec_4h"] == False)
                     and (last_candle["close"] < (last_candle["ema_26"] * 0.988))
+                  )
+                  or (
+                    (last_candle["rsi_14"] < 36.0)
+                    and (previous_candle["rsi_3"] > 10.0)
+                    and (last_candle["rsi_3_15m"] > 10.0)
+                    and (last_candle["rsi_3_1h"] > 10.0)
+                    and (last_candle["rsi_3_4h"] > 10.0)
+                    and (last_candle["close"] < (last_candle["sma_16"] * 0.988))
                   )
                 )
               )
@@ -13898,9 +13800,17 @@ class NostalgiaForInfinityX4(IStrategy):
                 and (last_candle["rsi_3_4h"] > 20.0)
                 and (last_candle["rsi_14"] < 36.0)
                 # and (last_candle["zlma_50_dec_15m"] == False)
-                and (last_candle["zlma_50_dec_1h"] == False)
-                and (last_candle["zlma_50_dec_4h"] == False)
+                # and (last_candle["zlma_50_dec_1h"] == False)
+                # and (last_candle["zlma_50_dec_4h"] == False)
                 and (last_candle["close"] < (last_candle["ema_26"] * 0.988))
+              )
+              or (
+                (last_candle["rsi_14"] < 36.0)
+                and (previous_candle["rsi_3"] > 10.0)
+                and (last_candle["rsi_3_15m"] > 10.0)
+                and (last_candle["rsi_3_1h"] > 10.0)
+                and (last_candle["rsi_3_4h"] > 10.0)
+                and (last_candle["close"] < (last_candle["sma_16"] * 0.986))
               )
             )
           )
@@ -13937,7 +13847,13 @@ class NostalgiaForInfinityX4(IStrategy):
         order_tag = "g1"
         return buy_amount, order_tag, is_derisk
 
-    if self.is_futures_mode and has_order_tags and (not partial_sell) and slice_profit < (-0.65 / trade.leverage):
+    if (
+      self.is_futures_mode
+      and has_order_tags
+      and (not partial_sell)
+      and slice_profit < (-0.65 / trade.leverage)
+      and (grind_1_sub_grind_count < max_grind_1_sub_grinds)
+    ):
       buy_amount = (
         slice_amount
         * regular_mode_grind_1_stakes[grind_1_sub_grind_count]
@@ -14050,9 +13966,17 @@ class NostalgiaForInfinityX4(IStrategy):
                 and (last_candle["rsi_3_4h"] > 20.0)
                 and (last_candle["rsi_14"] < 36.0)
                 # and (last_candle["zlma_50_dec_15m"] == False)
-                and (last_candle["zlma_50_dec_1h"] == False)
-                and (last_candle["zlma_50_dec_4h"] == False)
+                # and (last_candle["zlma_50_dec_1h"] == False)
+                # and (last_candle["zlma_50_dec_4h"] == False)
                 and (last_candle["close"] < (last_candle["ema_26"] * 0.988))
+              )
+              or (
+                (last_candle["rsi_14"] < 36.0)
+                and (previous_candle["rsi_3"] > 10.0)
+                and (last_candle["rsi_3_15m"] > 10.0)
+                and (last_candle["rsi_3_1h"] > 10.0)
+                and (last_candle["rsi_3_4h"] > 10.0)
+                and (last_candle["close"] < (last_candle["sma_16"] * 0.986))
               )
             )
           )
@@ -14181,6 +14105,14 @@ class NostalgiaForInfinityX4(IStrategy):
                 # and (last_candle["zlma_50_dec_4h"] == False)
                 and (last_candle["close"] < (last_candle["ema_26"] * 0.988))
               )
+              or (
+                (last_candle["rsi_14"] < 36.0)
+                and (previous_candle["rsi_3"] > 10.0)
+                and (last_candle["rsi_3_15m"] > 10.0)
+                and (last_candle["rsi_3_1h"] > 10.0)
+                and (last_candle["rsi_3_4h"] > 10.0)
+                and (last_candle["close"] < (last_candle["sma_16"] * 0.986))
+              )
             )
           )
           or (
@@ -14308,6 +14240,14 @@ class NostalgiaForInfinityX4(IStrategy):
                 # and (last_candle["zlma_50_dec_4h"] == False)
                 and (last_candle["close"] < (last_candle["ema_26"] * 0.988))
               )
+              or (
+                (last_candle["rsi_14"] < 36.0)
+                and (previous_candle["rsi_3"] > 10.0)
+                and (last_candle["rsi_3_15m"] > 10.0)
+                and (last_candle["rsi_3_1h"] > 10.0)
+                and (last_candle["rsi_3_4h"] > 10.0)
+                and (last_candle["close"] < (last_candle["sma_16"] * 0.986))
+              )
             )
           )
           or (
@@ -14434,6 +14374,14 @@ class NostalgiaForInfinityX4(IStrategy):
                 # and (last_candle["zlma_50_dec_1h"] == False)
                 # and (last_candle["zlma_50_dec_4h"] == False)
                 and (last_candle["close"] < (last_candle["ema_26"] * 0.988))
+              )
+              or (
+                (last_candle["rsi_14"] < 36.0)
+                and (previous_candle["rsi_3"] > 10.0)
+                and (last_candle["rsi_3_15m"] > 10.0)
+                and (last_candle["rsi_3_1h"] > 10.0)
+                and (last_candle["rsi_3_4h"] > 10.0)
+                and (last_candle["close"] < (last_candle["sma_16"] * 0.986))
               )
             )
           )
@@ -21862,7 +21810,7 @@ class NostalgiaForInfinityX4(IStrategy):
             is_derisk_1_found = True
             is_derisk_1 = True
             derisk_1_order = order
-        elif order_tag in ["p", "r", "d", "dd0", "partial_exit", ""]:
+        elif order_tag in ["p", "r", "d", "dd0", "partial_exit", "force_exit", ""]:
           if order_tag in ["d"]:
             is_derisk_found = True
             is_derisk = True
@@ -22365,6 +22313,14 @@ class NostalgiaForInfinityX4(IStrategy):
                     # and (last_candle["zlma_50_dec_4h"] == False)
                     and (last_candle["close"] > (last_candle["ema_26"] * 1.012))
                   )
+                  or (
+                    (last_candle["rsi_14"] > 64.0)
+                    and (previous_candle["rsi_3"] < 90.0)
+                    and (last_candle["rsi_3_15m"] < 90.0)
+                    and (last_candle["rsi_3_1h"] < 90.0)
+                    and (last_candle["rsi_3_4h"] < 90.0)
+                    and (last_candle["close"] > (last_candle["sma_16"] * 1.012))
+                  )
                 )
               )
               or (
@@ -22422,6 +22378,7 @@ class NostalgiaForInfinityX4(IStrategy):
       and (not partial_sell)
       and slice_profit > (0.65 / trade.leverage)
       and (is_derisk or is_derisk_calc or is_grind_mode)
+      and (grind_1_sub_grind_count < grind_1_max_sub_grinds)
     ):
       buy_amount = (
         slice_amount * grind_1_stakes[grind_1_sub_grind_count] / (trade.leverage if self.is_futures_mode else 1.0)
@@ -22551,6 +22508,14 @@ class NostalgiaForInfinityX4(IStrategy):
                     # and (last_candle["zlma_50_dec_1h"] == False)
                     # and (last_candle["zlma_50_dec_4h"] == False)
                     and (last_candle["close"] > (last_candle["ema_26"] * 1.012))
+                  )
+                  or (
+                    (last_candle["rsi_14"] > 64.0)
+                    and (previous_candle["rsi_3"] < 90.0)
+                    and (last_candle["rsi_3_15m"] < 90.0)
+                    and (last_candle["rsi_3_1h"] < 90.0)
+                    and (last_candle["rsi_3_4h"] < 90.0)
+                    and (last_candle["close"] > (last_candle["sma_16"] * 1.012))
                   )
                 )
               )
@@ -22708,6 +22673,14 @@ class NostalgiaForInfinityX4(IStrategy):
                     # and (last_candle["zlma_50_dec_4h"] == False)
                     and (last_candle["close"] > (last_candle["ema_26"] * 1.012))
                   )
+                  or (
+                    (last_candle["rsi_14"] > 64.0)
+                    and (previous_candle["rsi_3"] < 90.0)
+                    and (last_candle["rsi_3_15m"] < 90.0)
+                    and (last_candle["rsi_3_1h"] < 90.0)
+                    and (last_candle["rsi_3_4h"] < 90.0)
+                    and (last_candle["close"] > (last_candle["sma_16"] * 1.012))
+                  )
                 )
               )
               or (
@@ -22863,6 +22836,14 @@ class NostalgiaForInfinityX4(IStrategy):
                     # and (last_candle["zlma_50_dec_1h"] == False)
                     # and (last_candle["zlma_50_dec_4h"] == False)
                     and (last_candle["close"] > (last_candle["ema_26"] * 1.012))
+                  )
+                  or (
+                    (last_candle["rsi_14"] > 64.0)
+                    and (previous_candle["rsi_3"] < 90.0)
+                    and (last_candle["rsi_3_15m"] < 90.0)
+                    and (last_candle["rsi_3_1h"] < 90.0)
+                    and (last_candle["rsi_3_4h"] < 90.0)
+                    and (last_candle["close"] > (last_candle["sma_16"] * 1.012))
                   )
                 )
               )
@@ -23020,6 +23001,14 @@ class NostalgiaForInfinityX4(IStrategy):
                     # and (last_candle["zlma_50_dec_4h"] == False)
                     and (last_candle["close"] > (last_candle["ema_26"] * 1.012))
                   )
+                  or (
+                    (last_candle["rsi_14"] > 64.0)
+                    and (previous_candle["rsi_3"] < 90.0)
+                    and (last_candle["rsi_3_15m"] < 90.0)
+                    and (last_candle["rsi_3_1h"] < 90.0)
+                    and (last_candle["rsi_3_4h"] < 90.0)
+                    and (last_candle["close"] > (last_candle["sma_16"] * 1.012))
+                  )
                 )
               )
               or (
@@ -23175,6 +23164,14 @@ class NostalgiaForInfinityX4(IStrategy):
                     # and (last_candle["zlma_50_dec_1h"] == False)
                     # and (last_candle["zlma_50_dec_4h"] == False)
                     and (last_candle["close"] > (last_candle["ema_26"] * 1.012))
+                  )
+                  or (
+                    (last_candle["rsi_14"] > 64.0)
+                    and (previous_candle["rsi_3"] < 90.0)
+                    and (last_candle["rsi_3_15m"] < 90.0)
+                    and (last_candle["rsi_3_1h"] < 90.0)
+                    and (last_candle["rsi_3_4h"] < 90.0)
+                    and (last_candle["close"] > (last_candle["sma_16"] * 1.012))
                   )
                 )
               )
@@ -24205,9 +24202,17 @@ class NostalgiaForInfinityX4(IStrategy):
                 and (last_candle["rsi_3_1h"] < 80.0)
                 and (last_candle["rsi_3_4h"] < 80.0)
                 and (last_candle["rsi_14"] > 64.0)
-                and (last_candle["zlma_50_dec_1h"] == True)
-                and (last_candle["zlma_50_dec_4h"] == True)
+                # and (last_candle["zlma_50_dec_1h"] == True)
+                # and (last_candle["zlma_50_dec_4h"] == True)
                 and (last_candle["close"] > (last_candle["ema_26"] * 1.012))
+              )
+              or (
+                (last_candle["rsi_14"] > 64.0)
+                and (previous_candle["rsi_3"] < 90.0)
+                and (last_candle["rsi_3_15m"] < 90.0)
+                and (last_candle["rsi_3_1h"] < 90.0)
+                and (last_candle["rsi_3_4h"] < 90.0)
+                and (last_candle["close"] > (last_candle["sma_16"] * 1.014))
               )
             )
           )
@@ -24244,7 +24249,13 @@ class NostalgiaForInfinityX4(IStrategy):
         order_tag = "g1"
         return buy_amount, order_tag, is_derisk
 
-    if self.is_futures_mode and has_order_tags and (not partial_sell) and slice_profit > (0.65 / trade.leverage):
+    if (
+      self.is_futures_mode
+      and has_order_tags
+      and (not partial_sell)
+      and slice_profit > (0.65 / trade.leverage)
+      and (grind_1_sub_grind_count < max_grind_1_sub_grinds)
+    ):
       buy_amount = (
         slice_amount
         * regular_mode_grind_1_stakes[grind_1_sub_grind_count]
@@ -24323,9 +24334,17 @@ class NostalgiaForInfinityX4(IStrategy):
                 and (last_candle["rsi_3_1h"] < 80.0)
                 and (last_candle["rsi_3_4h"] < 80.0)
                 and (last_candle["rsi_14"] > 64.0)
-                and (last_candle["zlma_50_dec_1h"] == True)
-                and (last_candle["zlma_50_dec_4h"] == True)
+                # and (last_candle["zlma_50_dec_1h"] == True)
+                # and (last_candle["zlma_50_dec_4h"] == True)
                 and (last_candle["close"] > (last_candle["ema_26"] * 1.012))
+              )
+              or (
+                (last_candle["rsi_14"] > 64.0)
+                and (previous_candle["rsi_3"] < 90.0)
+                and (last_candle["rsi_3_15m"] < 90.0)
+                and (last_candle["rsi_3_1h"] < 90.0)
+                and (last_candle["rsi_3_4h"] < 90.0)
+                and (last_candle["close"] > (last_candle["sma_16"] * 1.014))
               )
             )
           )
@@ -24421,6 +24440,14 @@ class NostalgiaForInfinityX4(IStrategy):
                 # and (last_candle["zlma_50_dec_4h"] == True)
                 and (last_candle["close"] > (last_candle["ema_26"] * 1.012))
               )
+              or (
+                (last_candle["rsi_14"] > 64.0)
+                and (previous_candle["rsi_3"] < 90.0)
+                and (last_candle["rsi_3_15m"] < 90.0)
+                and (last_candle["rsi_3_1h"] < 90.0)
+                and (last_candle["rsi_3_4h"] < 90.0)
+                and (last_candle["close"] > (last_candle["sma_16"] * 1.014))
+              )
             )
           )
           or (
@@ -24515,6 +24542,14 @@ class NostalgiaForInfinityX4(IStrategy):
                 # and (last_candle["zlma_50_dec_4h"] == True)
                 and (last_candle["close"] > (last_candle["ema_26"] * 1.012))
               )
+              or (
+                (last_candle["rsi_14"] > 64.0)
+                and (previous_candle["rsi_3"] < 90.0)
+                and (last_candle["rsi_3_15m"] < 90.0)
+                and (last_candle["rsi_3_1h"] < 90.0)
+                and (last_candle["rsi_3_4h"] < 90.0)
+                and (last_candle["close"] > (last_candle["sma_16"] * 1.014))
+              )
             )
           )
           or (
@@ -24608,6 +24643,14 @@ class NostalgiaForInfinityX4(IStrategy):
                 # and (last_candle["zlma_50_dec_1h"] == True)
                 # and (last_candle["zlma_50_dec_4h"] == True)
                 and (last_candle["close"] > (last_candle["ema_26"] * 1.012))
+              )
+              or (
+                (last_candle["rsi_14"] > 64.0)
+                and (previous_candle["rsi_3"] < 90.0)
+                and (last_candle["rsi_3_15m"] < 90.0)
+                and (last_candle["rsi_3_1h"] < 90.0)
+                and (last_candle["rsi_3_4h"] < 90.0)
+                and (last_candle["close"] > (last_candle["sma_16"] * 1.014))
               )
             )
           )
