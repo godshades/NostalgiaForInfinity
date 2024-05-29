@@ -68,7 +68,7 @@ class NostalgiaForInfinityX3(IStrategy):
   INTERFACE_VERSION = 3
 
   def version(self) -> str:
-    return "v13.1.775"
+    return "v13.1.777"
 
   stoploss = -0.99
 
@@ -15497,7 +15497,7 @@ class NostalgiaForInfinityX3(IStrategy):
           long_entry_logic.append(df["cti_20"] < -0.9)
           long_entry_logic.append(df["rsi_14"] < 50.0)
 
-        # Condition #23 - Pump mode.
+        # Condition #23 - Pump mode (Long).
         if index == 23:
           # Protections
           long_entry_logic.append(df["protections_long_global"] == True)
@@ -15505,11 +15505,11 @@ class NostalgiaForInfinityX3(IStrategy):
           long_entry_logic.append(df["global_protections_long_dump"] == True)
           long_entry_logic.append(df["btc_pct_close_max_24_5m"] < 0.03)
           long_entry_logic.append(df["btc_pct_close_max_72_5m"] < 0.03)
-          long_entry_logic.append(df["close_max_12"] < (df["close"] * 1.2))
-          long_entry_logic.append(df["close_max_24"] < (df["close"] * 1.24))
-          long_entry_logic.append(df["close_max_48"] < (df["close"] * 1.3))
-          long_entry_logic.append(df["high_max_24_1h"] < (df["close"] * 1.4))
-          long_entry_logic.append(df["high_max_24_4h"] < (df["close"] * 1.5))
+          long_entry_logic.append(df["close"] > (df["close_max_12"] * 0.82))
+          long_entry_logic.append(df["close"] > (df["close_max_24"] * 0.78))
+          long_entry_logic.append(df["close"] > (df["close_max_48"] * 0.72))
+          long_entry_logic.append(df["close"] > (df["high_max_24_1h"] * 0.60))
+          long_entry_logic.append(df["close"] > (df["high_max_24_4h"] * 0.50))
           long_entry_logic.append(df["hl_pct_change_6_1h"] < 0.5)
           long_entry_logic.append(df["hl_pct_change_12_1h"] < 0.6)
           long_entry_logic.append(df["hl_pct_change_24_1h"] < 0.75)
@@ -15519,74 +15519,6 @@ class NostalgiaForInfinityX3(IStrategy):
 
           long_entry_logic.append(df["cti_20_4h"] < 0.8)
           long_entry_logic.append(df["rsi_14_4h"] < 80.0)
-
-          long_entry_logic.append(
-            (df["not_downtrend_1h"])
-            | (df["rsi_3_15m"] > 12.0)
-            | (df["rsi_3_1h"] > 12.0)
-            | (df["ema_200_dec_4_1d"] == False)
-          )
-          long_entry_logic.append(
-            (df["change_pct_4h"] > -0.0) | (df["change_pct_4h"].shift(48) < 0.02) | (df["cti_20_4h"] < 0.8)
-          )
-          long_entry_logic.append(
-            (df["change_pct_1h"] > -0.02)
-            | (df["change_pct_4h"] > -0.02)
-            | (df["change_pct_4h"].shift(48) < 0.02)
-            | (df["cti_20_1h"] < 0.8)
-          )
-          long_entry_logic.append(
-            (df["change_pct_4h"] > -0.0) | (df["top_wick_pct_4h"] < (abs(df["change_pct_4h"]) * 6.0))
-          )
-          long_entry_logic.append(
-            (df["cti_20_1h"] < 0.5)
-            | (df["cti_20_1d"] < 0.8)
-            | (df["rsi_14_1d"] < 80.0)
-            | (df["ema_200_dec_4_1d"] == False)
-          )
-          long_entry_logic.append(
-            (df["change_pct_4h"] > -0.08)
-            | (df["not_downtrend_1h"])
-            | (df["cti_20_4h"] < 0.7)
-            | (df["ema_200_dec_4_1d"] == False)
-          )
-          long_entry_logic.append(
-            (df["change_pct_1h"] > -0.02)
-            | (df["rsi_3_1h"] > 10.0)
-            | (df["cti_20_4h"] < 0.7)
-            | (df["ema_200_dec_24_4h"] == False)
-          )
-          long_entry_logic.append(
-            (df["change_pct_4h"] > -0.0)
-            | (df["cti_20_1h"] < 0.5)
-            | (df["cti_20_4h"] < 0.7)
-            | (df["ema_200_dec_4_1d"] == False)
-          )
-          long_entry_logic.append(
-            (df["change_pct_1h"] > -0.0)
-            | (df["rsi_3_15m"] > 6.0)
-            | (df["cti_20_1h"] < 0.5)
-            | (df["ema_200_dec_24_4h"] == False)
-          )
-          long_entry_logic.append(
-            (df["change_pct_4h"] > -0.0)
-            | (df["rsi_3_15m"] > 5.0)
-            | (df["cti_20_4h"] < 0.7)
-            | (df["ema_200_dec_24_4h"] == False)
-          )
-          long_entry_logic.append(
-            (df["rsi_3_15m"] > 20.0)
-            | (df["cti_20_4h"] < 0.5)
-            | (df["cti_20_1d"] < 0.7)
-            | (((df["ema_12_4h"] - df["ema_26_4h"]) / df["ema_26_4h"]) < 0.08)
-            | (df["ema_200_dec_4_1d"] == False)
-          )
-          long_entry_logic.append(
-            (df["change_pct_4h"] > -0.02)
-            | (df["rsi_3_15m"] > 26.0)
-            | (df["rsi_3_1h"] > 16.0)
-            | (df["cti_20_4h"] < 0.8)
-          )
 
           # Logic
           long_entry_logic.append(df["ewo_50_200_15m"] > 4.2)
@@ -28987,7 +28919,7 @@ class NostalgiaForInfinityX3(IStrategy):
           or (current_time - timedelta(hours=6) > filled_orders[-1].order_filled_utc)
           or (slice_profit < -0.06)
         )
-        # and ((num_open_grinds == 0) or (slice_profit < -0.03))
+        and ((num_open_grinds == 0) or (slice_profit < -0.03))
         and (
           (last_candle["protections_long_rebuy"] == True)
           and (last_candle["protections_long_global"] == True)
@@ -29124,7 +29056,7 @@ class NostalgiaForInfinityX3(IStrategy):
           or (current_time - timedelta(hours=6) > filled_orders[-1].order_filled_utc)
           or (slice_profit < -0.06)
         )
-        # and ((num_open_grinds == 0) or (slice_profit < -0.03))
+        and ((num_open_grinds == 0) or (slice_profit < -0.03))
         and (
           (last_candle["protections_long_rebuy"] == True)
           and (last_candle["protections_long_global"] == True)
@@ -29270,7 +29202,7 @@ class NostalgiaForInfinityX3(IStrategy):
           or (current_time - timedelta(hours=6) > filled_orders[-1].order_filled_utc)
           or (slice_profit < -0.06)
         )
-        # and ((num_open_grinds == 0) or (slice_profit < -0.03))
+        and ((num_open_grinds == 0) or (slice_profit < -0.03))
         and (
           (last_candle["protections_long_rebuy"] == True)
           and (last_candle["protections_long_global"] == True)
@@ -29472,7 +29404,7 @@ class NostalgiaForInfinityX3(IStrategy):
           or (current_time - timedelta(hours=6) > filled_orders[-1].order_filled_utc)
           or (slice_profit < -0.06)
         )
-        # and ((num_open_grinds == 0) or (slice_profit < -0.03))
+        and ((num_open_grinds == 0) or (slice_profit < -0.03))
         and (
           (last_candle["protections_long_rebuy"] == True)
           and (last_candle["protections_long_global"] == True)
@@ -29642,7 +29574,7 @@ class NostalgiaForInfinityX3(IStrategy):
           or (current_time - timedelta(hours=6) > filled_orders[-1].order_filled_utc)
           or (slice_profit < -0.06)
         )
-        # and ((num_open_grinds == 0) or (slice_profit < -0.03))
+        and ((num_open_grinds == 0) or (slice_profit < -0.03))
         and (
           (last_candle["protections_long_rebuy"] == True)
           and (last_candle["protections_long_global"] == True)
@@ -29812,7 +29744,7 @@ class NostalgiaForInfinityX3(IStrategy):
           or (current_time - timedelta(hours=6) > filled_orders[-1].order_filled_utc)
           or (slice_profit < -0.06)
         )
-        # and ((num_open_grinds == 0) or (slice_profit < -0.03))
+        and ((num_open_grinds == 0) or (slice_profit < -0.03))
         and (
           (last_candle["protections_long_rebuy"] == True)
           and (last_candle["protections_long_global"] == True)
@@ -29982,7 +29914,7 @@ class NostalgiaForInfinityX3(IStrategy):
           or (current_time - timedelta(hours=6) > filled_orders[-1].order_filled_utc)
           or (slice_profit < -0.06)
         )
-        # and ((num_open_grinds == 0) or (slice_profit < -0.03))
+        and ((num_open_grinds == 0) or (slice_profit < -0.03))
         and (
           (last_candle["protections_long_rebuy"] == True)
           and (last_candle["protections_long_global"] == True)
@@ -30152,7 +30084,7 @@ class NostalgiaForInfinityX3(IStrategy):
           or (current_time - timedelta(hours=6) > filled_orders[-1].order_filled_utc)
           or (slice_profit < -0.06)
         )
-        # and ((num_open_grinds == 0) or (slice_profit < -0.03))
+        and ((num_open_grinds == 0) or (slice_profit < -0.03))
         and (
           (last_candle["protections_long_rebuy"] == True)
           and (last_candle["protections_long_global"] == True)
@@ -30328,7 +30260,7 @@ class NostalgiaForInfinityX3(IStrategy):
           or (current_time - timedelta(hours=6) > filled_orders[-1].order_filled_utc)
           or (slice_profit < -0.06)
         )
-        # and ((num_open_grinds == 0) or (slice_profit < -0.03))
+        and ((num_open_grinds == 0) or (slice_profit < -0.03))
         and (
           (last_candle["protections_long_rebuy"] == True)
           and (last_candle["protections_long_global"] == True)
@@ -39913,7 +39845,7 @@ class NostalgiaForInfinityX3(IStrategy):
           or (current_time - timedelta(hours=6) > filled_orders[-1].order_filled_utc)
           or (slice_profit > 0.06)
         )
-        # and ((num_open_grinds == 0) or (slice_profit > 0.03))
+        and ((num_open_grinds == 0) or (slice_profit > 0.03))
         and (
           (last_candle["protections_short_rebuy"] == True)
           and (last_candle["protections_short_global"] == True)
@@ -40050,7 +39982,7 @@ class NostalgiaForInfinityX3(IStrategy):
           or (current_time - timedelta(hours=6) > filled_orders[-1].order_filled_utc)
           or (slice_profit > 0.06)
         )
-        # and ((num_open_grinds == 0) or (slice_profit > 0.03))
+        and ((num_open_grinds == 0) or (slice_profit > 0.03))
         and (
           (last_candle["protections_short_rebuy"] == True)
           and (last_candle["protections_short_global"] == True)
@@ -40196,7 +40128,7 @@ class NostalgiaForInfinityX3(IStrategy):
           or (current_time - timedelta(hours=6) > filled_orders[-1].order_filled_utc)
           or (slice_profit > 0.06)
         )
-        # and ((num_open_grinds == 0) or (slice_profit > 0.03))
+        and ((num_open_grinds == 0) or (slice_profit > 0.03))
         and (
           (last_candle["protections_short_rebuy"] == True)
           and (last_candle["protections_short_global"] == True)
@@ -40398,7 +40330,7 @@ class NostalgiaForInfinityX3(IStrategy):
           or (current_time - timedelta(hours=6) > filled_orders[-1].order_filled_utc)
           or (slice_profit > 0.06)
         )
-        # and ((num_open_grinds == 0) or (slice_profit > 0.03))
+        and ((num_open_grinds == 0) or (slice_profit > 0.03))
         and (
           (last_candle["protections_short_rebuy"] == True)
           and (last_candle["protections_short_global"] == True)
@@ -40568,7 +40500,7 @@ class NostalgiaForInfinityX3(IStrategy):
           or (current_time - timedelta(hours=6) > filled_orders[-1].order_filled_utc)
           or (slice_profit > 0.06)
         )
-        # and ((num_open_grinds == 0) or (slice_profit > 0.03))
+        and ((num_open_grinds == 0) or (slice_profit > 0.03))
         and (
           (last_candle["protections_short_rebuy"] == True)
           and (last_candle["protections_short_global"] == True)
@@ -40738,7 +40670,7 @@ class NostalgiaForInfinityX3(IStrategy):
           or (current_time - timedelta(hours=6) > filled_orders[-1].order_filled_utc)
           or (slice_profit > 0.06)
         )
-        # and ((num_open_grinds == 0) or (slice_profit > 0.03))
+        and ((num_open_grinds == 0) or (slice_profit > 0.03))
         and (
           (last_candle["protections_short_rebuy"] == True)
           and (last_candle["protections_short_global"] == True)
@@ -40908,7 +40840,7 @@ class NostalgiaForInfinityX3(IStrategy):
           or (current_time - timedelta(hours=6) > filled_orders[-1].order_filled_utc)
           or (slice_profit > 0.06)
         )
-        # and ((num_open_grinds == 0) or (slice_profit > 0.03))
+        and ((num_open_grinds == 0) or (slice_profit > 0.03))
         and (
           (last_candle["protections_short_rebuy"] == True)
           and (last_candle["protections_short_global"] == True)
@@ -41078,7 +41010,7 @@ class NostalgiaForInfinityX3(IStrategy):
           or (current_time - timedelta(hours=6) > filled_orders[-1].order_filled_utc)
           or (slice_profit > 0.06)
         )
-        # and ((num_open_grinds == 0) or (slice_profit > 0.03))
+        and ((num_open_grinds == 0) or (slice_profit > 0.03))
         and (
           (last_candle["protections_short_rebuy"] == True)
           and (last_candle["protections_short_global"] == True)
@@ -41254,7 +41186,7 @@ class NostalgiaForInfinityX3(IStrategy):
           or (current_time - timedelta(hours=6) > filled_orders[-1].order_filled_utc)
           or (slice_profit > 0.06)
         )
-        # and ((num_open_grinds == 0) or (slice_profit > 0.03))
+        and ((num_open_grinds == 0) or (slice_profit > 0.03))
         and (
           (last_candle["protections_short_rebuy"] == True)
           and (last_candle["protections_short_global"] == True)
