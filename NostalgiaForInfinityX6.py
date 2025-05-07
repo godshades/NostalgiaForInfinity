@@ -69,7 +69,7 @@ class NostalgiaForInfinityX6(IStrategy):
   INTERFACE_VERSION = 3
 
   def version(self) -> str:
-    return "v16.4.105"
+    return "v16.4.105_1"
 
   stoploss = -0.99
 
@@ -113,7 +113,7 @@ class NostalgiaForInfinityX6(IStrategy):
   num_cores_indicators_calc = 0
 
   # Long Normal mode tags
-  long_normal_mode_tags = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "31", "32", "33", "34"]
+  long_normal_mode_tags = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "31", "32", "33", "34", "35"]
   # Long Pump mode tags
   long_pump_mode_tags = ["21", "22", "23", "24", "25", "26"]
   # Long Quick mode tags
@@ -592,6 +592,7 @@ class NostalgiaForInfinityX6(IStrategy):
     "long_entry_condition_32_enable": True,
     "long_entry_condition_33_enable": True,
     "long_entry_condition_34_enable": True,
+    "long_entry_condition_35_enable": True,
     "long_entry_condition_41_enable": True,
     "long_entry_condition_42_enable": True,
     "long_entry_condition_43_enable": True,
@@ -7884,7 +7885,6 @@ class NostalgiaForInfinityX6(IStrategy):
           long_entry_logic.append(df['WILLR_14'] < -80.0)  # Deeper oversold level
           long_entry_logic.append(df['close'] < (df['EMA_20'] * 0.98))  # Price dipped below EMA
           long_entry_logic.append(df['RSI_14_15m'] < 40.0)  # 15m RSI not too weak
-          long_entry_logic.append(df['volume'] > df['volume'].rolling(20).mean() * 1.2)  # Volume confirmation
 
           # Confirmation/Momentum (5m)
           long_entry_logic.append(df['MFI_14'] < 35.0)  # Avoid over-extended MFI
@@ -7896,7 +7896,6 @@ class NostalgiaForInfinityX6(IStrategy):
           long_entry_logic.append(df["RSI_14"] < 40)  # Stricter oversold
           long_entry_logic.append(df["RSI_3"] < 20)  # Quick dip
           long_entry_logic.append(df["close"] < df["EMA_20"] * 0.985)
-          long_entry_logic.append(df["volume"] > df["volume"].rolling(20).mean() * 1.2)  # Volume filter
 
         if long_entry_condition_index == 33:
           # Daily accumulation
@@ -7925,8 +7924,15 @@ class NostalgiaForInfinityX6(IStrategy):
           # Multi-Timeframe Confirmation
           long_entry_logic.append((df["RSI_3_15m"] < 40.0) | (df["RSI_14_1h"] < 50.0))  # Either 15m or 1h RSI not overbought
 
-          # Volume Filter (New Addition)
-          long_entry_logic.append(df["volume"] > df["volume"].rolling(20).mean() * 1.2)
+        if long_entry_condition_index == 35:
+          long_entry_logic.append(df["RSI_3"] < 22.0)                             # 5m RSI is low
+          long_entry_logic.append(df["EMA_12"] > df["EMA_26"])                     # Short-term EMA above long-term EMA
+          long_entry_logic.append((df["EMA_12"] - df["EMA_26"]) > (df["open"] * 0.018)) # Ensure EMA separation
+          long_entry_logic.append(df["CMF_20"] > 0.03)                             # Chaikin Money Flow indicating accumulation
+          long_entry_logic.append(df["RSI_14_1h"] < 48.0)                           # 1h RSI not overbought
+          long_entry_logic.append(df["WILLR_14_4h"] < -75.0)                         # 4h Williams %R indicates oversold
+          long_entry_logic.append(df["MFI_14_15m"] < 40.0)                           # 15m MFI indicates money inflow potential
+          long_entry_logic.append(df["close"] < (df["BBL_20_2.0"] * 1.005))         # Close near lower Bollinger Band
         ###############################################################################################
 
         # LONG ENTRY CONDITIONS ENDS HERE
