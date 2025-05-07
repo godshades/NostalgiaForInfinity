@@ -113,7 +113,7 @@ class NostalgiaForInfinityX6(IStrategy):
   num_cores_indicators_calc = 0
 
   # Long Normal mode tags
-  long_normal_mode_tags = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13"]
+  long_normal_mode_tags = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "31", "32", "33", "34"]
   # Long Pump mode tags
   long_pump_mode_tags = ["21", "22", "23", "24", "25", "26"]
   # Long Quick mode tags
@@ -588,6 +588,10 @@ class NostalgiaForInfinityX6(IStrategy):
     "long_entry_condition_4_enable": True,
     "long_entry_condition_5_enable": True,
     "long_entry_condition_6_enable": True,
+    "long_entry_condition_31_enable": True,
+    "long_entry_condition_32_enable": True,
+    "long_entry_condition_33_enable": True,
+    "long_entry_condition_34_enable": True,
     "long_entry_condition_41_enable": True,
     "long_entry_condition_42_enable": True,
     "long_entry_condition_43_enable": True,
@@ -2443,6 +2447,7 @@ class NostalgiaForInfinityX6(IStrategy):
     informative_4h["RSI_14_diff"] = informative_4h["RSI_14"] - informative_4h["RSI_14"].shift(1)
     # EMA
     informative_4h["EMA_12"] = pta.ema(informative_4h["close"], length=12)
+    informative_4h["EMA_26"] = pta.ema(informative_4h["close"], length=26)
     informative_4h["EMA_200"] = pta.ema(informative_4h["close"], length=200, fillna=0.0)
     # BB 20 - STD2
     bbands_20_2 = pta.bbands(informative_4h["close"], length=20)
@@ -7869,6 +7874,59 @@ class NostalgiaForInfinityX6(IStrategy):
           long_entry_logic.append(df["BBB_20_2.0_1h"] > 12.0)
           long_entry_logic.append(df["close_max_48"] >= (df["close"] * 1.10))
 
+        if long_entry_condition_index == 31:
+           # Trend/Context (1h & 4h)
+          long_entry_logic.append(df['RSI_14_4h'] < 60.0)  # Avoid overbought 4h RSI
+          long_entry_logic.append(df['CMF_20_4h'] > 0.0)  # Stronger accumulation filter
+
+          # Pullback Signal (5m & 15m)
+          long_entry_logic.append(df['RSI_14'] < 35.0)  # More conservative oversold
+          long_entry_logic.append(df['WILLR_14'] < -80.0)  # Deeper oversold level
+          long_entry_logic.append(df['close'] < (df['EMA_20'] * 0.98))  # Price dipped below EMA
+          long_entry_logic.append(df['RSI_14_15m'] < 40.0)  # 15m RSI not too weak
+          long_entry_logic.append(df['volume'] > df['volume'].rolling(20).mean() * 1.2)  # Volume confirmation
+
+          # Confirmation/Momentum (5m)
+          long_entry_logic.append(df['MFI_14'] < 35.0)  # Avoid over-extended MFI
+
+        if long_entry_condition_index == 32:
+          # 4h strength
+          long_entry_logic.append(df["RSI_14_4h"] > 50)  # Less strict than 55
+          # 5m pullback
+          long_entry_logic.append(df["RSI_14"] < 40)  # Stricter oversold
+          long_entry_logic.append(df["RSI_3"] < 20)  # Quick dip
+          long_entry_logic.append(df["close"] < df["EMA_20"] * 0.985)
+          long_entry_logic.append(df["volume"] > df["volume"].rolling(20).mean() * 1.2)  # Volume filter
+
+        if long_entry_condition_index == 33:
+          # Daily accumulation
+          long_entry_logic.append(df["RSI_14_1d"] > 45)
+          # 4h momentum
+          long_entry_logic.append(df["EMA_12_4h"] > df["EMA_26_4h"])
+          long_entry_logic.append(df["RSI_14_4h"] > 50)
+          # 5m oversold
+          long_entry_logic.append(df["RSI_14"] < 30)
+          long_entry_logic.append(df["STOCHRSIk_14_14_3_3"] < 20)
+          long_entry_logic.append(df["close"] > df["low_min_24_4h"] * 1.05)  # Avoid capitulation
+
+        if long_entry_condition_index == 34:
+          # Long Entry Conditions (Integrated with Original Strategy)
+          long_entry_logic.append(df["num_empty_288"] <= allowed_empty_candles_288)  # Protection from illiquid pairs
+
+          # Confluence of Oversold Indicators
+          long_entry_logic.append((df["RSI_14"] < 35.0) & (df["WILLR_14"] < -75.0))  # RSI and Williams %R both oversold
+          long_entry_logic.append(df["MFI_14"] > 25.0)  # MFI shows buying pressure
+          long_entry_logic.append(df["CMF_20"] > -0.1)  # Chaikin Money Flow not excessively negative
+
+          # Price Action Filters
+          long_entry_logic.append(df["close"] > df["EMA_9"])  # Price above short-term EMA
+          long_entry_logic.append(df["close"] < df["EMA_50"])  # Price still below mid-term EMA (pullback)
+
+          # Multi-Timeframe Confirmation
+          long_entry_logic.append((df["RSI_3_15m"] < 40.0) | (df["RSI_14_1h"] < 50.0))  # Either 15m or 1h RSI not overbought
+
+          # Volume Filter (New Addition)
+          long_entry_logic.append(df["volume"] > df["volume"].rolling(20).mean() * 1.2)
         ###############################################################################################
 
         # LONG ENTRY CONDITIONS ENDS HERE
