@@ -7962,31 +7962,43 @@ class NostalgiaForInfinityX6(IStrategy):
           long_entry_logic.append(df["close"] < (df["EMA_20"] * 0.985)) # Price recently dipped below short-term EMA
           long_entry_logic.append(df["close"] > (df["BBL_20_2.0"] * 0.99)) # Price is not excessively far below the lower Bollinger Band (avoiding freefall)
 
+        # Dip Catcher (Long). Uses Williams %R and CMF confirmation.
         if long_entry_condition_index == 34:
-          # Long Entry Conditions (Integrated with Original Strategy)
-          long_entry_logic.append(df["num_empty_288"] <= allowed_empty_candles_288)  # Protection from illiquid pairs
+          # Protections
+          long_entry_logic.append(df["num_empty_288"] <= allowed_empty_candles_288)
 
-          # Confluence of Oversold Indicators
-          long_entry_logic.append((df["RSI_14"] < 35.0) & (df["WILLR_14"] < -75.0))  # RSI and Williams %R both oversold
-          long_entry_logic.append(df["MFI_14"] > 25.0)  # MFI shows buying pressure
-          long_entry_logic.append(df["CMF_20"] > -0.1)  # Chaikin Money Flow not excessively negative
+          # Context (Higher Timeframes) - Avoid catching falling knives / ensure not extremely overbought
+          long_entry_logic.append(df["RSI_14_1h"] < 65.0)          # 1h RSI not excessively overbought
+          long_entry_logic.append(df["EMA_12_1h"] > df["EMA_26_1h"] * 0.99) # 1h EMA trend mostly intact (allow minor crossover)
+          long_entry_logic.append(df["RSI_14_4h"] < 70.0)          # 4h RSI not overbought
+          long_entry_logic.append(df["CMF_20_15m"] > -0.15)         # 15m CMF: Avoid strong distribution, allow weak distribution or accumulation
 
-          # Price Action Filters
-          long_entry_logic.append(df["close"] > df["EMA_9"])  # Price above short-term EMA
-          long_entry_logic.append(df["close"] < df["EMA_50"])  # Price still below mid-term EMA (pullback)
+          # Entry Timeframe Signal (5m Dip) - Deeper oversold signal confirmed by money flow
+          long_entry_logic.append(df["WILLR_14"] < -85.0)          # Williams %R indicating deep oversold state
+          long_entry_logic.append(df["RSI_14"] < 40.0)             # RSI confirms oversold state
+          long_entry_logic.append(df["CMF_20"] > -0.10)            # CMF not showing strong distribution on entry timeframe
+          long_entry_logic.append(df["close"] < df["EMA_20"] * 0.985) # Price clearly dipped below short-term EMA
 
-          # Multi-Timeframe Confirmation
-          long_entry_logic.append((df["RSI_3_15m"] < 40.0) | (df["RSI_14_1h"] < 50.0))  # Either 15m or 1h RSI not overbought
+          # Additional Filter - Avoid entering right at the bottom of a potential sharp V-reversal candle
+          long_entry_logic.append(df["change_pct"] < 3.0)           # Avoid entering on a very large green candle ( > 3% change)
 
+        # CMF Divergence & Pullback Confirmation
         if long_entry_condition_index == 35:
-          long_entry_logic.append(df["RSI_3"] < 22.0)                             # 5m RSI is low
-          long_entry_logic.append(df["EMA_12"] > df["EMA_26"])                     # Short-term EMA above long-term EMA
-          long_entry_logic.append((df["EMA_12"] - df["EMA_26"]) > (df["open"] * 0.018)) # Ensure EMA separation
-          long_entry_logic.append(df["CMF_20"] > 0.03)                             # Chaikin Money Flow indicating accumulation
-          long_entry_logic.append(df["RSI_14_1h"] < 48.0)                           # 1h RSI not overbought
-          long_entry_logic.append(df["WILLR_14_4h"] < -75.0)                         # 4h Williams %R indicates oversold
-          long_entry_logic.append(df["MFI_14_15m"] < 40.0)                           # 15m MFI indicates money inflow potential
-          long_entry_logic.append(df["close"] < (df["BBL_20_2.0"] * 1.005))         # Close near lower Bollinger Band
+          # Protections (using standard protection from existing code)
+          long_entry_logic.append(df["num_empty_288"] <= allowed_empty_candles_288)
+
+          # Context: Ensure underlying accumulation and avoid extended 4h conditions
+          long_entry_logic.append(df['CMF_20'] > 0.05)               # Chaikin Money Flow indicating accumulation pressure
+          long_entry_logic.append(df['RSI_14_4h'] < 65.0)           # 4h RSI not excessively overbought
+
+          # Trigger: Pullback into potential support zone indicated by oscillators
+          long_entry_logic.append(df['RSI_14'] < 40.0)                # 5m RSI dipped into oversold territory
+          long_entry_logic.append(df['STOCHRSIk_14_14_3_3'] < 30.0) # 5m StochRSI also confirming oversold/pullback
+          long_entry_logic.append(df['close'] < df['EMA_50'])       # Price pulled back below the 50 EMA
+
+          # Confirmation: Signs of recovery/bottoming on 15m timeframe
+          long_entry_logic.append(df['RSI_3_15m'] > df['RSI_3_15m'].shift(1)) # 15m RSI (fast) starting to tick up
+          long_entry_logic.append(df['MFI_14_15m'] < 50.0)          # 15m MFI not showing excessive selling pressure relief yet
         ###############################################################################################
 
         # LONG ENTRY CONDITIONS ENDS HERE
