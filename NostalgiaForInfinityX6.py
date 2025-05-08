@@ -2990,10 +2990,8 @@ class NostalgiaForInfinityX6(IStrategy):
     # Number of empty candles
     df["num_empty_288"] = (df["volume"] <= 0).rolling(window=288, min_periods=288).sum()
     # MACD
-    macd_df = pta.macd(df["close"], fast=12, slow=26, signal=9)
-    df["MACD_12_26_9"] = macd_df["MACD"]
-    df["MACDs_12_26_9"] = macd_df["MACD_Signal"]
-
+    df["MACD_12_26_9"], df["MACDs_12_26_9"], _  = pta.macd(df["close"], fast=12, slow=26, signal=9)
+ 
     # -----------------------------------------------------------------------------------------
 
     # Global protections
