@@ -2924,6 +2924,8 @@ class NostalgiaForInfinityX6(IStrategy):
     #   ],
     # )
     # df.ta.study(base_tf_5m_indicators_pandas_ta, cores=self.num_cores_indicators_calc)
+    # ADX
+    df["ADX_14"] = pta.adx(df["high"], df["low"], df["close"], length=14)['ADX_14']
     # RSI
     df["RSI_3"] = pta.rsi(df["close"], length=3)
     df["RSI_4"] = pta.rsi(df["close"], length=4)
