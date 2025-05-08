@@ -2726,8 +2726,6 @@ class NostalgiaForInfinityX6(IStrategy):
     informative_1h["low_min_6"] = informative_1h["low"].rolling(6).min()
     informative_1h["low_min_12"] = informative_1h["low"].rolling(12).min()
     informative_1h["low_min_24"] = informative_1h["low"].rolling(24).min()
-    # Close
-    informative_1h["close"] = informative_1h["close"]
 
     # Performance logging
     # -----------------------------------------------------------------------------------------
@@ -2991,6 +2989,10 @@ class NostalgiaForInfinityX6(IStrategy):
     df["high_max_48"] = df["high"].rolling(48).max()
     # Number of empty candles
     df["num_empty_288"] = (df["volume"] <= 0).rolling(window=288, min_periods=288).sum()
+    # MACD
+    macd_df = pta.macd(df['close'], fast=12, slow=26, signal=9)
+    df['MACD_12_26_9'] = macd_df['MACD']
+    df['MACDs_12_26_9'] = macd_df['MACD_Signal']
 
     # -----------------------------------------------------------------------------------------
 
@@ -8765,19 +8767,26 @@ class NostalgiaForInfinityX6(IStrategy):
           short_entry_logic.append(df["close"] > df["EMA_50"]) # Price still above mid-term EMA (confirming HTF trend context)
           short_entry_logic.append(df["volume"] > 0) # Basic volume check
 
-        # Normal mode (Short). New Condition - BB Upper Band Touch & RSI Drop
+        # Trend Exhaustion & Breakdown Confirmation
         if short_entry_condition_index == 514:
           # Protections
-          short_entry_logic.append(df["num_empty_288"] <= allowed_empty_candles_288)
+          short_entry_logic.append(df["num_empty_288"] <= allowed_empty_candles_288) # Ensure sufficient market data
 
-          # Higher Timeframe Context: Price near upper limits
-          short_entry_logic.append(df["close_1h"] > df["BBU_20_2.0_1h"] * 0.995) # 1h Price near or above Upper Bollinger Band
-          short_entry_logic.append(df["RSI_14_4h"] > 55.0) # 4h RSI shows some underlying strength (not in a sharp downtrend)
+          # Context: Higher Timeframe Trend Weakening (1h & 4h)
+          short_entry_logic.append(df["RSI_14_4h"] > 55.0)              # 4h RSI indicates recent strength (potential exhaustion)
+          short_entry_logic.append(df["RSI_14_4h"] < df["RSI_14_4h"].shift(1)) # 4h RSI is now declining
+          short_entry_logic.append(df["CMF_20_1h"] < 0.0)                # 1h Chaikin Money Flow showing distribution or weakness
+          short_entry_logic.append(df["ADX_14_1h"] > 20.0)               # 1h ADX indicates a trend was present (either up or down)
 
-          # Lower Timeframe Signal: BB Touch and Reversal Indication
-          short_entry_logic.append(df["close"] > df["BBU_20_2.0"] * 1.000) # 5m Price touches or slightly pierces Upper BB
-          short_entry_logic.append((df["RSI_14"] < 75.0) & (df["RSI_14"].shift(1) > 75.0)) # RSI dropping from overbought
-          short_entry_logic.append(df["WILLR_14"] > -30.0) # Williams %R confirming overbought / high price level
+          # Signal: Shorter Timeframe Breakdown (5m & 15m)
+          short_entry_logic.append(df["MACD_12_26_9"] < df["MACDs_12_26_9"]) # 5m MACD cross below signal (bearish momentum)
+          short_entry_logic.append(df["close"] < df["EMA_20"])                # 5m price breaks below short-term EMA
+          short_entry_logic.append(df["RSI_14"] < 55.0)                       # 5m RSI falling from potentially overbought
+          short_entry_logic.append(df["STOCHRSIk_14_14_3_3_15m"] < 70.0)      # 15m StochRSI moving down from overbought
+
+          # Filters
+          short_entry_logic.append(df["RSI_14_1d"] < 85.0)              # Avoid shorting into extreme daily strength
+          short_entry_logic.append(df['high_max_6'] > df['close'] * 1.015) # Price dropped >1.5% from recent (30min) high
 
         # Condition #509 - Normal mode (Short). New Condition - Trend Exhaustion (ADX) & Resistance
         if short_entry_condition_index == 515:
