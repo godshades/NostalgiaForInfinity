@@ -2726,6 +2726,8 @@ class NostalgiaForInfinityX6(IStrategy):
     informative_1h["low_min_6"] = informative_1h["low"].rolling(6).min()
     informative_1h["low_min_12"] = informative_1h["low"].rolling(12).min()
     informative_1h["low_min_24"] = informative_1h["low"].rolling(24).min()
+    # Close
+    informative_1h["close"] = informative_1h["close"]
 
     # Performance logging
     # -----------------------------------------------------------------------------------------
