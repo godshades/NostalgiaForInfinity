@@ -2986,6 +2986,7 @@ class NostalgiaForInfinityX6(IStrategy):
     df["close_min_12"] = df["close"].rolling(12).min()
     df["close_min_48"] = df["close"].rolling(48).min()
     # Max highs
+    df["high_max_6"] = df["high"].rolling(6).max()
     df["high_max_48"] = df["high"].rolling(48).max()
     # Number of empty candles
     df["num_empty_288"] = (df["volume"] <= 0).rolling(window=288, min_periods=288).sum()
