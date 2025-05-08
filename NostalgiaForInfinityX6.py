@@ -2135,7 +2135,7 @@ class NostalgiaForInfinityX6(IStrategy):
     is_backtest = self.is_backtest_mode()
     is_long_grind_mode = all(c in self.long_grind_mode_tags for c in enter_tags)
     is_short_grind_mode = all(c in self.short_grind_mode_tags for c in enter_tags)
-    is_v2_date = trade.open_date_utc.replace(tzinfo=None) >= datetime(2025, 2, 13) or is_backtest
+    is_v2_date = True
 
     # Rebuy mode
     if not trade.is_short and (
@@ -27291,7 +27291,7 @@ class NostalgiaForInfinityX6(IStrategy):
       and (last_candle["RSI_14"] > (last_candle["RSI_14_1h"] + 24.0))
       # and (current_time - timedelta(minutes=720) > trade.open_date_utc)
       # temporary
-      and (trade.open_date_utc.replace(tzinfo=None) >= datetime(2025, 4, 3) or is_backtest)
+      # and (trade.open_date_utc.replace(tzinfo=None) >= datetime(2025, 4, 3) or is_backtest)
     ):
       return True, f"exit_{mode_name}_stoploss_u_e"
 
@@ -49405,7 +49405,7 @@ class NostalgiaForInfinityX6(IStrategy):
       and (last_candle["RSI_14"] < (last_candle["RSI_14_1h"] - 24.0))
       # and (current_time - timedelta(minutes=720) > trade.open_date_utc)
       # temporary
-      and (trade.open_date_utc.replace(tzinfo=None) >= datetime(2025, 4, 3) or is_backtest)
+      # and (trade.open_date_utc.replace(tzinfo=None) >= datetime(2025, 4, 3) or is_backtest)
     ):
       return True, f"exit_{mode_name}_stoploss_u_e"
 
