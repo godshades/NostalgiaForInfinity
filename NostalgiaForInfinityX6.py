@@ -2990,9 +2990,9 @@ class NostalgiaForInfinityX6(IStrategy):
     # Number of empty candles
     df["num_empty_288"] = (df["volume"] <= 0).rolling(window=288, min_periods=288).sum()
     # MACD
-    macd_df = pta.macd(df['close'], fast=12, slow=26, signal=9)
-    df['MACD_12_26_9'] = macd_df['MACD']
-    df['MACDs_12_26_9'] = macd_df['MACD_Signal']
+    macd_df = pta.macd(df["close"], fast=12, slow=26, signal=9)
+    df["MACD_12_26_9"] = macd_df["MACD"]
+    df["MACDs_12_26_9"] = macd_df["MACD_Signal"]
 
     # -----------------------------------------------------------------------------------------
 
@@ -8786,7 +8786,7 @@ class NostalgiaForInfinityX6(IStrategy):
 
           # Filters
           short_entry_logic.append(df["RSI_14_1d"] < 85.0)              # Avoid shorting into extreme daily strength
-          short_entry_logic.append(df['high_max_6'] > df['close'] * 1.015) # Price dropped >1.5% from recent (30min) high
+          short_entry_logic.append(df["high_max_6"] > df["close"] * 1.015) # Price dropped >1.5% from recent (30min) high
 
         # Condition #509 - Normal mode (Short). New Condition - Trend Exhaustion (ADX) & Resistance
         if short_entry_condition_index == 515:
