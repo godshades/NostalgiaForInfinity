@@ -2622,7 +2622,7 @@ class NostalgiaForInfinityX6(IStrategy):
     informative_1h["RSI_3_diff"] = informative_1h["RSI_3"] - informative_1h["RSI_3"].shift(1)
     informative_1h["RSI_14_diff"] = informative_1h["RSI_14"] - informative_1h["RSI_14"].shift(1)
     # ADX
-    informative_1h["ADX_14"] = pta.adx(informative_1h["high"], informative_1h["low"], informative_1h["close"], length=14)
+    #informative_1h["ADX_14"] = pta.adx(informative_1h["high"], informative_1h["low"], informative_1h["close"], length=14)
     # EMA
     informative_1h["EMA_12"] = pta.ema(informative_1h["close"], length=12)
     informative_1h["EMA_26"] = pta.ema(informative_1h["close"], length=26)
@@ -7926,7 +7926,7 @@ class NostalgiaForInfinityX6(IStrategy):
           # Trend/Context (Higher Timeframes: 1h, 4h)
           long_entry_logic.append(df["EMA_12_4h"] > df["EMA_26_4h"]) # Context: 4h EMAs confirm overall uptrend
           long_entry_logic.append(df["CMF_20_4h"] > 0.05)           # Context: 4h Chaikin Money Flow indicates accumulation/strength
-          long_entry_logic.append(df["ADX_14_1h"] > 25.0)           # Context: 1h ADX shows trend strength (either up or down, filtered by EMAs)
+          #long_entry_logic.append(df["ADX_14_1h"] > 25.0)           # Context: 1h ADX shows trend strength (either up or down, filtered by EMAs)
           long_entry_logic.append(df["EMA_50_1h"] > df["EMA_100_1h"]) # Context: 1h Mid-term EMAs confirm uptrend
 
           # Pullback/Consolidation Signal (Entry Timeframe: 5m)
