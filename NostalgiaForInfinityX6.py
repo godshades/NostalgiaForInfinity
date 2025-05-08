@@ -69,7 +69,7 @@ class NostalgiaForInfinityX6(IStrategy):
   INTERFACE_VERSION = 3
 
   def version(self) -> str:
-    return "v16.4.107"
+    return "v16.4.108"
 
   stoploss = -0.99
 
@@ -1978,10 +1978,11 @@ class NostalgiaForInfinityX6(IStrategy):
         and all(c in (self.long_rebuy_mode_tags + self.long_grind_mode_tags) for c in enter_tags)
       ):
         stake_multiplier = self.rebuy_mode_stake_multiplier
-        # Low stakes, on Binance mostly
-        if (proposed_stake * self.rebuy_mode_stake_multiplier) < min_stake:
-          stake_multiplier = self.rebuy_mode_stake_multiplier_alt
-        return proposed_stake * stake_multiplier
+        stake = proposed_stake * stake_multiplier
+        if stake > min_stake:
+          return stake
+        else:
+          return min_stake
       # Rapid mode
       if all(c in self.long_rapid_mode_tags for c in enter_tags) or (
         any(c in self.long_rapid_mode_tags for c in enter_tags)
@@ -14399,7 +14400,7 @@ class NostalgiaForInfinityX6(IStrategy):
       ):
         return True, f"exit_{mode_name}_d_1_2"
       elif (
-        (last_candle["WILLR_14"] > -5.0)
+        (last_candle["WILLR_14"] > -8.0)
         and (last_candle["STOCHRSIk_14_14_3_3"] > 99.0)
         and (last_candle["CMF_20_1h"] < -0.0)
         and (last_candle["CMF_20_4h"] < -0.0)
@@ -36513,7 +36514,7 @@ class NostalgiaForInfinityX6(IStrategy):
       ):
         return True, f"exit_{mode_name}_d_1_2"
       elif (
-        (last_candle["WILLR_14"] < -95.0)
+        (last_candle["WILLR_14"] < -92.0)
         and (last_candle["STOCHRSIk_14_14_3_3"] < 1.0)
         and (last_candle["CMF_20_1h"] > 0.0)
         and (last_candle["CMF_20_4h"] > 0.0)
