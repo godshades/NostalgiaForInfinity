@@ -144,7 +144,7 @@ class NostalgiaForInfinityX6(IStrategy):
   # Shorting
 
   # Short normal mode tags
-  short_normal_mode_tags = ["500", "501"]
+  short_normal_mode_tags = ["500", "501", "502", "511", "512", "513", "514", "515"]
   # Short Pump mode tags
   short_pump_mode_tags = ["521", "522", "523", "524", "525", "526"]
   # Short Quick mode tags
@@ -617,6 +617,11 @@ class NostalgiaForInfinityX6(IStrategy):
     "short_entry_condition_502_enable": True,
     # "short_entry_condition_503_enable": True,
     # "short_entry_condition_504_enable": True,
+    "short_entry_condition_511_enable": True,
+    "short_entry_condition_512_enable": True,
+    "short_entry_condition_513_enable": True,
+    "short_entry_condition_514_enable": True,
+    "short_entry_condition_515_enable": True,
     # "short_entry_condition_541_enable": True,
     "short_entry_condition_542_enable": True,
     # "short_entry_condition_543_enable": True,
@@ -2980,6 +2985,8 @@ class NostalgiaForInfinityX6(IStrategy):
     # Close min
     df["close_min_12"] = df["close"].rolling(12).min()
     df["close_min_48"] = df["close"].rolling(48).min()
+    # Max highs
+    df["high_max_48"] = df["high"].rolling(48).max()
     # Number of empty candles
     df["num_empty_288"] = (df["volume"] <= 0).rolling(window=288, min_periods=288).sum()
 
@@ -8667,6 +8674,118 @@ class NostalgiaForInfinityX6(IStrategy):
           short_entry_logic.append(df["AROOND_14_15m"] < 25.0)
           short_entry_logic.append(df["close"] > (df["EMA_9"] * 1.058))
           short_entry_logic.append(df["close"] > (df["EMA_20"] * 1.040))
+
+        # Normal mode (Short). Mirrored from Long #5
+        if short_entry_condition_index == 511:
+          # Protections
+          short_entry_logic.append(df["num_empty_288"] <= allowed_empty_candles_288)
+
+          # Mirrored Context/Protections from Long #5 (Applied for Short)
+          # Ensure price isn't already crashing hard or in deep oversold territory on higher TFs
+          short_entry_logic.append((df["RSI_3"] < 97.0) | (df["STOCHRSIk_14_14_3_3_1h"] > 50.0) | (df["STOCHRSIk_14_14_3_3_4h"] > 50.0)) # 5m not extreme, or 1h/4h StochRSI not too low
+          short_entry_logic.append((df["RSI_3"] < 95.0) | (df["STOCHRSIk_14_14_3_3_1h"] > 30.0)) # 5m not extreme, or 1h StochRSI not too low
+          short_entry_logic.append((df["RSI_3_1h"] < 90.0) | (df["RSI_3_4h"] < 90.0) | (df["STOCHRSIk_14_14_3_3_1h"] > 70.0)) # 1h/4h RSI not extreme, or 1h StochRSI not low
+          short_entry_logic.append((df["RSI_3_1h"] < 80.0) | (df["RSI_3_4h"] < 70.0) | (df["AROONU_14_4h"] > 20.0)) # 1h/4h RSI moderate, or 4h Aroon Up not weak
+          short_entry_logic.append((df["RSI_3_15m"] < 97.0) | (df["RSI_3_1h"] < 80.0) | (df["RSI_3_4h"] < 80.0)) # 15m/1h/4h RSI not too extreme
+          short_entry_logic.append((df["RSI_3_15m"] < 97.0) | (df["RSI_3_4h"] < 70.0) | (df["AROONU_14_4h"] > 60.0)) # 15m/4h RSI not extreme, or 4h Aroon Up strong
+          short_entry_logic.append((df["RSI_3_15m"] < 97.0) | (df["STOCHRSIk_14_14_3_3_4h"] > 50.0)) # 15m RSI not extreme or 4h StochRSI not low
+          short_entry_logic.append((df["RSI_3_15m"] < 95.0) | (df["RSI_3_1h"] < 95.0) | (df["RSI_3_4h"] < 75.0)) # Avoid extreme RSI across TFs
+          short_entry_logic.append((df["RSI_3_15m"] < 95.0) | (df["RSI_3_1h"] < 90.0) | (df["STOCHRSIk_14_14_3_3_4h"] > 60.0)) # 15m/1h RSI not extreme or 4h StochRSI not low
+          short_entry_logic.append((df["RSI_3_15m"] < 90.0) | (df["RSI_3_4h"] < 85.0) | (df["AROONU_14_15m"] > 50.0)) # 15m/4h RSI moderate, or 15m Aroon Up strong
+          short_entry_logic.append((df["RSI_3_1h"] < 95.0) | (df["STOCHRSIk_14_14_3_3_4h"] > 50.0)) # 1h RSI not extreme or 4h StochRSI not low
+          short_entry_logic.append((df["RSI_3_4h"] < 90.0) | (df["STOCHRSIk_14_14_3_3_15m"] < 50.0) | (df["AROONU_14_4h"] > 75.0)) # 4h RSI not extreme, or 15m StochRSI not high, or 4h Aroon Up strong
+          short_entry_logic.append((df["RSI_3_1h"] < 80.0) | (df["close"] < (df["low_min_12_4h"] * 1.50)) | (df["close"] > (df["high_max_24_4h"] * 0.80))) # 1h RSI moderate, or not too far from recent high/lows
+          short_entry_logic.append((df["RSI_3_4h"] < 75.0) | (df["close"] < (df["low_min_12_4h"] * 1.50)) | (df["close"] > (df["high_max_24_4h"] * 0.90))) # 4h RSI moderate, or not too far from recent high/lows
+          short_entry_logic.append((df["close"] < (df["low_min_30_1d"] * 1.95))) # Protection against extreme long-term pumps
+
+          # Mirrored Core Logic from Long #5
+          short_entry_logic.append(df["RSI_3"] > 50.0) # 5m RSI relatively high (mirrored from < 50)
+          short_entry_logic.append(df["AROOND_14"] < 25.0) # Aroon Down weak (mirrored from AROONU < 25)
+          short_entry_logic.append(df["AROONU_14"] > 75.0) # Aroon Up strong (mirrored from AROOND > 75)
+          short_entry_logic.append(df["STOCHRSIk_14_14_3_3"] > 70.0) # StochRSI high (mirrored from < 30)
+          short_entry_logic.append(df["EMA_12"] > df["EMA_26"]) # Short-term EMA above long-term (mirrored from EMA_26 > EMA_12)
+          short_entry_logic.append((df["EMA_12"] - df["EMA_26"]) > (df["open"] * 0.030)) # EMA separation indicating uptrend (mirrored from EMA_26 - EMA_12 > ...)
+          short_entry_logic.append((df["EMA_12"].shift() - df["EMA_26"].shift()) > (df["open"] / 100.0)) # Previous EMA separation confirms trend (mirrored)
+          
+        # Normal mode (Short). Mirrored from Long #6
+        if short_entry_condition_index == 512:
+          # Protections
+          short_entry_logic.append(df["num_empty_288"] <= allowed_empty_candles_288)
+
+          # Mirrored Context/Protections from Long #6
+          # Avoid entering short if price just had a massive drop
+          short_entry_logic.append(df["close"] < (df["close_min_12"] * 1.50)) # Mirrored from close > (close_max_12 * 0.50)
+          short_entry_logic.append((df["RSI_3"] < 97.0) | (df["RSI_3_15m"] < 85.0) | (df["AROOND_14_1h"] < 50.0))
+          short_entry_logic.append((df["RSI_3"] < 97.0) | (df["RSI_3_15m"] < 85.0) | (df["STOCHRSIk_14_14_3_3_4h"] > 50.0))
+          short_entry_logic.append((df["RSI_3"] < 97.0) | (df["RSI_3_1h"] < 90.0) | (df["AROONU_14_4h"] > 80.0))
+          short_entry_logic.append((df["RSI_3"] < 97.0) | (df["RSI_3_1h"] < 75.0) | (df["AROOND_14_4h"] < 50.0))
+          short_entry_logic.append((df["RSI_3"] < 97.0) | (df["RSI_3_4h"] < 90.0) | (df["STOCHRSIk_14_14_3_3_1h"] > 90.0))
+          short_entry_logic.append((df["RSI_3"] < 97.0) | (df["RSI_14_15m"] > 70.0))
+          short_entry_logic.append((df["RSI_3"] < 97.0) | (df["STOCHRSIk_14_14_3_3_15m"] > 70.0))
+          short_entry_logic.append((df["RSI_3"] < 97.0) | (df["STOCHRSIk_14_14_3_3_1h"] > 50.0))
+          short_entry_logic.append((df["RSI_3_15m"] < 97.0) | (df["STOCHRSIk_14_14_3_3_1h"] > 70.0))
+          short_entry_logic.append((df["RSI_3_15m"] < 95.0) | (df["RSI_3_1h"] < 85.0) | (df["STOCHRSIk_14_14_3_3_4h"] > 70.0))
+          short_entry_logic.append((df["RSI_3_15m"] < 90.0) | (df["RSI_3_4h"] < 80.0) | (df["AROOND_14_15m"] < 50.0))
+          short_entry_logic.append((df["RSI_3_1h"] < 80.0) | (df["STOCHRSIk_14_14_3_3_1h"] > 60.0))
+          short_entry_logic.append((df["RSI_3_4h"] < 95.0) | (df["AROOND_14_4h"] < 80.0))
+          short_entry_logic.append((df["change_pct_1d"] < 20.0) | (df["change_pct_1d"].shift(288) < 10.0) | (df["ROC_9_1d"] < 100.0) ) # Avoid recent huge daily pump
+          short_entry_logic.append((df["close"] < (df["low_min_30_1d"] * 1.99))) # Protection: Price didn't double in 30d
+
+          # Mirrored Core Logic from Long #6
+          short_entry_logic.append(df["RSI_20"] > df["RSI_20"].shift(1)) # RSI_20 increasing (mirrored)
+          short_entry_logic.append(df["RSI_3"] > 54.0) # RSI_3 high (mirrored from < 46)
+          short_entry_logic.append(df["STOCHRSIk_14_14_3_3"] > 80.0) # StochRSI high (mirrored from < 20)
+          short_entry_logic.append(df["close"] > df["SMA_16"] * 1.048) # Price above SMA_16 (mirrored from < SMA_16 * 0.952)
+
+        # Normal mode (Short). New Condition - HTF Overbought, LTF Weakening
+        if short_entry_condition_index == 513:
+          # Protections
+          short_entry_logic.append(df["num_empty_288"] <= allowed_empty_candles_288)
+
+          # Higher Timeframe Context: Overbought / Strong Uptrend
+          short_entry_logic.append(df["RSI_14_4h"] > 65.0)  # 4h RSI showing strength, nearing overbought
+          short_entry_logic.append(df["EMA_12_1h"] > df["EMA_26_1h"]) # 1h uptrend confirmation
+          short_entry_logic.append(df["CMF_20_4h"] > -0.1) # 4h CMF not strongly negative
+
+          # Lower Timeframe Signal: Weakening Momentum / Reversal Signs
+          short_entry_logic.append(df["RSI_14"] < df["RSI_14"].shift(1)) # 5m RSI starting to decline
+          short_entry_logic.append(df["RSI_14"] > 60.0) # 5m RSI still high, but dropping
+          short_entry_logic.append(df["STOCHRSIk_14_14_3_3"] < df["STOCHRSIk_14_14_3_3"].shift(1)) # 5m StochRSI k declining
+          short_entry_logic.append(df["STOCHRSIk_14_14_3_3"] > 70.0) # 5m StochRSI still overbought but declining
+          short_entry_logic.append(df["close"] > df["EMA_50"]) # Price still above mid-term EMA (confirming HTF trend context)
+          short_entry_logic.append(df["volume"] > 0) # Basic volume check
+
+        # Normal mode (Short). New Condition - BB Upper Band Touch & RSI Drop
+        if short_entry_condition_index == 514:
+          # Protections
+          short_entry_logic.append(df["num_empty_288"] <= allowed_empty_candles_288)
+
+          # Higher Timeframe Context: Price near upper limits
+          short_entry_logic.append(df["close_1h"] > df["BBU_20_2.0_1h"] * 0.995) # 1h Price near or above Upper Bollinger Band
+          short_entry_logic.append(df["RSI_14_4h"] > 55.0) # 4h RSI shows some underlying strength (not in a sharp downtrend)
+
+          # Lower Timeframe Signal: BB Touch and Reversal Indication
+          short_entry_logic.append(df["close"] > df["BBU_20_2.0"] * 1.000) # 5m Price touches or slightly pierces Upper BB
+          short_entry_logic.append((df["RSI_14"] < 75.0) & (df["RSI_14"].shift(1) > 75.0)) # RSI dropping from overbought
+          short_entry_logic.append(df["WILLR_14"] > -30.0) # Williams %R confirming overbought / high price level
+
+        # Condition #509 - Normal mode (Short). New Condition - Trend Exhaustion (ADX) & Resistance
+        if short_entry_condition_index == 515:
+          # Protections
+          short_entry_logic.append(df["num_empty_288"] <= allowed_empty_candles_288)
+
+          # Higher Timeframe Context: Strong trend potentially ending
+          short_entry_logic.append(df["ADX_14_1h"] > 40.0) # 1h ADX indicating strong trend (that might reverse)
+          short_entry_logic.append(df["RSI_14_4h"] > 50.0) # Avoid shorting into strong 4h downtrend
+
+          # Lower Timeframe Signal: Hitting resistance / Volume confirmation lacking
+          short_entry_logic.append(df["ADX_14"] > 35.0) # 5m ADX also high
+          short_entry_logic.append(df["ADX_14"] < df["ADX_14"].shift(1)) # 5m ADX starting to decline (trend weakening)
+          short_entry_logic.append(df["RSI_14"] > 65.0) # RSI still high, confirming recent push
+          short_entry_logic.append(df["close"] > df["high_max_48"] * 0.99) # Price near the high of the last 48 candles (4 hours)
+          short_entry_logic.append(df["OBV"] < df["OBV"].shift(1)) # On Balance Volume declining (volume doesn't support price high)
+          # Alternative: Check CMF
+          short_entry_logic.append(df["CMF_20"] < 0.05) # CMF not showing strong accumulation
 
         # Condition #541 - Quick mode (Short).
         if short_entry_condition_index == 541:
