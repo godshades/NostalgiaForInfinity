@@ -2148,7 +2148,7 @@ class NostalgiaForInfinityX6(IStrategy):
     is_backtest = self.is_backtest_mode()
     is_long_grind_mode = all(c in self.long_grind_mode_tags for c in enter_tags)
     is_short_grind_mode = all(c in self.short_grind_mode_tags for c in enter_tags)
-    is_v2_date = True
+    is_v2_date = False
 
     # Rebuy mode
     if not trade.is_short and (
