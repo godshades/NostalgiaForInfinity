@@ -2145,11 +2145,6 @@ class NostalgiaForInfinityX6(IStrategy):
       enter_tag = trade.enter_tag
     enter_tags = enter_tag.split()
 
-    is_backtest = self.is_backtest_mode()
-    is_long_grind_mode = all(c in self.long_grind_mode_tags for c in enter_tags)
-    is_short_grind_mode = all(c in self.short_grind_mode_tags for c in enter_tags)
-    is_v2_date = False
-
     # Rebuy mode
     if not trade.is_short and (
       all(c in self.long_rebuy_mode_tags for c in enter_tags)
@@ -2174,117 +2169,34 @@ class NostalgiaForInfinityX6(IStrategy):
 
     # Grinding
     elif not trade.is_short:
-      if is_long_grind_mode or not is_v2_date:
-        return self.long_grind_adjust_trade_position(
-          trade,
-          enter_tags,
-          current_time,
-          current_rate,
-          current_profit,
-          min_stake,
-          max_stake,
-          current_entry_rate,
-          current_exit_rate,
-          current_entry_profit,
-          current_exit_profit,
-        )
-      elif any(
-        c
-        in (
-          self.long_normal_mode_tags
-          + self.long_pump_mode_tags
-          + self.long_quick_mode_tags
-          + self.long_mode_tags
-          + self.long_rapid_mode_tags
-          + self.long_top_coins_mode_tags
-          + self.long_scalp_mode_tags
-        )
-        for c in enter_tags
-      ) or not any(
-        c
-        in (
-          self.long_normal_mode_tags
-          + self.long_pump_mode_tags
-          + self.long_quick_mode_tags
-          + self.long_rebuy_mode_tags
-          + self.long_mode_tags
-          + self.long_rapid_mode_tags
-          + self.long_grind_mode_tags
-          + self.long_top_coins_mode_tags
-          + self.long_scalp_mode_tags
-        )
-        for c in enter_tags
-      ):
-        return self.long_grind_adjust_trade_position_v2(
-          trade,
-          enter_tags,
-          current_time,
-          current_rate,
-          current_profit,
-          min_stake,
-          max_stake,
-          current_entry_rate,
-          current_exit_rate,
-          current_entry_profit,
-          current_exit_profit,
-        )
+      return self.long_grind_adjust_trade_position_v2(
+        trade,
+        enter_tags,
+        current_time,
+        current_rate,
+        current_profit,
+        min_stake,
+        max_stake,
+        current_entry_rate,
+        current_exit_rate,
+        current_entry_profit,
+        current_exit_profit,
+      )
 
     elif trade.is_short:
-      if is_short_grind_mode or not is_v2_date:
-        return self.short_grind_adjust_trade_position(
-          trade,
-          enter_tags,
-          current_time,
-          current_rate,
-          current_profit,
-          min_stake,
-          max_stake,
-          current_entry_rate,
-          current_exit_rate,
-          current_entry_profit,
-          current_exit_profit,
-        )
-      else:
-        if any(
-          c
-          in (
-            self.short_normal_mode_tags
-            + self.short_pump_mode_tags
-            + self.short_quick_mode_tags
-            + self.short_mode_tags
-            + self.short_rapid_mode_tags
-            + self.short_top_coins_mode_tags
-            + self.short_scalp_mode_tags
-          )
-          for c in enter_tags
-        ) or not any(
-          c
-          in (
-            self.short_normal_mode_tags
-            + self.short_pump_mode_tags
-            + self.short_quick_mode_tags
-            + self.short_rebuy_mode_tags
-            + self.short_mode_tags
-            + self.short_rapid_mode_tags
-            + self.short_grind_mode_tags
-            + self.short_top_coins_mode_tags
-            + self.short_scalp_mode_tags
-          )
-          for c in enter_tags
-        ):
-          return self.short_grind_adjust_trade_position_v2(
-            trade,
-            enter_tags,
-            current_time,
-            current_rate,
-            current_profit,
-            min_stake,
-            max_stake,
-            current_entry_rate,
-            current_exit_rate,
-            current_entry_profit,
-            current_exit_profit,
-          )
+      return self.short_grind_adjust_trade_position_v2(
+        trade,
+        enter_tags,
+        current_time,
+        current_rate,
+        current_profit,
+        min_stake,
+        max_stake,
+        current_entry_rate,
+        current_exit_rate,
+        current_entry_profit,
+        current_exit_profit,
+      )
 
     return None
 
