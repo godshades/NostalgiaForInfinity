@@ -622,7 +622,7 @@ class NostalgiaForInfinityX6(IStrategy):
     # "short_entry_condition_503_enable": True,
     # "short_entry_condition_504_enable": True,
     "short_entry_condition_511_enable": True,
-    "short_entry_condition_512_enable": True,
+    "short_entry_condition_512_enable": False,
     "short_entry_condition_513_enable": False,
     "short_entry_condition_514_enable": True,
     "short_entry_condition_515_enable": True,
