@@ -5,7 +5,7 @@ MAIN_DATA_DIRECTORY="user_data/data"
 # HELPER_TIME_FRAMES="15m 1h 4h 1d"
 # TRADING_MODE="spot"
 # EXCHANGE="binance"
-URL="https://github.com/DigiTuccar/HistoricalDataForTradeBacktest.git"
+URL="https://github.com/iterativv/NostalgiaForInfinityData.git"
 
 rm PAIRS_FOR_DOWNLOAD.txt
 # docker run -v ".:/running_config" --rm --env-file .github/workflows/scripts/ci-proxy.env \
@@ -18,7 +18,7 @@ jq -r .exchange.pair_whitelist[] configs/pairlist-backtest-static-$EXCHANGE-$TRA
 
 if [[ -L $MAIN_DATA_DIRECTORY ]]; then
     echo "###############################################"
-    echo "$MAIN_DATA_DIRECTORY exists on your filesyste as a link. We will delete it for Github CI Workflow"
+    echo "$MAIN_DATA_DIRECTORY exists on your filesystem as a link. We will delete it for Github CI Workflow"
     echo "###############################################"
     rm -rf $MAIN_DATA_DIRECTORY
 else
@@ -43,13 +43,13 @@ git clone --filter=blob:none --no-checkout --depth 1 --sparse $URL $MAIN_DATA_DI
 git -C $MAIN_DATA_DIRECTORY sparse-checkout reapply --no-cone
 
 echo "Fetching necessary Timeframe Data"
-
+data_necessary_timerange="${TIMERANGE[*]}"
 for data_necessary_exchange in ${EXCHANGE[*]}; do
     for data_necessary_market_type in ${TRADING_MODE[*]}; do
         for data_necessary_timeframe in ${TIMEFRAME[*]}; do
             echo
             echo "--------------------------------------------------------------------------------------------------------"
-            echo "# Exchange: $data_necessary_exchange      Market Type: $data_necessary_market_type      Time Frame: $data_necessary_timeframe"
+            echo "# Exchange: $data_necessary_exchange      Market Type: $data_necessary_market_type      Time Frame: $data_necessary_timeframe     Timerange: $data_necessary_timerange"
             echo "--------------------------------------------------------------------------------------------------------"
             echo
 
@@ -78,7 +78,7 @@ for data_necessary_exchange in ${EXCHANGE[*]}; do
         for data_necessary_timeframe in ${HELPER_TIME_FRAMES[*]}; do
             echo
             echo "--------------------------------------------------------------------------------------------------------"
-            echo "# Exchange: $data_necessary_exchange      Market Type: $data_necessary_market_type      Time Frame: $data_necessary_timeframe"
+            echo "# Exchange: $data_necessary_exchange      Market Type: $data_necessary_market_type      Time Frame: $data_necessary_timeframe     Timerange: $data_necessary_timerange"
             echo "--------------------------------------------------------------------------------------------------------"
             echo
 
