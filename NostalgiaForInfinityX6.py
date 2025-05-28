@@ -24,7 +24,7 @@ class NostalgiaForInfinityX6(IStrategy):
   INTERFACE_VERSION = 3
 
   def version(self) -> str:
-    return "v16.5.44"
+    return "v16.5.54"
 
   stoploss = -0.99
 
@@ -527,7 +527,7 @@ class NostalgiaForInfinityX6(IStrategy):
   profit_max_thresholds = [0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.05, 0.05]
 
   # Max allowed buy "slippage", how high to buy on the candle
-  max_slippage = 0.012
+  max_slippage = 0.005
 
   # BTC/ETH stakes
   btc_stakes = ["BTC", "ETH"]
@@ -2841,6 +2841,7 @@ class NostalgiaForInfinityX6(IStrategy):
     df["SMA_16"] = pta.sma(df["close"], length=16)
     df["SMA_21"] = pta.sma(df["close"], length=21)
     df["SMA_30"] = pta.sma(df["close"], length=30)
+    df["SMA_200"] = pta.sma(df["close"], length=200)
     # BB 20 - STD2
     bbands_20_2 = pta.bbands(df["close"], length=20)
     df["BBL_20_2.0"] = bbands_20_2["BBL_20_2.0"] if isinstance(bbands_20_2, pd.DataFrame) else np.nan
@@ -5049,6 +5050,10 @@ class NostalgiaForInfinityX6(IStrategy):
           short_entry_logic.append((df["RSI_3_1h"] < 85.0) | (df["AROONU_14_4h"] > 80.0) | (df["RSI_14_1d"] > 40.0))
           # 4h up move, 1d low
           short_entry_logic.append((df["RSI_3_4h"] < 95.0) | (df["RSI_14_1d"] > 40.0))
+          # 4h down move, 15m still not high enough, 1d low
+          short_entry_logic.append(
+            (df["RSI_3_4h"] < 95.0) | (df["STOCHRSIk_14_14_3_3_15m"] > 80.0) | (df["AROOND_14_1d"] < 75.0)
+          )
           # 4h up move, 15m low
           short_entry_logic.append((df["RSI_3_4h"] < 90.0) | (df["STOCHRSIk_14_14_3_3_15m"] > 45.0))
           # 4h up move, 15m low
