@@ -1342,15 +1342,15 @@ class CombinedStrategy(IStrategy):
                     return None
         return None
         
-  def leverage(
-    self,
-    pair: str,
-    current_time: datetime,
-    current_rate: float,
-    proposed_leverage: float,
-    max_leverage: float,
-    entry_tag: Optional[str],
-    side: str,
-    **kwargs,
-  ) -> float:
-    return 3.0
+    def leverage(
+        self,
+        pair: str,
+        current_time: datetime,
+        current_rate: float,
+        proposed_leverage: float,
+        max_leverage: float,
+        entry_tag: Optional[str],
+        side: str,
+        **kwargs,
+    ) -> float:
+        return 3.0
