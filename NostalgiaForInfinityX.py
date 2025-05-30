@@ -1018,7 +1018,6 @@ class CombinedStrategy(IStrategy):
             (dataframe['volume'] > 0),
             'exit_long' # Changed from 'sell' to 'exit_long'
         ] = 1 # Changed from 0 to 1 to signal an exit
-        dataframe.loc[conditions_above, 'exit_tag'] = 'exit_long_fisher_ha_ns53'
         
         # Re-evaluating newstrategy53's `populate_exit_trend`:
         # `dataframe.loc[..., 'sell'] = 0` (where 'sell' is an alias for 'exit_long' if not shorting)
