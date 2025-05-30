@@ -216,7 +216,7 @@ def pmax(df, period, multiplier, length, MAtype, src):
     return pm_series, Series(pmx_np, index=df.index)
 
 
-class CombinedStrategy(IStrategy):
+class Gemini(IStrategy):
     INTERFACE_VERSION = 3 # From ZaratustraV13, newstrategy53 doesn't specify but 3 is current
 
     # Strategy Parameters from ZaratustraV13 & newstrategy53 (to be merged/chosen)
