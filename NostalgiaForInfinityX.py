@@ -307,62 +307,25 @@ class Gemini(IStrategy):
     
     
     
-    def custom_sell(self, pair: str, trade: 'Trade', current_time: 'datetime', current_rate: float, current_profit: float, **kwargs):
+    def custom_exit(self, pair: str, trade: 'Trade', current_time: 'datetime', current_rate: float, current_profit: float, **kwargs):
         dataframe, _ = self.dp.get_analyzed_dataframe(pair, self.timeframe)
         last_candle = dataframe.iloc[-1].squeeze()
         filled_buys = trade.select_filled_orders('buy')
         count_of_buys = len(filled_buys)
 
-
-
-
-
-
-
-
         if (last_candle is not None):
-
-
-
-
-
-
-
-
-
-
-
-
-
             if (current_profit > self.sell_trail_profit_min_1.value) & (current_profit < self.sell_trail_profit_max_1.value) & (((trade.max_rate - trade.open_rate) / 100) > (current_profit + self.sell_trail_down_1.value)):
                 return 'trail_target_1'
             elif (current_profit > self.sell_trail_profit_min_2.value) & (current_profit < self.sell_trail_profit_max_2.value) & (((trade.max_rate - trade.open_rate) / 100) > (current_profit + self.sell_trail_down_2.value)):
                 return 'trail_target_2'
             elif (current_profit > 3) & (last_candle['rsi'] > 85):
-                 return 'RSI-85 target'
-
-
-
-
-        
-
-
-   
-            
+                 return 'RSI-85 target'            
             if (current_profit > 0) & (count_of_buys < 4) & (last_candle['close'] > last_candle['hma_50']) & (last_candle['close'] > (last_candle[f'ma_sell_{self.base_nb_candles_sell.value}'] * self.high_offset_2.value)) & (last_candle['rsi']>50) & (last_candle['volume'] > 0) & (last_candle['rsi_fast'] > last_candle['rsi_slow']):
                 return 'sell signal1'
             if (current_profit > 0) & (count_of_buys >= 4) & (last_candle['close'] > last_candle['hma_50'] * 1.01) & (last_candle['close'] > (last_candle[f'ma_sell_{self.base_nb_candles_sell.value}'] * self.high_offset_2.value)) & (last_candle['rsi']>50) & (last_candle['volume'] > 0) & (last_candle['rsi_fast'] > last_candle['rsi_slow']):
                 return 'sell signal1 * 1.01'
             if (current_profit > 0) & (last_candle['close'] > last_candle['hma_50']) & (last_candle['close'] > (last_candle[f'ma_sell_{self.base_nb_candles_sell.value}'] * self.high_offset.value)) &  (last_candle['volume'] > 0) & (last_candle['rsi_fast'] > last_candle['rsi_slow']):
-                return 'sell signal2'
-
-                return 'sell stoploss1'
-
-            
-
-
-            
-            
+                return 'sell signal2'           
             if (    (current_profit < self.sell_deadfish_profit.value)
                 and (last_candle['close'] < last_candle['ema_200'])
                 and (last_candle['bb_width'] < self.sell_deadfish_bb_width.value)
@@ -380,9 +343,6 @@ class Gemini(IStrategy):
         SL_1 = self.pSL_1.value
         PF_2 = self.pPF_2.value
         SL_2 = self.pSL_2.value
-
-
-
 
         if current_profit > PF_2:
             sl_profit = SL_2 + (current_profit - PF_2)
