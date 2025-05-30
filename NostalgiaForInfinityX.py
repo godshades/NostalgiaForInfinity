@@ -216,7 +216,7 @@ def pmax(df, period, multiplier, length, MAtype, src):
     return pm_series, Series(pmx_np, index=df.index)
 
 
-class Gemini(IStrategy):
+class CombinedStrategy(IStrategy):
     INTERFACE_VERSION = 3 # From ZaratustraV13, newstrategy53 doesn't specify but 3 is current
 
     # Strategy Parameters from ZaratustraV13 & newstrategy53 (to be merged/chosen)
@@ -486,7 +486,7 @@ class Gemini(IStrategy):
         
         # Let's use merge_informative_pair for BTC data as well for consistency and robustness
         btc_informative = self.dp.get_pair_dataframe(pair="BTC/USDT", timeframe=info_tf_btc)
-        dataframe = merge_informative_pair(dataframe, btc_informative, self.timeframe, info_tf_btc, ffill=True, suffix='_btc')
+        dataframe = merge_informative_pair(dataframe, btc_informative, self.timeframe, info_tf_btc, ffill=True)
 
         # Now use the suffixed columns, e.g., dataframe['close_btc']
         # If a 1-candle shift is desired for specific BTC signals (as newstrategy53's .shift(1) implied):
@@ -705,7 +705,7 @@ class Gemini(IStrategy):
         informative_1h['r_84_inf'] = williams_r(informative_1h, period=84) # Renamed
         informative_1h['cti_40_inf'] = pta.cti(informative_1h["close"], length=40) # Renamed
         
-        dataframe = merge_informative_pair(dataframe, informative_1h, self.timeframe, inf_tf_1h, ffill=True, suffix='_1h')
+        dataframe = merge_informative_pair(dataframe, informative_1h, self.timeframe, inf_tf_1h, ffill=True)
         # Note: Suffixing here means columns become e.g. 'sup_level_1h', 'roc_1h', 'bb_width_1h' etc.
         # This is good. newstrategy53 already expected this for some (e.g. 'roc_1h', 'bb_width_1h').
         # I've pre-suffixed some informative calculations (e.g. 'roc_inf') before the merge.
@@ -738,7 +738,7 @@ class Gemini(IStrategy):
         informative_1h_clean['r_84'] = williams_r(informative_1h_clean, period=84)
         informative_1h_clean['cti_40'] = pta.cti(informative_1h_clean["close"], length=40)
         
-        dataframe = merge_informative_pair(dataframe, informative_1h_clean, self.timeframe, inf_tf_1h, ffill=True, suffix='_1h')
+        dataframe = merge_informative_pair(dataframe, informative_1h_clean, self.timeframe, inf_tf_1h, ffill=True)
         # Now columns will be: rocr_1h, rsi_14_1h, cmf_calc_1h, sup_level_1h, roc_1h, r_480_1h, bb_width_1h, r_84_1h, cti_40_1h.
         # This matches the naming convention expected by newstrategy53's entry logic.
 
@@ -1342,15 +1342,15 @@ class Gemini(IStrategy):
                     return None
         return None
         
-    def leverage(
-      self,
-      pair: str,
-      current_time: datetime,
-      current_rate: float,
-      proposed_leverage: float,
-      max_leverage: float,
-      entry_tag: Optional[str],
-      side: str,
-      **kwargs,
-    ) -> float:
-      return 3.0
+  def leverage(
+    self,
+    pair: str,
+    current_time: datetime,
+    current_rate: float,
+    proposed_leverage: float,
+    max_leverage: float,
+    entry_tag: Optional[str],
+    side: str,
+    **kwargs,
+  ) -> float:
+    return 3.0
