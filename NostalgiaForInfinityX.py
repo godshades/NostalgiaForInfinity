@@ -158,7 +158,6 @@ class Gemini(IStrategy):
     }
 
     INTERFACE_VERSION = 3
-    can_short = True
     exit_profit_only = True
     
     minimal_roi = {
@@ -189,18 +188,10 @@ class Gemini(IStrategy):
     process_only_new_candles = True
     startup_candle_count = 168
 
-    order_types = {
-        'entry': 'market',
-        'exit': 'market',
-        'emergencyexit': 'market',
-        'forceentry': "market",
-        'forceexit': 'market',
-        'stoploss': 'market',
-        'stoploss_on_exchange': False,
-
-        'stoploss_on_exchange_interval': 60,
-        'stoploss_on_exchange_limit_ratio': 0.99
-    }
+    def __init__(self, config: dict) -> None:
+        super().__init__(config)
+        if ("trading_mode" in self.config) and (self.config["trading_mode"] in ["futures", "margin"]):
+            self.can_short = True
     
     def is_support(self, row_data) -> bool:
         conditions = []
