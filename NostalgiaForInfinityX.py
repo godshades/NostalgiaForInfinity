@@ -744,6 +744,14 @@ class Gemini(IStrategy):
             (dataframe['volume'] > 0),
             'exit_long'
         ] = 0
+        
+        dataframe.loc[
+            (dataframe['ha_close'] > dataframe['ha_open']) &
+            (dataframe['ha_close'].shift(1) > dataframe['ha_open'].shift(1)) & # Previous HA was also green
+            (dataframe['ha_open'].shift(1) > dataframe['ha_close'].shift(2)) & # Previous HA opened above prior HA close (gap up or strong green)
+            (dataframe['volume'] > 0),
+            'exit_short'
+        ] = 0
 
         return dataframe
     
@@ -765,7 +773,7 @@ class Gemini(IStrategy):
             return (dataframe['open'].rolling(length).max() - dataframe['close']) / dataframe['close']
         
     def leverage(self, pair: str, current_time: "datetime", current_rate: float, proposed_leverage: float, max_leverage: float, side: str, **kwargs,) -> float:
-        return 3
+        return 6
 
     def adjust_trade_position(self, trade: Trade, current_time: datetime,
                               current_rate: float, current_profit: float, min_stake: float,
