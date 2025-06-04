@@ -4,6 +4,7 @@ import pathlib
 import rapidjson
 import numpy as np
 import talib.abstract as ta
+from technical import qtpylib
 import pandas as pd
 import pandas_ta as pta
 from freqtrade.strategy.interface import IStrategy
@@ -2816,7 +2817,13 @@ class NostalgiaForInfinityX6(IStrategy):
     #     {"kind": "obv"},
     #   ],
     # )
-    # df.ta.study(base_tf_5m_indicators_pandas_ta, cores=self.num_cores_indicators_calc)
+# df.ta.study(base_tf_5m_indicators_pandas_ta, cores=self.num_cores_indicators_calc)
+    df['dx']  = ta.DX(df)
+    df['adx'] = ta.ADX(df)
+    df['pdi'] = ta.PLUS_DI(df)
+    df['mdi'] = ta.MINUS_DI(df)
+    df[['bbl', 'bbm', 'bbu']] = qtpylib.bollinger_bands(qtpylib.typical_price(df), window=20, stds=2)[['lower', 'mid', 'upper']]
+
     # ADX
     df["ADX_14"] = pta.adx(df["high"], df["low"], df["close"], length=14)['ADX_14']
     # RSI
@@ -3904,6 +3911,22 @@ class NostalgiaForInfinityX6(IStrategy):
         # -----------------------------------------------------------------------------------------
         long_entry_logic = []
         long_entry_logic.append(reduce(lambda x, y: x & y, item_buy_protection_list))
+        
+        if long_entry_condition_index == 29:
+          # Protections
+          long_entry_logic.append(df["num_empty_288"] <= allowed_empty_candles_288)
+          long_entry_logic.append(df["RSI_14_1h"] < 75.0) # Avoid entering when 1h is too overbought
+          long_entry_logic.append(df["RSI_14_4h"] < 70.0) # Avoid entering when 4h is too overbought
+          long_entry_logic.append(qtpylib.crossed_above(df['close'], df['bbu']))
+          
+        if long_entry_condition_index == 30:
+          # Protections
+          long_entry_logic.append(df["num_empty_288"] <= allowed_empty_candles_288)
+          long_entry_logic.append(df["RSI_14_1h"] < 75.0) # Avoid entering when 1h is too overbought
+          long_entry_logic.append(df["RSI_14_4h"] < 70.0) # Avoid entering when 4h is too overbought
+          long_entry_logic.append(df['dx']  > df['mdi'])
+          long_entry_logic.append(df['dx']  > df['mdi'])
+          long_entry_logic.append(df['dx']  > df['mdi'])
 
         if long_entry_condition_index == 31:
           # Protections
@@ -4029,6 +4052,23 @@ class NostalgiaForInfinityX6(IStrategy):
         short_entry_logic = []
         short_entry_logic.append(reduce(lambda x, y: x & y, item_short_buy_protection_list))
 
+        if short_entry_condition_index == 29:
+          # Protections
+          short_entry_logic.append(df["num_empty_288"] <= allowed_empty_candles_288)
+          short_entry_logic.append(df["global_protections_short_pump"] == True)
+          short_entry_logic.append(df["global_protections_short_dump"] == True)
+          short_entry_logic.append(qtpylib.crossed_below(df['close'], df['bbu']))
+          
+        # 500
+        if short_entry_condition_index == 500:
+          # Protections
+          short_entry_logic.append(df["num_empty_288"] <= allowed_empty_candles_288)
+          short_entry_logic.append(df["global_protections_short_pump"] == True)
+          short_entry_logic.append(df["global_protections_short_dump"] == True)
+
+          short_entry_logic.append(df['dx']  > df['mdi'])
+          short_entry_logic.append(df['dx']  > df['mdi'])
+          short_entry_logic.append(df['mdi'] > df['pdi'])
         # Condition #501 - Normal mode (Short).
         if short_entry_condition_index == 501:
           # Protections
