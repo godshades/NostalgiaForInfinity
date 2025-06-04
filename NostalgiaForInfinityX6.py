@@ -69,7 +69,7 @@ class NostalgiaForInfinityX6(IStrategy):
   num_cores_indicators_calc = 0
 
   # Long Normal mode tags
-  long_normal_mode_tags = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "31", "32", "33", "34", "35"]
+  long_normal_mode_tags = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13"]
   # Long Pump mode tags
   long_pump_mode_tags = ["21", "22", "23", "24", "25", "26"]
   # Long Quick mode tags
@@ -85,7 +85,7 @@ class NostalgiaForInfinityX6(IStrategy):
   # Long top coins mode tags
   long_top_coins_mode_tags = ["141", "142", "143", "144"]
   # Long scalp mode tags
-  long_scalp_mode_tags = ["161"]
+  long_scalp_mode_tags = ["161","29","31", "32", "33", "34", "35"]
 
   long_normal_mode_name = "long_normal"
   long_pump_mode_name = "long_pump"
@@ -100,7 +100,7 @@ class NostalgiaForInfinityX6(IStrategy):
   # Shorting
 
   # Short normal mode tags
-  short_normal_mode_tags = ["500", "501", "502", "511", "512", "513", "514", "515"]
+  short_normal_mode_tags = ["501", "502", "511", "512", "513", "514", "515"]
   # Short Pump mode tags
   short_pump_mode_tags = ["521", "522", "523", "524", "525", "526"]
   # Short Quick mode tags
@@ -116,7 +116,7 @@ class NostalgiaForInfinityX6(IStrategy):
   # Short top coins mode tags
   short_top_coins_mode_tags = ["641", "642"]
   # Short scalp mode tags
-  short_scalp_mode_tags = ["661"]
+  short_scalp_mode_tags = ["661", "500", "499"]
 
   short_normal_mode_name = "short_normal"
   short_pump_mode_name = "short_pump"
@@ -128,9 +128,9 @@ class NostalgiaForInfinityX6(IStrategy):
   short_scalp_mode_name = "short_scalp"
 
   is_futures_mode = False
-  futures_mode_leverage = 3.0
-  futures_mode_leverage_rebuy_mode = 3.0
-  futures_mode_leverage_grind_mode = 3.0
+  futures_mode_leverage = 6.0
+  futures_mode_leverage_rebuy_mode = 6.0
+  futures_mode_leverage_grind_mode = 6.0
 
   # Limit the number of long/short trades for futures (0 for no limit)
   futures_max_open_trades_long = 0
@@ -543,6 +543,8 @@ class NostalgiaForInfinityX6(IStrategy):
     "long_entry_condition_5_enable": False,
     "long_entry_condition_6_enable": False,
     "long_entry_condition_21_enable": False,
+    "long_entry_condition_29_enable": True,
+    "long_entry_condition_30_enable": True,
     "long_entry_condition_31_enable": True,
     "long_entry_condition_32_enable": True,
     "long_entry_condition_33_enable": True,
@@ -570,6 +572,8 @@ class NostalgiaForInfinityX6(IStrategy):
   short_entry_signal_params = {
     # Enable/Disable conditions
     # -------------------------------------------------------
+    "short_entry_condition_499_enable": True,
+    "short_entry_condition_500_enable": True,
     "short_entry_condition_501_enable": True,
     "short_entry_condition_502_enable": True,
     "short_entry_condition_503_enable": True,
