@@ -4,7 +4,6 @@ import os
 import pathlib
 import pprint
 import sys
-import time
 
 import github
 from github.GithubException import GithubException
@@ -49,7 +48,20 @@ def comment_results(options, results_data):
     exchanges.add(exchange)
     sorted_report_names = list(reversed(sorted(results_data[exchange]["names"], key=sort_report_names)))
     for timerange in results_data[exchange]["timeranges"]:
-      comment_body = f"## {exchange.capitalize()} - {timerange}\n\n"
+      # Detect if we have spot or futures output
+      market_type = None
+      ft_output = None
+      for mt_candidate in ["spot", "futures"]:
+        candidate_path = options.path / "current" / f"backtest-output-{exchange}-{mt_candidate}-{timerange}.txt"
+        if candidate_path.exists():
+          market_type = mt_candidate
+          ft_output = candidate_path
+          break
+      # Build the header
+      if market_type:
+        comment_body = f"## {exchange.capitalize()} ({market_type}) - {timerange}\n\n"
+      else:
+        comment_body = f"## {exchange.capitalize()} - {timerange}\n\n"
       report_table_header_1 = "| "
       report_table_header_2 = "| --: "
       for report_name in sorted_report_names:
@@ -130,10 +142,9 @@ def comment_results(options, results_data):
             value = results_data[exchange]["timeranges"][timerange][key][report_name]
             row_line += f" {value} |"
           comment_body += f"{row_line}\n"
-      ft_output = options.path / "current" / f"backtest-output-{exchange}-spot-{timerange}.txt"
-      if ft_output.exists():
+      if ft_output:
         comment_body += "\n<details>\n"
-        comment_body += "<summary>Detailed Backest Output (click to see details)</summary>\n"
+        comment_body += "<summary>Detailed Backtest Output (click to see details)</summary>\n"
         try:
           comment_body += f"{ft_output.read_text().strip()}\n"
         except Exception as e:
@@ -145,7 +156,6 @@ def comment_results(options, results_data):
         comment_body += "<summary>Detailed Backtest Output</summary>\n"
         comment_body += "⚠️ No backtest output file found for this exchange and timerange.\n"
         comment_body += "</details>\n"
-      time.sleep(2)
       comment = commit.create_comment(comment_body.rstrip())
       print(f"Created Comment: {comment}", file=sys.stderr, flush=True)
       comment_ids.add(comment.id)
