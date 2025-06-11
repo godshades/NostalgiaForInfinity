@@ -114,7 +114,7 @@ class NostalgiaForInfinityX6(IStrategy):
   num_cores_indicators_calc = 0
 
   # Long Normal mode tags
-  long_normal_mode_tags = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13"]
+  long_normal_mode_tags = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13","29","31", "32", "33", "34", "35"]
   # Long Pump mode tags
   long_pump_mode_tags = ["21", "22", "23", "24", "25", "26"]
   # Long Quick mode tags
@@ -130,7 +130,7 @@ class NostalgiaForInfinityX6(IStrategy):
   # Long top coins mode tags
   long_top_coins_mode_tags = ["141", "142", "143", "144"]
   # Long scalp mode tags
-  long_scalp_mode_tags = ["161","29","31", "32", "33", "34", "35"]
+  long_scalp_mode_tags = ["161"]
 
   long_normal_mode_name = "long_normal"
   long_pump_mode_name = "long_pump"
