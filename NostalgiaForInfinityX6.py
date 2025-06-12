@@ -471,7 +471,7 @@ class NostalgiaForInfinityX6(IStrategy):
   rapid_mode_stake_multiplier_futures = [0.75]
 
   # Scalp mode
-  min_free_slots_scalp_mode = 2
+  min_free_slots_scalp_mode = 6
 
   # Grind mode
   grind_mode_stake_multiplier_spot = [0.20, 0.30, 0.40, 0.50, 0.60, 0.70]
