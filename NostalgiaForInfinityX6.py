@@ -70,7 +70,7 @@ class NostalgiaForInfinityX6(IStrategy):
   INTERFACE_VERSION = 3
 
   def version(self) -> str:
-    return "v16.5.81"
+    return "v16.5.95"
 
   stoploss = -0.99
 
@@ -374,13 +374,13 @@ class NostalgiaForInfinityX6(IStrategy):
 
   grinding_v2_derisk_level_1_enable = True
   grinding_v2_derisk_level_1_spot = -0.12
-  grinding_v2_derisk_level_1_futures = -0.12
+  grinding_v2_derisk_level_1_futures = -0.36
   grinding_v2_derisk_level_2_enable = True
   grinding_v2_derisk_level_2_spot = -0.14
-  grinding_v2_derisk_level_2_futures = -0.14
+  grinding_v2_derisk_level_2_futures = -0.42
   grinding_v2_derisk_level_3_enable = True
   grinding_v2_derisk_level_3_spot = -0.15
-  grinding_v2_derisk_level_3_futures = -0.15
+  grinding_v2_derisk_level_3_futures = -0.45
   grinding_v2_derisk_level_1_stake_spot = 0.50
   grinding_v2_derisk_level_1_stake_futures = 0.50
   grinding_v2_derisk_level_2_stake_spot = 0.30
@@ -389,7 +389,7 @@ class NostalgiaForInfinityX6(IStrategy):
   grinding_v2_derisk_level_3_stake_futures = 0.20
   grinding_v2_derisk_global_enable = False
   grinding_v2_derisk_global_spot = -0.10
-  grinding_v2_derisk_global_futures = -0.10
+  grinding_v2_derisk_global_futures = -0.30
 
   grinding_v2_grind_1_enable = True
   grinding_v2_grind_1_stakes_spot = [0.25, 0.30, 0.35, 0.40]
@@ -3746,8 +3746,8 @@ class NostalgiaForInfinityX6(IStrategy):
     if exit_reason != "force_exit":
       if self._should_hold_trade(trade, rate, exit_reason):
         return False
-      if exit_reason in ["stop_loss", "trailing_stop_loss", "liquidation"]:
-        log.info(f"[{current_time}] Cancelling {exit_reason} exit for {pair}")
+      if exit_reason in ["stop_loss", "trailing_stop_loss"]:
+        # log.info(f"[{current_time}] Cancelling {exit_reason} exit for {pair}")
         return False
       if self.exit_profit_only:
         profit = 0.0
@@ -4222,6 +4222,8 @@ class NostalgiaForInfinityX6(IStrategy):
           )
           # 15m & 1h up move, 4h low
           short_entry_logic.append((df["RSI_3"] < 90.0) | (df["RSI_3_1h"] < 80.0) | (df["AROONU_14_4h"] > 20.0))
+          # 5m up move, 15m stil low
+          short_entry_logic.append((df["RSI_3"] < 90.0) | (df["AROONU_14_15m"] > 50.0))
           # 5m up move, 15m & 1h still not high enough
           short_entry_logic.append(
             (df["RSI_3"] < 90.0) | (df["STOCHRSIk_14_14_3_3_15m"] > 60.0) | (df["STOCHRSIk_14_14_3_3_1h"] > 75.0)
@@ -4402,6 +4404,8 @@ class NostalgiaForInfinityX6(IStrategy):
           short_entry_logic.append((df["change_pct"] < 5.0) | (df["AROOND_14_15m"] < 50.0))
           # 5m green, 15m still not high enough
           short_entry_logic.append((df["change_pct"] < 5.0) | (df["STOCHRSIk_14_14_3_3_15m"] > 90.0))
+          # big pump in the last 4 hours, 15m still low
+          short_entry_logic.append((df["close"] < (df["close_min_48"] * 1.50)) | (df["AROONU_14_15m"] > 50.0))
 
           # Logic
           short_entry_logic.append(df["EMA_12"] > df["EMA_26"])
@@ -4430,6 +4434,10 @@ class NostalgiaForInfinityX6(IStrategy):
           )
           # 5m up move, 4h low
           short_entry_logic.append((df["RSI_3"] < 90.0) | (df["AROONU_14_4h"] > 20.0))
+          # 15m & 1h down move, 4h still not high enough
+          short_entry_logic.append(
+            (df["RSI_3_15m"] < 97.0) | (df["RSI_3_1h"] < 85.0) | (df["STOCHRSIk_14_14_3_3_4h"] > 80.0)
+          )
           # 15m up move, 1h still low
           short_entry_logic.append((df["RSI_3_15m"] < 97.0) | (df["STOCHRSIk_14_14_3_3_1h"] > 60.0))
           # 15m & 1h & 4h up move
@@ -4451,6 +4459,10 @@ class NostalgiaForInfinityX6(IStrategy):
           # 15m & 1h up move, 1d low
           short_entry_logic.append(
             (df["RSI_3_15m"] < 90.0) | (df["RSI_3_1h"] < 90.0) | (df["STOCHRSIk_14_14_3_3_1d"] > 40.0)
+          )
+          # 15m & 1h up move, 1h still not high enough
+          short_entry_logic.append(
+            (df["RSI_3_15m"] < 90.0) | (df["RSI_3_1h"] < 85.0) | (df["STOCHRSIk_14_14_3_3_1h"] > 80.0)
           )
           # 15m & 4h up move, 1d low
           short_entry_logic.append(
@@ -4498,6 +4510,8 @@ class NostalgiaForInfinityX6(IStrategy):
           short_entry_logic.append((df["RSI_3_1h"] < 75.0) | (df["STOCHRSIk_14_14_3_3_1h"] > 50.0))
           # 1h up move, 4h low
           short_entry_logic.append((df["RSI_3_1h"] < 70.0) | (df["RSI_14_4h"] > 40.0))
+          # 1h up move, 1h low
+          short_entry_logic.append((df["RSI_3_1h"] < 60.0) | (df["STOCHRSIk_14_14_3_3_1h"] > 20.0))
           # 4h up move, 1d still low
           short_entry_logic.append((df["RSI_3_4h"] < 97.0) | (df["RSI_14_1d"] > 50.0))
           # 4h up move, 1h still not high enough
@@ -5195,6 +5209,10 @@ class NostalgiaForInfinityX6(IStrategy):
           # 1h & 4h up move, 1h still moving higher
           short_entry_logic.append(
             (df["RSI_3_1h"] < 90.0) | (df["RSI_3_4h"] < 85.0) | (df["CCI_20_change_pct_1h"] < -0.0)
+          )
+          # 1h & 4h up move, 4h still not high enough
+          short_entry_logic.append(
+            (df["RSI_3_1h"] < 90.0) | (df["RSI_3_4h"] < 70.0) | (df["STOCHRSIk_14_14_3_3_4h"] > 80.0)
           )
           # 1h & 1d up move, 15m still low
           short_entry_logic.append(
@@ -23604,6 +23622,7 @@ class NostalgiaForInfinityX6(IStrategy):
           slice_amount
           * (self.grinding_v2_derisk_level_1_futures if self.is_futures_mode else self.grinding_v2_derisk_level_1_spot)
         )
+        / trade.leverage
       )
     ):
       sell_amount = (
@@ -23643,6 +23662,7 @@ class NostalgiaForInfinityX6(IStrategy):
           slice_amount
           * (self.grinding_v2_derisk_level_2_futures if self.is_futures_mode else self.grinding_v2_derisk_level_2_spot)
         )
+        / trade.leverage
       )
     ):
       sell_amount = (
@@ -23682,6 +23702,7 @@ class NostalgiaForInfinityX6(IStrategy):
           slice_amount
           * (self.grinding_v2_derisk_level_3_futures if self.is_futures_mode else self.grinding_v2_derisk_level_3_spot)
         )
+        / trade.leverage
       )
     ):
       sell_amount = (
@@ -23719,6 +23740,7 @@ class NostalgiaForInfinityX6(IStrategy):
           slice_amount
           * (self.grinding_v2_derisk_global_futures if self.is_futures_mode else self.grinding_v2_derisk_global_spot)
         )
+        / trade.leverage
       )
     ):
       sell_amount = trade.amount * exit_rate / trade.leverage - (min_stake * 1.55)
@@ -45914,6 +45936,7 @@ class NostalgiaForInfinityX6(IStrategy):
           slice_amount
           * (self.grinding_v2_derisk_level_1_futures if self.is_futures_mode else self.grinding_v2_derisk_level_1_spot)
         )
+        / trade.leverage
       )
     ):
       sell_amount = (
@@ -45953,6 +45976,7 @@ class NostalgiaForInfinityX6(IStrategy):
           slice_amount
           * (self.grinding_v2_derisk_level_2_futures if self.is_futures_mode else self.grinding_v2_derisk_level_2_spot)
         )
+        / trade.leverage
       )
     ):
       sell_amount = (
@@ -45992,6 +46016,7 @@ class NostalgiaForInfinityX6(IStrategy):
           slice_amount
           * (self.grinding_v2_derisk_level_3_futures if self.is_futures_mode else self.grinding_v2_derisk_level_3_spot)
         )
+        / trade.leverage
       )
     ):
       sell_amount = (
@@ -46029,6 +46054,7 @@ class NostalgiaForInfinityX6(IStrategy):
           slice_amount
           * (self.grinding_v2_derisk_global_futures if self.is_futures_mode else self.grinding_v2_derisk_global_spot)
         )
+        / trade.leverage
       )
     ):
       sell_amount = trade.amount * exit_rate / trade.leverage - (min_stake * 1.55)
