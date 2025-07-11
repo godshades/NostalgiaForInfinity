@@ -739,21 +739,144 @@ class NostalgiaForInfinityX6(IStrategy):
   # ---------------------------------------------------------------------------------------------
   def mark_profit_target(
     self,
-    mode_name: str,
-    pair: str,
-    sell: bool,
-    signal_name: str,
-    trade: Trade,
-    current_time: datetime,
-    current_rate: float,
-    current_profit: float,
-    last_candle,
-    previous_candle_1,
+    mode_name: str, # Name of the current trading mode (e.g., "long_normal")
+    pair: str,      # The trading pair (e.g., "BTC/USDT")
+    sell: bool,     # Boolean indicating if a sell/exit signal was triggered by mode-specific logic
+    signal_name: str, # The name of the sell/exit signal from mode-specific logic
+    trade: Trade,   # The Freqtrade Trade object
+    current_time: datetime, # Current datetime
+    current_rate: float,    # Current price of the asset
+    current_profit: float,  # Current profit ratio (profit_init_ratio is often used by this method via _set_profit_target)
+    last_candle,            # Pandas Series for the last candle
+    previous_candle_1,      # Pandas Series for the candle before the last
   ) -> tuple:
+    """
+    Determines if a potential exit signal should be "marked" for further observation.
+    This method is typically called from within mode-specific exit logic (e.g., long_exit_normal).
+
+    If a 'sell' signal is active (sell=True and signal_name is provided),
+    this method confirms that this signal should be cached via `_set_profit_target`.
+    The `exit_profit_target` method will then use this cached information to make
+    the final decision on whether to exit the trade, potentially allowing the trade
+    to continue if profit increases or other conditions change favorably.
+
+    Parameters:
+    - mode_name (str): The active trading mode.
+    - pair (str): The currency pair.
+    - sell (bool): True if an exit signal is currently active from the main exit logic.
+    - signal_name (str): The name of the active exit signal.
+    - trade (Trade): The trade object.
+    - current_time (datetime): The current time.
+    - current_rate (float): The current asset price.
+    - current_profit (float): The current profit (often profit_init_ratio from the caller).
+    - last_candle: The last available candle data.
+    - previous_candle_1: The candle data prior to the last one.
+
+    Returns:
+    - tuple: (pair, signal_name) if the target should be marked, otherwise (None, None).
+             The returned 'current_profit' when setting the target is typically profit_init_ratio.
+    """
+    # If a sell signal is active from the primary exit logic (e.g., long_exit_signals),
+    # this method will return the pair and signal name.
+    # This tuple is then typically used by _set_profit_target to cache these details.
+    # The actual exit decision based on this marked target happens in exit_profit_target.
     if sell and (signal_name is not None):
+      # The parameters current_rate, current_profit, last_candle, previous_candle_1
+      # are passed to _set_profit_target if a signal is returned from here.
+      # The current_profit passed to _set_profit_target is usually profit_init_ratio.
       return pair, signal_name
 
+    # If no primary sell signal is active, or if signal_name is None,
+    # this method currently does not generate its own reasons to mark a profit target.
+    # The other parameters (current_rate, current_profit, candles) would be relevant
+    # if this method had more complex internal logic to decide on marking a target
+    # independently, which is not its current implementation.
     return None, None
+
+  def _is_trade_derisked_for_profit_target(self, trade: Trade, previous_sell_reason: str, mode_name: str) -> bool:
+    """
+    Helper method to determine if a trade is considered 'derisked' for the purpose of exit_profit_target logic.
+    A trade might be derisked if a previous exit order was tagged as a derisk operation,
+    or if its current amount is significantly less than the initial entry.
+    """
+    # This check is specific to when the previous_sell_reason was a stoploss type.
+    if previous_sell_reason not in [
+      f"exit_{mode_name}_stoploss_doom",
+      f"exit_{mode_name}_stoploss",
+      f"exit_{mode_name}_stoploss_u_e",
+    ]:
+      return False
+
+    filled_entries = trade.select_filled_orders(trade.entry_side)
+    if not filled_entries: # Should not happen if a trade exists
+        return False
+
+    filled_exits = trade.select_filled_orders(trade.exit_side)
+
+    # Check for explicit derisk order tags
+    # Ensure ft_order_tag exists before trying to access it.
+    has_order_tags = hasattr(filled_entries[0], "ft_order_tag")
+    if has_order_tags:
+      for order in filled_exits:
+        if hasattr(order, "ft_order_tag") and order.ft_order_tag: # Check if the attribute exists and is not None
+          sell_order_tag_parts = order.ft_order_tag.split(" ", 1)
+          if sell_order_tag_parts and sell_order_tag_parts[0] in ["d", "d1", "derisk_level_1", "derisk_level_2", "derisk_level_3"]:
+            return True
+
+    # Fallback check: if current amount is significantly less than the first entry's filled amount
+    # This implies a partial sell might have occurred without specific derisk tags.
+    if trade.amount < (filled_entries[0].safe_filled * 0.95): # Ensure safe_filled is not None if that's possible
+        return True
+
+    return False
+
+  def _get_profit_target_exit_conditions(self, is_short: bool, is_scalp_mode: bool, profit_init_ratio: float, previous_profit: float, last_candle, previous_candle_1, mode_name:str) -> tuple[bool, Optional[str]]:
+      """
+      Helper method to check profit target exit conditions for the 'exit_profit_{mode_name}_max' block.
+      """
+      profit_tiers = [
+          (0.001, 0.01, 0.008 if is_scalp_mode else 0.03, 0.05, "_t_0"), # min_profit, max_profit, scalp_drop, normal_drop_main, normal_drop_alt, signal_suffix
+          (0.01, 0.02, 0.010 if is_scalp_mode else 0.03, 0.05, "_t_1"),
+          (0.02, 0.03, 0.010 if is_scalp_mode else 0.03, 0.05, "_t_2"),
+          (0.03, 0.04, 0.015 if is_scalp_mode else 0.03, 0.05, "_t_3"),
+          (0.04, 0.05, 0.015 if is_scalp_mode else 0.03, 0.05, "_t_4"),
+          (0.05, 0.06, 0.015 if is_scalp_mode else 0.03, 0.05, "_t_5"),
+          (0.06, 0.07, 0.015 if is_scalp_mode else 0.03, 0.05, "_t_6"),
+          (0.07, 0.08, 0.020 if is_scalp_mode else 0.03, 0.05, "_t_7"),
+          (0.08, 0.09, 0.020 if is_scalp_mode else 0.03, 0.05, "_t_8"),
+          (0.09, 0.10, 0.020 if is_scalp_mode else 0.03, 0.05, "_t_9"),
+          (0.10, 0.11, 0.025 if is_scalp_mode else 0.03, 0.05, "_t_10"),
+          (0.11, 0.12, 0.025 if is_scalp_mode else 0.03, 0.05, "_t_11"),
+          (0.12, float('inf'), 0.025 if is_scalp_mode else 0.03, 0.05, "_t_12"),
+      ]
+
+      for min_p, max_p, scalp_d, normal_d_main, normal_d_alt, suffix in profit_tiers:
+          if not (min_p <= profit_init_ratio < max_p):
+              continue
+
+          if is_scalp_mode:
+              if profit_init_ratio < (previous_profit - scalp_d):
+                  return True, f"exit_profit_{mode_name}{suffix}_1"
+          else: # Not scalp mode
+              # Condition 1 (RSI based)
+              rsi_cond = (last_candle["RSI_14"] > 50.0 and last_candle["RSI_14"] > previous_candle_1["RSI_14"] and last_candle["CMF_20"] > 0.0) if is_short \
+                    else (last_candle["RSI_14"] < 50.0 and last_candle["RSI_14"] < previous_candle_1["RSI_14"] and last_candle["CMF_20"] < -0.0)
+              if profit_init_ratio < (previous_profit - normal_d_main) and rsi_cond:
+                  return True, f"exit_profit_{mode_name}{suffix}_1"
+
+              # Condition 2 (CMF based)
+              cmf_cond = (last_candle["CMF_20"] > 0.0 and last_candle["CMF_20_1h"] > 0.0 and last_candle["CMF_20_4h"] > 0.0) if is_short \
+                    else (last_candle["CMF_20"] < -0.0 and last_candle["CMF_20_1h"] < -0.0 and last_candle["CMF_20_4h"] < -0.0)
+              if profit_init_ratio < (previous_profit - normal_d_main) and cmf_cond:
+                  return True, f"exit_profit_{mode_name}{suffix}_2"
+
+              # Condition 3 (ROC based)
+              roc_cond = (last_candle["ROC_9_4h"] < -40.0) if is_short else (last_candle["ROC_9_4h"] > 40.0)
+              if profit_init_ratio < (previous_profit - normal_d_alt) and roc_cond:
+                  return True, f"exit_profit_{mode_name}{suffix}_3"
+          # If a tier was matched but no sub-condition, break from this loop to avoid re-checking other tiers
+          break
+      return False, None
 
   # Exit Profit Target
   # ---------------------------------------------------------------------------------------------
@@ -764,651 +887,94 @@ class NostalgiaForInfinityX6(IStrategy):
     trade: Trade,
     current_time: datetime,
     current_rate: float,
-    profit_stake: float,
-    profit_ratio: float,
-    profit_current_stake_ratio: float,
-    profit_init_ratio: float,
+    profit_stake: float,  # Absolute profit in stake currency
+    profit_ratio: float,  # (current_profit / total_stake)
+    profit_current_stake_ratio: float, # (current_profit / current_stake)
+    profit_init_ratio: float, # (current_profit / initial_stake of first entry)
     last_candle,
     previous_candle_1,
-    previous_rate,
-    previous_profit,
-    previous_sell_reason,
-    previous_time_profit_reached,
+    previous_rate: float, # Rate at the time the profit target was marked
+    previous_profit: float, # profit_init_ratio at the time the profit target was marked
+    previous_sell_reason: str, # The signal_name that was cached
+    previous_time_profit_reached: datetime, # Time the profit target was marked
     enter_tags,
   ) -> tuple:
-    is_backtest = self.is_backtest_mode()
-    is_derisk = False
-    if previous_sell_reason in [
-      f"exit_{mode_name}_stoploss_doom",
-      f"exit_{mode_name}_stoploss",
-      f"exit_{mode_name}_stoploss_u_e",
-    ]:
-      filled_entries = trade.select_filled_orders(trade.entry_side)
-      filled_exits = trade.select_filled_orders(trade.exit_side)
-      has_order_tags = False
-      if hasattr(filled_entries[0], "ft_order_tag"):
-        has_order_tags = True
-      for order in filled_exits:
-        order_tag = ""
-        if has_order_tags:
-          if order.ft_order_tag is not None:
-            sell_order_tag = order.ft_order_tag
-            order_mode = sell_order_tag.split(" ", 1)
-            if len(order_mode) > 0:
-              order_tag = order_mode[0]
-        if order_tag in ["d", "d1", "derisk_level_1", "derisk_level_2", "derisk_level_3"]:
-          is_derisk = True
-          break
-      if not is_derisk:
-        is_derisk = trade.amount < (filled_entries[0].safe_filled * 0.95)
+    """
+    Decides whether to actually exit a trade for which a profit target or stoploss signal
+    was previously marked (and cached via _set_profit_target).
+
+    This method re-evaluates the situation based on current profit, time passed,
+    and potentially market conditions, to confirm or override the initial signal.
+    """
+
+    is_derisked = self._is_trade_derisked_for_profit_target(trade, previous_sell_reason, mode_name)
+
+    # --- Block 1: Handling Stoploss-related previous_sell_reason ---
     if previous_sell_reason in [f"exit_{mode_name}_stoploss_doom", f"exit_{mode_name}_stoploss"]:
-      is_rapid_mode = all(c in self.long_rapid_mode_tags for c in enter_tags)
-      is_rebuy_mode = all(c in self.long_rebuy_mode_tags for c in enter_tags) or (
-        any(c in self.long_rebuy_mode_tags for c in enter_tags)
-        and all(c in (self.long_rebuy_mode_tags + self.long_grind_mode_tags) for c in enter_tags)
-      )
-      is_scalp_mode = all(c in self.long_scalp_mode_tags for c in enter_tags) or (
-        any(c in self.long_scalp_mode_tags for c in enter_tags)
-        and all(
-          c in (self.long_scalp_mode_tags + self.long_rebuy_mode_tags + self.long_grind_mode_tags) for c in enter_tags
-        )
-      )
-      if profit_init_ratio > 0.0:
-        # profit is over the threshold, don't exit
+      if profit_init_ratio > 0.0 or is_derisked:
         self._remove_profit_target(pair)
         return False, None
-      elif is_derisk:
-        self._remove_profit_target(pair)
-        return False, None
-      elif self.derisk_enable and (current_time - timedelta(minutes=60) > previous_time_profit_reached):
-        if profit_ratio < previous_profit:
+
+      if self.derisk_enable and (current_time - timedelta(minutes=60) > previous_time_profit_reached):
+        if profit_ratio < previous_profit: # Using overall profit_ratio for this check
           return True, previous_sell_reason
-        elif profit_ratio > previous_profit:
+        else: # Profit improved or stayed same
           self._remove_profit_target(pair)
           return False, None
-      elif (
-        not self.derisk_enable
-        and not is_rapid_mode
-        and not is_rebuy_mode
-        and not is_scalp_mode
-        and (
-          profit_init_ratio
-          <= -(self.stop_threshold_doom_futures if self.is_futures_mode else self.stop_threshold_doom_spot)
-        )
-      ):
-        return True, previous_sell_reason
-      elif (
-        not self.derisk_enable
-        and is_rapid_mode
-        and (
-          profit_init_ratio
-          <= -(self.stop_threshold_rapid_futures if self.is_futures_mode else self.stop_threshold_rapid_spot)
-        )
-      ):
-        return True, previous_sell_reason
-      elif (
-        not self.derisk_enable
-        and is_rebuy_mode
-        and (
-          profit_init_ratio
-          <= -(self.stop_threshold_futures_rebuy if self.is_futures_mode else self.stop_threshold_spot_rebuy)
-        )
-      ):
-        return True, previous_sell_reason
-      elif (
-        not self.derisk_enable
-        and is_scalp_mode
-        and (
-          profit_init_ratio
-          <= -(self.stop_threshold_scalp_futures if self.is_futures_mode else self.stop_threshold_scalp_spot)
-        )
-      ):
-        return True, previous_sell_reason
-    elif previous_sell_reason in [f"exit_{mode_name}_stoploss_u_e"]:
-      if profit_init_ratio > 0.0:
-        # profit is over the threshold, don't exit
-        self._remove_profit_target(pair)
-        return False, None
-      elif is_derisk:
-        self._remove_profit_target(pair)
-        return False, None
-      elif profit_ratio < (previous_profit - (0.04 / trade.leverage)):
-        return True, previous_sell_reason
-    elif previous_sell_reason in [f"exit_profit_{mode_name}_max"]:
-      if profit_init_ratio < -0.08:
-        # profit is under the threshold, cancel it
-        self._remove_profit_target(pair)
-        return False, None
-      if trade.is_short:
-        is_scalp_mode = all(c in self.short_scalp_mode_tags for c in enter_tags)
-        if is_scalp_mode:
-          if 0.001 <= profit_init_ratio < 0.01:
-            if profit_init_ratio < (previous_profit - 0.008):
-              return True, f"exit_profit_{mode_name}_t_0_1"
-          elif 0.01 <= profit_init_ratio < 0.02:
-            if profit_init_ratio < (previous_profit - 0.01):
-              return True, f"exit_profit_{mode_name}_t_1_1"
-          elif 0.02 <= profit_init_ratio < 0.03:
-            if profit_init_ratio < (previous_profit - 0.01):
-              return True, f"exit_profit_{mode_name}_t_2_1"
-          elif 0.03 <= profit_init_ratio < 0.04:
-            if profit_init_ratio < (previous_profit - 0.015):
-              return True, f"exit_profit_{mode_name}_t_3_1"
-          elif 0.04 <= profit_init_ratio < 0.05:
-            if profit_init_ratio < (previous_profit - 0.015):
-              return True, f"exit_profit_{mode_name}_t_4_1"
-          elif 0.05 <= profit_init_ratio < 0.06:
-            if profit_init_ratio < (previous_profit - 0.015):
-              return True, f"exit_profit_{mode_name}_t_5_1"
-          elif 0.06 <= profit_init_ratio < 0.07:
-            if profit_init_ratio < (previous_profit - 0.015):
-              return True, f"exit_profit_{mode_name}_t_6_1"
-          elif 0.07 <= profit_init_ratio < 0.08:
-            if profit_init_ratio < (previous_profit - 0.02):
-              return True, f"exit_profit_{mode_name}_t_7_1"
-          elif 0.08 <= profit_init_ratio < 0.09:
-            if profit_init_ratio < (previous_profit - 0.02):
-              return True, f"exit_profit_{mode_name}_t_8_1"
-          elif 0.09 <= profit_init_ratio < 0.10:
-            if profit_init_ratio < (previous_profit - 0.02):
-              return True, f"exit_profit_{mode_name}_t_9_1"
-          elif 0.10 <= profit_init_ratio < 0.11:
-            if profit_init_ratio < (previous_profit - 0.025):
-              return True, f"exit_profit_{mode_name}_t_10_1"
-          elif 0.11 <= profit_init_ratio < 0.12:
-            if profit_init_ratio < (previous_profit - 0.025):
-              return True, f"exit_profit_{mode_name}_t_11_1"
-          elif 0.12 <= profit_init_ratio:
-            if profit_init_ratio < (previous_profit - 0.025):
-              return True, f"exit_profit_{mode_name}_t_12_1"
-        elif 0.001 <= profit_init_ratio < 0.01:
-          if (
-            profit_init_ratio < (previous_profit - 0.03)
-            and (last_candle["RSI_14"] > 50.0)
-            and (last_candle["RSI_14"] > previous_candle_1["RSI_14"])
-            and (last_candle["CMF_20"] > 0.0)
-          ):
-            return True, f"exit_profit_{mode_name}_t_0_1"
-          elif (
-            profit_init_ratio < (previous_profit - 0.03)
-            and (last_candle["CMF_20"] > 0.0)
-            and (last_candle["CMF_20_1h"] > 0.0)
-            and (last_candle["CMF_20_4h"] > 0.0)
-          ):
-            return True, f"exit_profit_{mode_name}_t_0_2"
-          elif profit_init_ratio < (previous_profit - 0.05) and (last_candle["ROC_9_4h"] < -40.0):
-            return True, f"exit_profit_{mode_name}_t_0_3"
-        elif 0.01 <= profit_init_ratio < 0.02:
-          if (
-            profit_init_ratio < (previous_profit - 0.03)
-            and (last_candle["RSI_14"] > 50.0)
-            and (last_candle["RSI_14"] > previous_candle_1["RSI_14"])
-            and (last_candle["CMF_20"] > 0.0)
-          ):
-            return True, f"exit_profit_{mode_name}_t_1_1"
-          elif (
-            profit_init_ratio < (previous_profit - 0.03)
-            and (last_candle["CMF_20"] > 0.0)
-            and (last_candle["CMF_20_1h"] > 0.0)
-            and (last_candle["CMF_20_4h"] > 0.0)
-          ):
-            return True, f"exit_profit_{mode_name}_t_1_2"
-          elif profit_init_ratio < (previous_profit - 0.05) and (last_candle["ROC_9_4h"] < -40.0):
-            return True, f"exit_profit_{mode_name}_t_1_3"
-        elif 0.02 <= profit_init_ratio < 0.03:
-          if (
-            profit_init_ratio < (previous_profit - 0.03)
-            and (last_candle["RSI_14"] > 50.0)
-            and (last_candle["RSI_14"] > previous_candle_1["RSI_14"])
-            and (last_candle["CMF_20"] > 0.0)
-          ):
-            return True, f"exit_profit_{mode_name}_t_2_1"
-          elif (
-            profit_init_ratio < (previous_profit - 0.03)
-            and (last_candle["CMF_20"] > 0.0)
-            and (last_candle["CMF_20_1h"] > 0.0)
-            and (last_candle["CMF_20_4h"] > 0.0)
-          ):
-            return True, f"exit_profit_{mode_name}_t_2_2"
-          elif profit_init_ratio < (previous_profit - 0.05) and (last_candle["ROC_9_4h"] < -40.0):
-            return True, f"exit_profit_{mode_name}_t_2_3"
-        elif 0.03 <= profit_init_ratio < 0.04:
-          if (
-            profit_init_ratio < (previous_profit - 0.03)
-            and (last_candle["RSI_14"] > 50.0)
-            and (last_candle["RSI_14"] > previous_candle_1["RSI_14"])
-            and (last_candle["CMF_20"] > 0.0)
-          ):
-            return True, f"exit_profit_{mode_name}_t_3_1"
-          elif (
-            profit_init_ratio < (previous_profit - 0.03)
-            and (last_candle["CMF_20"] > 0.0)
-            and (last_candle["CMF_20_1h"] > 0.0)
-            and (last_candle["CMF_20_4h"] > 0.0)
-          ):
-            return True, f"exit_profit_{mode_name}_t_3_2"
-          elif profit_init_ratio < (previous_profit - 0.05) and (last_candle["ROC_9_4h"] < -40.0):
-            return True, f"exit_profit_{mode_name}_t_3_3"
-        elif 0.04 <= profit_init_ratio < 0.05:
-          if (
-            profit_init_ratio < (previous_profit - 0.03)
-            and (last_candle["RSI_14"] > 50.0)
-            and (last_candle["RSI_14"] > previous_candle_1["RSI_14"])
-            and (last_candle["CMF_20"] > 0.0)
-          ):
-            return True, f"exit_profit_{mode_name}_t_4_1"
-          elif (
-            profit_init_ratio < (previous_profit - 0.03)
-            and (last_candle["CMF_20"] > 0.0)
-            and (last_candle["CMF_20_1h"] > 0.0)
-            and (last_candle["CMF_20_4h"] > 0.0)
-          ):
-            return True, f"exit_profit_{mode_name}_t_4_2"
-          elif profit_init_ratio < (previous_profit - 0.05) and (last_candle["ROC_9_4h"] < -40.0):
-            return True, f"exit_profit_{mode_name}_t_4_3"
-        elif 0.05 <= profit_init_ratio < 0.06:
-          if (
-            profit_init_ratio < (previous_profit - 0.03)
-            and (last_candle["RSI_14"] > 50.0)
-            and (last_candle["RSI_14"] > previous_candle_1["RSI_14"])
-            and (last_candle["CMF_20"] > 0.0)
-          ):
-            return True, f"exit_profit_{mode_name}_t_5_1"
-          elif (
-            profit_init_ratio < (previous_profit - 0.03)
-            and (last_candle["CMF_20"] > 0.0)
-            and (last_candle["CMF_20_1h"] > 0.0)
-            and (last_candle["CMF_20_4h"] > 0.0)
-          ):
-            return True, f"exit_profit_{mode_name}_t_5_2"
-          elif profit_init_ratio < (previous_profit - 0.05) and (last_candle["ROC_9_4h"] < -40.0):
-            return True, f"exit_profit_{mode_name}_t_5_3"
-        elif 0.06 <= profit_init_ratio < 0.07:
-          if (
-            profit_init_ratio < (previous_profit - 0.03)
-            and (last_candle["RSI_14"] > 50.0)
-            and (last_candle["RSI_14"] > previous_candle_1["RSI_14"])
-            and (last_candle["CMF_20"] > 0.0)
-          ):
-            return True, f"exit_profit_{mode_name}_t_6_1"
-          elif (
-            profit_init_ratio < (previous_profit - 0.03)
-            and (last_candle["CMF_20"] > 0.0)
-            and (last_candle["CMF_20_1h"] > 0.0)
-            and (last_candle["CMF_20_4h"] > 0.0)
-          ):
-            return True, f"exit_profit_{mode_name}_t_6_2"
-          elif profit_init_ratio < (previous_profit - 0.05) and (last_candle["ROC_9_4h"] < -40.0):
-            return True, f"exit_profit_{mode_name}_t_6_3"
-        elif 0.07 <= profit_init_ratio < 0.08:
-          if (
-            profit_init_ratio < (previous_profit - 0.03)
-            and (last_candle["RSI_14"] > 50.0)
-            and (last_candle["RSI_14"] > previous_candle_1["RSI_14"])
-            and (last_candle["CMF_20"] > 0.0)
-          ):
-            return True, f"exit_profit_{mode_name}_t_7_1"
-          elif (
-            profit_init_ratio < (previous_profit - 0.03)
-            and (last_candle["CMF_20"] > 0.0)
-            and (last_candle["CMF_20_1h"] > 0.0)
-            and (last_candle["CMF_20_4h"] > 0.0)
-          ):
-            return True, f"exit_profit_{mode_name}_t_7_2"
-          elif profit_init_ratio < (previous_profit - 0.05) and (last_candle["ROC_9_4h"] < -40.0):
-            return True, f"exit_profit_{mode_name}_t_7_3"
-        elif 0.08 <= profit_init_ratio < 0.09:
-          if (
-            profit_init_ratio < (previous_profit - 0.03)
-            and (last_candle["RSI_14"] > 50.0)
-            and (last_candle["RSI_14"] > previous_candle_1["RSI_14"])
-            and (last_candle["CMF_20"] > 0.0)
-          ):
-            return True, f"exit_profit_{mode_name}_t_8_1"
-          elif (
-            profit_init_ratio < (previous_profit - 0.03)
-            and (last_candle["CMF_20"] > 0.0)
-            and (last_candle["CMF_20_1h"] > 0.0)
-            and (last_candle["CMF_20_4h"] > 0.0)
-          ):
-            return True, f"exit_profit_{mode_name}_t_8_2"
-          elif profit_init_ratio < (previous_profit - 0.05) and (last_candle["ROC_9_4h"] < -40.0):
-            return True, f"exit_profit_{mode_name}_t_8_3"
-        elif 0.09 <= profit_init_ratio < 0.10:
-          if (
-            profit_init_ratio < (previous_profit - 0.03)
-            and (last_candle["RSI_14"] > 50.0)
-            and (last_candle["RSI_14"] > previous_candle_1["RSI_14"])
-            and (last_candle["CMF_20"] > 0.0)
-          ):
-            return True, f"exit_profit_{mode_name}_t_9_1"
-          elif (
-            profit_init_ratio < (previous_profit - 0.03)
-            and (last_candle["CMF_20"] > 0.0)
-            and (last_candle["CMF_20_1h"] > 0.0)
-            and (last_candle["CMF_20_4h"] > 0.0)
-          ):
-            return True, f"exit_profit_{mode_name}_t_9_2"
-          elif profit_init_ratio < (previous_profit - 0.05) and (last_candle["ROC_9_4h"] < -40.0):
-            return True, f"exit_profit_{mode_name}_t_9_3"
-        elif 0.10 <= profit_init_ratio < 0.11:
-          if (
-            profit_init_ratio < (previous_profit - 0.03)
-            and (last_candle["RSI_14"] > 50.0)
-            and (last_candle["RSI_14"] > previous_candle_1["RSI_14"])
-            and (last_candle["CMF_20"] > 0.0)
-          ):
-            return True, f"exit_profit_{mode_name}_t_10_1"
-          elif (
-            profit_init_ratio < (previous_profit - 0.03)
-            and (last_candle["CMF_20"] > 0.0)
-            and (last_candle["CMF_20_1h"] > 0.0)
-            and (last_candle["CMF_20_4h"] > 0.0)
-          ):
-            return True, f"exit_profit_{mode_name}_t_10_2"
-          elif profit_init_ratio < (previous_profit - 0.05) and (last_candle["ROC_9_4h"] < -40.0):
-            return True, f"exit_profit_{mode_name}_t_10_3"
-        elif 0.11 <= profit_init_ratio < 0.12:
-          if (
-            profit_init_ratio < (previous_profit - 0.03)
-            and (last_candle["RSI_14"] > 50.0)
-            and (last_candle["RSI_14"] > previous_candle_1["RSI_14"])
-            and (last_candle["CMF_20"] > 0.0)
-          ):
-            return True, f"exit_profit_{mode_name}_t_11_1"
-          elif (
-            profit_init_ratio < (previous_profit - 0.03)
-            and (last_candle["CMF_20"] > 0.0)
-            and (last_candle["CMF_20_1h"] > 0.0)
-            and (last_candle["CMF_20_4h"] > 0.0)
-          ):
-            return True, f"exit_profit_{mode_name}_t_11_2"
-          elif profit_init_ratio < (previous_profit - 0.05) and (last_candle["ROC_9_4h"] < -40.0):
-            return True, f"exit_profit_{mode_name}_t_11_3"
-        elif 0.12 <= profit_init_ratio:
-          if (
-            profit_init_ratio < (previous_profit - 0.03)
-            and (last_candle["RSI_14"] > 50.0)
-            and (last_candle["RSI_14"] > previous_candle_1["RSI_14"])
-            and (last_candle["CMF_20"] > 0.0)
-          ):
-            return True, f"exit_profit_{mode_name}_t_12_1"
-          elif (
-            profit_init_ratio < (previous_profit - 0.03)
-            and (last_candle["CMF_20"] > 0.0)
-            and (last_candle["CMF_20_1h"] > 0.0)
-            and (last_candle["CMF_20_4h"] > 0.0)
-          ):
-            return True, f"exit_profit_{mode_name}_t_12_2"
-          elif profit_init_ratio < (previous_profit - 0.05) and (last_candle["ROC_9_4h"] < -40.0):
-            return True, f"exit_profit_{mode_name}_t_12_3"
-      else:
-        is_scalp_mode = all(c in self.long_scalp_mode_tags for c in enter_tags)
-        if is_scalp_mode:
-          if 0.001 <= profit_init_ratio < 0.01:
-            if profit_init_ratio < (previous_profit - 0.008):
-              return True, f"exit_profit_{mode_name}_t_0_1"
-          elif 0.01 <= profit_init_ratio < 0.02:
-            if profit_init_ratio < (previous_profit - 0.01):
-              return True, f"exit_profit_{mode_name}_t_1_1"
-          elif 0.02 <= profit_init_ratio < 0.03:
-            if profit_init_ratio < (previous_profit - 0.01):
-              return True, f"exit_profit_{mode_name}_t_2_1"
-          elif 0.03 <= profit_init_ratio < 0.04:
-            if profit_init_ratio < (previous_profit - 0.015):
-              return True, f"exit_profit_{mode_name}_t_3_1"
-          elif 0.04 <= profit_init_ratio < 0.05:
-            if profit_init_ratio < (previous_profit - 0.015):
-              return True, f"exit_profit_{mode_name}_t_4_1"
-          elif 0.05 <= profit_init_ratio < 0.06:
-            if profit_init_ratio < (previous_profit - 0.015):
-              return True, f"exit_profit_{mode_name}_t_5_1"
-          elif 0.06 <= profit_init_ratio < 0.07:
-            if profit_init_ratio < (previous_profit - 0.015):
-              return True, f"exit_profit_{mode_name}_t_6_1"
-          elif 0.07 <= profit_init_ratio < 0.08:
-            if profit_init_ratio < (previous_profit - 0.02):
-              return True, f"exit_profit_{mode_name}_t_7_1"
-          elif 0.08 <= profit_init_ratio < 0.09:
-            if profit_init_ratio < (previous_profit - 0.02):
-              return True, f"exit_profit_{mode_name}_t_8_1"
-          elif 0.09 <= profit_init_ratio < 0.10:
-            if profit_init_ratio < (previous_profit - 0.02):
-              return True, f"exit_profit_{mode_name}_t_9_1"
-          elif 0.10 <= profit_init_ratio < 0.11:
-            if profit_init_ratio < (previous_profit - 0.025):
-              return True, f"exit_profit_{mode_name}_t_10_1"
-          elif 0.11 <= profit_init_ratio < 0.12:
-            if profit_init_ratio < (previous_profit - 0.025):
-              return True, f"exit_profit_{mode_name}_t_11_1"
-          elif 0.12 <= profit_init_ratio:
-            if profit_init_ratio < (previous_profit - 0.025):
-              return True, f"exit_profit_{mode_name}_t_12_1"
-        else:
-          if 0.001 <= profit_init_ratio < 0.01:
-            if (
-              profit_init_ratio < (previous_profit - 0.03)
-              and (last_candle["RSI_14"] < 50.0)
-              and (last_candle["RSI_14"] < previous_candle_1["RSI_14"])
-              and (last_candle["CMF_20"] < -0.0)
-            ):
-              return True, f"exit_profit_{mode_name}_t_0_1"
-            elif (
-              profit_init_ratio < (previous_profit - 0.03)
-              and (last_candle["CMF_20"] < -0.0)
-              and (last_candle["CMF_20_1h"] < -0.0)
-              and (last_candle["CMF_20_4h"] < -0.0)
-            ):
-              return True, f"exit_profit_{mode_name}_t_0_2"
-            elif profit_init_ratio < (previous_profit - 0.05) and (last_candle["ROC_9_4h"] > 40.0):
-              return True, f"exit_profit_{mode_name}_t_0_3"
-          elif 0.01 <= profit_init_ratio < 0.02:
-            if (
-              profit_init_ratio < (previous_profit - 0.03)
-              and (last_candle["RSI_14"] < 50.0)
-              and (last_candle["RSI_14"] < previous_candle_1["RSI_14"])
-              and (last_candle["CMF_20"] < -0.0)
-            ):
-              return True, f"exit_profit_{mode_name}_t_1_1"
-            elif (
-              profit_init_ratio < (previous_profit - 0.03)
-              and (last_candle["CMF_20"] < -0.0)
-              and (last_candle["CMF_20_1h"] < -0.0)
-              and (last_candle["CMF_20_4h"] < -0.0)
-            ):
-              return True, f"exit_profit_{mode_name}_t_1_2"
-            elif profit_init_ratio < (previous_profit - 0.05) and (last_candle["ROC_9_4h"] > 40.0):
-              return True, f"exit_profit_{mode_name}_t_1_3"
-          elif 0.02 <= profit_init_ratio < 0.03:
-            if (
-              profit_init_ratio < (previous_profit - 0.03)
-              and (last_candle["RSI_14"] < 50.0)
-              and (last_candle["RSI_14"] < previous_candle_1["RSI_14"])
-              and (last_candle["CMF_20"] < -0.0)
-            ):
-              return True, f"exit_profit_{mode_name}_t_2_1"
-            elif (
-              profit_init_ratio < (previous_profit - 0.03)
-              and (last_candle["CMF_20"] < -0.0)
-              and (last_candle["CMF_20_1h"] < -0.0)
-              and (last_candle["CMF_20_4h"] < -0.0)
-            ):
-              return True, f"exit_profit_{mode_name}_t_2_2"
-            elif profit_init_ratio < (previous_profit - 0.05) and (last_candle["ROC_9_4h"] > 40.0):
-              return True, f"exit_profit_{mode_name}_t_2_3"
-          elif 0.03 <= profit_init_ratio < 0.04:
-            if (
-              profit_init_ratio < (previous_profit - 0.03)
-              and (last_candle["RSI_14"] < 50.0)
-              and (last_candle["RSI_14"] < previous_candle_1["RSI_14"])
-              and (last_candle["CMF_20"] < -0.0)
-            ):
-              return True, f"exit_profit_{mode_name}_t_3_1"
-            elif (
-              profit_init_ratio < (previous_profit - 0.03)
-              and (last_candle["CMF_20"] < -0.0)
-              and (last_candle["CMF_20_1h"] < -0.0)
-              and (last_candle["CMF_20_4h"] < -0.0)
-            ):
-              return True, f"exit_profit_{mode_name}_t_3_2"
-            elif profit_init_ratio < (previous_profit - 0.05) and (last_candle["ROC_9_4h"] > 40.0):
-              return True, f"exit_profit_{mode_name}_t_3_3"
-          elif 0.04 <= profit_init_ratio < 0.05:
-            if (
-              profit_init_ratio < (previous_profit - 0.03)
-              and (last_candle["RSI_14"] < 50.0)
-              and (last_candle["RSI_14"] < previous_candle_1["RSI_14"])
-              and (last_candle["CMF_20"] < -0.0)
-            ):
-              return True, f"exit_profit_{mode_name}_t_4_1"
-            elif (
-              profit_init_ratio < (previous_profit - 0.03)
-              and (last_candle["CMF_20"] < -0.0)
-              and (last_candle["CMF_20_1h"] < -0.0)
-              and (last_candle["CMF_20_4h"] < -0.0)
-            ):
-              return True, f"exit_profit_{mode_name}_t_4_2"
-            elif profit_init_ratio < (previous_profit - 0.05) and (last_candle["ROC_9_4h"] > 40.0):
-              return True, f"exit_profit_{mode_name}_t_4_3"
-          elif 0.05 <= profit_init_ratio < 0.06:
-            if (
-              profit_init_ratio < (previous_profit - 0.03)
-              and (last_candle["RSI_14"] < 50.0)
-              and (last_candle["RSI_14"] < previous_candle_1["RSI_14"])
-              and (last_candle["CMF_20"] < -0.0)
-            ):
-              return True, f"exit_profit_{mode_name}_t_5_1"
-            elif (
-              profit_init_ratio < (previous_profit - 0.03)
-              and (last_candle["CMF_20"] < -0.0)
-              and (last_candle["CMF_20_1h"] < -0.0)
-              and (last_candle["CMF_20_4h"] < -0.0)
-            ):
-              return True, f"exit_profit_{mode_name}_t_5_2"
-            elif profit_init_ratio < (previous_profit - 0.05) and (last_candle["ROC_9_4h"] > 40.0):
-              return True, f"exit_profit_{mode_name}_t_5_3"
-          elif 0.06 <= profit_init_ratio < 0.07:
-            if (
-              profit_init_ratio < (previous_profit - 0.03)
-              and (last_candle["RSI_14"] < 50.0)
-              and (last_candle["RSI_14"] < previous_candle_1["RSI_14"])
-              and (last_candle["CMF_20"] < -0.0)
-            ):
-              return True, f"exit_profit_{mode_name}_t_6_1"
-            elif (
-              profit_init_ratio < (previous_profit - 0.03)
-              and (last_candle["CMF_20"] < -0.0)
-              and (last_candle["CMF_20_1h"] < -0.0)
-              and (last_candle["CMF_20_4h"] < -0.0)
-            ):
-              return True, f"exit_profit_{mode_name}_t_6_2"
-            elif profit_init_ratio < (previous_profit - 0.05) and (last_candle["ROC_9_4h"] > 40.0):
-              return True, f"exit_profit_{mode_name}_t_6_3"
-          elif 0.07 <= profit_init_ratio < 0.08:
-            if (
-              profit_init_ratio < (previous_profit - 0.03)
-              and (last_candle["RSI_14"] < 50.0)
-              and (last_candle["RSI_14"] < previous_candle_1["RSI_14"])
-              and (last_candle["CMF_20"] < -0.0)
-            ):
-              return True, f"exit_profit_{mode_name}_t_7_1"
-            elif (
-              profit_init_ratio < (previous_profit - 0.03)
-              and (last_candle["CMF_20"] < -0.0)
-              and (last_candle["CMF_20_1h"] < -0.0)
-              and (last_candle["CMF_20_4h"] < -0.0)
-            ):
-              return True, f"exit_profit_{mode_name}_t_7_2"
-            elif profit_init_ratio < (previous_profit - 0.05) and (last_candle["ROC_9_4h"] > 40.0):
-              return True, f"exit_profit_{mode_name}_t_7_3"
-          elif 0.08 <= profit_init_ratio < 0.09:
-            if (
-              profit_init_ratio < (previous_profit - 0.03)
-              and (last_candle["RSI_14"] < 50.0)
-              and (last_candle["RSI_14"] < previous_candle_1["RSI_14"])
-              and (last_candle["CMF_20"] < -0.0)
-            ):
-              return True, f"exit_profit_{mode_name}_t_8_1"
-            elif (
-              profit_init_ratio < (previous_profit - 0.03)
-              and (last_candle["CMF_20"] < -0.0)
-              and (last_candle["CMF_20_1h"] < -0.0)
-              and (last_candle["CMF_20_4h"] < -0.0)
-            ):
-              return True, f"exit_profit_{mode_name}_t_8_2"
-            elif profit_init_ratio < (previous_profit - 0.05) and (last_candle["ROC_9_4h"] > 40.0):
-              return True, f"exit_profit_{mode_name}_t_8_3"
-          elif 0.09 <= profit_init_ratio < 0.10:
-            if (
-              profit_init_ratio < (previous_profit - 0.03)
-              and (last_candle["RSI_14"] < 50.0)
-              and (last_candle["RSI_14"] < previous_candle_1["RSI_14"])
-              and (last_candle["CMF_20"] < -0.0)
-            ):
-              return True, f"exit_profit_{mode_name}_t_9_1"
-            elif (
-              profit_init_ratio < (previous_profit - 0.03)
-              and (last_candle["CMF_20"] < -0.0)
-              and (last_candle["CMF_20_1h"] < -0.0)
-              and (last_candle["CMF_20_4h"] < -0.0)
-            ):
-              return True, f"exit_profit_{mode_name}_t_9_2"
-            elif profit_init_ratio < (previous_profit - 0.05) and (last_candle["ROC_9_4h"] > 40.0):
-              return True, f"exit_profit_{mode_name}_t_9_3"
-          elif 0.10 <= profit_init_ratio < 0.11:
-            if (
-              profit_init_ratio < (previous_profit - 0.03)
-              and (last_candle["RSI_14"] < 50.0)
-              and (last_candle["RSI_14"] < previous_candle_1["RSI_14"])
-              and (last_candle["CMF_20"] < -0.0)
-            ):
-              return True, f"exit_profit_{mode_name}_t_10_1"
-            elif (
-              profit_init_ratio < (previous_profit - 0.03)
-              and (last_candle["CMF_20"] < -0.0)
-              and (last_candle["CMF_20_1h"] < -0.0)
-              and (last_candle["CMF_20_4h"] < -0.0)
-            ):
-              return True, f"exit_profit_{mode_name}_t_10_2"
-            elif profit_init_ratio < (previous_profit - 0.05) and (last_candle["ROC_9_4h"] > 40.0):
-              return True, f"exit_profit_{mode_name}_t_10_3"
-          elif 0.11 <= profit_init_ratio < 0.12:
-            if (
-              profit_init_ratio < (previous_profit - 0.03)
-              and (last_candle["RSI_14"] < 50.0)
-              and (last_candle["RSI_14"] < previous_candle_1["RSI_14"])
-              and (last_candle["CMF_20"] < -0.0)
-            ):
-              return True, f"exit_profit_{mode_name}_t_11_1"
-            elif (
-              profit_init_ratio < (previous_profit - 0.03)
-              and (last_candle["CMF_20"] < -0.0)
-              and (last_candle["CMF_20_1h"] < -0.0)
-              and (last_candle["CMF_20_4h"] < -0.0)
-            ):
-              return True, f"exit_profit_{mode_name}_t_11_2"
-            elif profit_init_ratio < (previous_profit - 0.05) and (last_candle["ROC_9_4h"] > 40.0):
-              return True, f"exit_profit_{mode_name}_t_11_3"
-          elif 0.12 <= profit_init_ratio:
-            if (
-              profit_init_ratio < (previous_profit - 0.03)
-              and (last_candle["RSI_14"] < 50.0)
-              and (last_candle["RSI_14"] < previous_candle_1["RSI_14"])
-              and (last_candle["CMF_20"] < -0.0)
-            ):
-              return True, f"exit_profit_{mode_name}_t_12_1"
-            elif (
-              profit_init_ratio < (previous_profit - 0.03)
-              and (last_candle["CMF_20"] < -0.0)
-              and (last_candle["CMF_20_1h"] < -0.0)
-              and (last_candle["CMF_20_4h"] < -0.0)
-            ):
-              return True, f"exit_profit_{mode_name}_t_12_2"
-            elif profit_init_ratio < (previous_profit - 0.05) and (last_candle["ROC_9_4h"] > 40.0):
-              return True, f"exit_profit_{mode_name}_t_12_3"
-    else:
-      return False, None
 
+      if not self.derisk_enable:
+        # Determine mode based on enter_tags (only if derisk_enable is False)
+        is_rapid_mode = all(c in self.long_rapid_mode_tags for c in enter_tags) if not trade.is_short else all(c in self.short_rapid_mode_tags for c in enter_tags) # Simplified
+        is_rebuy_mode = any(c in (self.long_rebuy_mode_tags if not trade.is_short else self.short_rebuy_mode_tags) for c in enter_tags) # Simplified
+        is_scalp_mode = any(c in (self.long_scalp_mode_tags if not trade.is_short else self.short_scalp_mode_tags) for c in enter_tags) # Simplified
+
+        stop_threshold = 0.0
+        if is_rapid_mode:
+          stop_threshold = self.stop_threshold_rapid_futures if self.is_futures_mode else self.stop_threshold_rapid_spot
+        elif is_rebuy_mode:
+          stop_threshold = self.stop_threshold_futures_rebuy if self.is_futures_mode else self.stop_threshold_spot_rebuy
+        elif is_scalp_mode:
+          stop_threshold = self.stop_threshold_scalp_futures if self.is_futures_mode else self.stop_threshold_scalp_spot
+        else: # Normal mode
+          stop_threshold = self.stop_threshold_doom_futures if self.is_futures_mode else self.stop_threshold_doom_spot
+
+        if profit_init_ratio <= -stop_threshold:
+          return True, previous_sell_reason
+
+    # --- Block 2: Handling U_E Stoploss ---
+    elif previous_sell_reason == f"exit_{mode_name}_stoploss_u_e":
+      if profit_init_ratio > 0.0 or is_derisked:
+        self._remove_profit_target(pair)
+        return False, None
+      # Using overall profit_ratio for this check
+      if profit_ratio < (previous_profit - (0.04 / trade.leverage)):
+        return True, previous_sell_reason
+
+    # --- Block 3: Handling Max Profit Target ---
+    elif previous_sell_reason == f"exit_profit_{mode_name}_max":
+      if profit_init_ratio < -0.08: # Significant loss after marking max profit, cancel target
+        self._remove_profit_target(pair)
+        return False, None
+
+      current_tags = enter_tags # Assuming enter_tags are the relevant tags for current mode check
+
+      is_scalp = False
+      if trade.is_short:
+          is_scalp = all(c in self.short_scalp_mode_tags for c in current_tags)
+      else: # Long
+          is_scalp = all(c in self.long_scalp_mode_tags for c in current_tags)
+
+      return self._get_profit_target_exit_conditions(
+          is_short=trade.is_short,
+          is_scalp_mode=is_scalp,
+          profit_init_ratio=profit_init_ratio,
+          previous_profit=previous_profit, # This is the profit_init_ratio from when target was marked
+          last_candle=last_candle,
+          previous_candle_1=previous_candle_1,
+          mode_name=mode_name
+      )
+
+    # --- Default: No relevant previous_sell_reason or conditions not met ---
     return False, None
 
   # Calc Total Profit
