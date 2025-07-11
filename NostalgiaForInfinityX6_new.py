@@ -7418,134 +7418,6 @@ class NostalgiaForInfinityX6(IStrategy):
 
     return False, None
 
-  def _process_long_exit_mode(
-    self,
-    mode_name: str,
-    profit_check_ratio: float,  # Typically profit_init_ratio, but profit_current_stake_ratio for rebuy
-    max_profit: float,
-    max_loss: float,
-    last_candle,
-    previous_candle_1,
-    previous_candle_2,
-    previous_candle_3,
-    previous_candle_4,
-    previous_candle_5,
-    trade: "Trade",
-    current_time: "datetime",
-    enter_tags,
-    current_rate: float, # Added for stoploss
-    profit_stake: float, # Added for stoploss
-    profit_ratio: float, # Added for stoploss (overall, not just init or current_stake)
-    profit_current_stake_ratio: float, # Added for stoploss (overall, not just init or current_stake)
-    profit_init_ratio: float, # Added for stoploss
-    filled_entries, # Added for stoploss
-    filled_exits, # Added for stoploss
-  ) -> tuple[bool, Optional[str]]:
-    sell = False
-    signal_name = None
-
-    # if the profit is negative skip checking these main signals
-    if profit_check_ratio > 0.0: # profit_check_ratio is used here
-      # Original sell signals
-      sell, signal_name = self.long_exit_signals(
-        mode_name,
-        profit_check_ratio, # Pass appropriate profit ratio
-        max_profit,
-        max_loss,
-        last_candle,
-        previous_candle_1,
-        previous_candle_2,
-        previous_candle_3,
-        previous_candle_4,
-        previous_candle_5,
-        trade,
-        current_time,
-        enter_tags,
-      )
-
-      # Main sell signals
-      if not sell:
-        sell, signal_name = self.long_exit_main(
-          mode_name,
-          profit_check_ratio, # Pass appropriate profit ratio
-          max_profit,
-          max_loss,
-          last_candle,
-          previous_candle_1,
-          previous_candle_2,
-          previous_candle_3,
-          previous_candle_4,
-          previous_candle_5,
-          trade,
-          current_time,
-          enter_tags,
-        )
-
-      # Williams %R based sells
-      if not sell:
-        sell, signal_name = self.long_exit_williams_r(
-          mode_name,
-          profit_check_ratio, # Pass appropriate profit ratio
-          max_profit,
-          max_loss,
-          last_candle,
-          previous_candle_1,
-          previous_candle_2,
-          previous_candle_3,
-          previous_candle_4,
-          previous_candle_5,
-          trade,
-          current_time,
-          enter_tags,
-        )
-
-      # Downtrend/descending based sells
-      if not sell:
-        sell, signal_name = self.long_exit_dec(
-          mode_name,
-          profit_check_ratio, # Pass appropriate profit ratio
-          max_profit,
-          max_loss,
-          last_candle,
-          previous_candle_1,
-          previous_candle_2,
-          previous_candle_3,
-          previous_candle_4,
-          previous_candle_5,
-          trade,
-          current_time,
-          enter_tags,
-        )
-    
-    # Stoplosses are checked regardless of current profit if not already sold
-    if not sell:
-      sell_stop, signal_name_stop = self.long_exit_stoploss( # Renamed to avoid conflict
-        mode_name,
-        current_rate, # stoploss needs actual current_rate
-        profit_stake,
-        profit_ratio, # overall profit ratio
-        profit_current_stake_ratio, # overall current stake profit ratio
-        profit_init_ratio, # overall initial profit ratio
-        max_profit,
-        max_loss,
-        filled_entries,
-        filled_exits,
-        last_candle,
-        previous_candle_1,
-        previous_candle_2,
-        previous_candle_3,
-        previous_candle_4,
-        previous_candle_5,
-        trade,
-        current_time,
-        enter_tags,
-      )
-      if sell_stop:
-        sell = True
-        signal_name = signal_name_stop
-        
-    return sell, signal_name
-
   def _get_profit_threshold_config(self, trade_type: str, ema_check_type: str) -> list:
     """
     Helper to get profit threshold configuration for long_exit_main and short_exit_main.
@@ -7626,11 +7498,8 @@ class NostalgiaForInfinityX6(IStrategy):
 
   def _get_long_exit_williams_r_config(self) -> list:
     # This will hold the configurations for different profit tiers for long_exit_williams_r
-    # Each item: (min_profit, max_profit, conditions_func, signal_suffix_base)
-    # conditions_func will take (last_candle) and return True if conditions met
-    # This needs to be populated based on the original logic's thresholds and indicator checks
+    # Each item: (min_profit, max_profit, conditions_list_of_lambdas, signal_suffix_base)
     config = [
-        # Profit 0.1% - 1%
         (0.001, 0.01, [
             lambda lc: (lc["WILLR_480"] > -0.1) and (lc["WILLR_14"] >= -1.0) and (lc["RSI_14"] > 75.0),
             lambda lc: (lc["WILLR_14"] >= -1.0) and (lc["RSI_14"] > 84.0),
@@ -7651,7 +7520,6 @@ class NostalgiaForInfinityX6(IStrategy):
             lambda lc: (lc["RSI_3"] > 98.0) and (lc["WILLR_14"] > -4.0) and (lc["AROONU_14_4h"] > 75.0) and (lc["STOCHRSIk_14_14_3_3_4h"] > 70.0),
             lambda lc: (lc["RSI_3"] > 90.0) and (lc["WILLR_14"] > -20.0) and (lc["AROONU_14_4h"] > 50.0) and (lc["top_wick_pct_1d"] > 20.0),
         ], "w_0"),
-        # Profit 1% - 2%
         (0.01, 0.02, [
             lambda lc: lc["WILLR_480"] > -0.2,
             lambda lc: (lc["WILLR_14"] >= -1.0) and (lc["RSI_14"] > 78.0),
@@ -7672,7 +7540,6 @@ class NostalgiaForInfinityX6(IStrategy):
             lambda lc: (lc["RSI_3"] > 96.0) and (lc["WILLR_14"] > -6.0) and (lc["AROONU_14_4h"] > 75.0) and (lc["STOCHRSIk_14_14_3_3_4h"] > 70.0),
             lambda lc: (lc["RSI_3"] > 88.0) and (lc["WILLR_14"] > -20.0) and (lc["AROONU_14_4h"] > 50.0) and (lc["top_wick_pct_1d"] > 20.0),
         ], "w_1"),
-        # Profit 2% - 3%
         (0.02, 0.03, [
             lambda lc: lc["WILLR_480"] > -0.3,
             lambda lc: (lc["WILLR_14"] >= -1.0) and (lc["RSI_14"] > 77.0),
@@ -7693,7 +7560,6 @@ class NostalgiaForInfinityX6(IStrategy):
             lambda lc: (lc["RSI_3"] > 94.0) and (lc["WILLR_14"] > -8.0) and (lc["AROONU_14_4h"] > 75.0) and (lc["STOCHRSIk_14_14_3_3_4h"] > 70.0),
             lambda lc: (lc["RSI_3"] > 86.0) and (lc["WILLR_14"] > -20.0) and (lc["AROONU_14_4h"] > 50.0) and (lc["top_wick_pct_1d"] > 20.0),
         ], "w_2"),
-        # Profit 3% - 4%
         (0.03, 0.04, [
             lambda lc: lc["WILLR_480"] > -0.4,
             lambda lc: (lc["WILLR_14"] >= -1.0) and (lc["RSI_14"] > 76.0),
@@ -7714,7 +7580,6 @@ class NostalgiaForInfinityX6(IStrategy):
             lambda lc: (lc["RSI_3"] > 92.0) and (lc["WILLR_14"] > -10.0) and (lc["AROONU_14_4h"] > 75.0) and (lc["STOCHRSIk_14_14_3_3_4h"] > 70.0),
             lambda lc: (lc["RSI_3"] > 84.0) and (lc["WILLR_14"] > -20.0) and (lc["AROONU_14_4h"] > 50.0) and (lc["top_wick_pct_1d"] > 20.0),
         ], "w_3"),
-        # Profit 4% - 5%
         (0.04, 0.05, [
             lambda lc: lc["WILLR_480"] > -0.5,
             lambda lc: (lc["WILLR_14"] >= -1.0) and (lc["RSI_14"] > 75.0),
@@ -7735,7 +7600,6 @@ class NostalgiaForInfinityX6(IStrategy):
             lambda lc: (lc["RSI_3"] > 90.0) and (lc["WILLR_14"] > -12.0) and (lc["AROONU_14_4h"] > 75.0) and (lc["STOCHRSIk_14_14_3_3_4h"] > 70.0),
             lambda lc: (lc["RSI_3"] > 82.0) and (lc["WILLR_14"] > -20.0) and (lc["AROONU_14_4h"] > 50.0) and (lc["top_wick_pct_1d"] > 20.0),
         ], "w_4"),
-        # Profit 5% - 6%
         (0.05, 0.06, [
             lambda lc: lc["WILLR_480"] > -0.6,
             lambda lc: (lc["WILLR_14"] >= -1.0) and (lc["RSI_14"] > 74.0),
@@ -7756,7 +7620,6 @@ class NostalgiaForInfinityX6(IStrategy):
             lambda lc: (lc["RSI_3"] > 88.0) and (lc["WILLR_14"] > -14.0) and (lc["AROONU_14_4h"] > 75.0) and (lc["STOCHRSIk_14_14_3_3_4h"] > 70.0),
             lambda lc: (lc["RSI_3"] > 80.0) and (lc["WILLR_14"] > -20.0) and (lc["AROONU_14_4h"] > 50.0) and (lc["top_wick_pct_1d"] > 20.0),
         ], "w_5"),
-        # Profit 6% - 7%
         (0.06, 0.07, [
              lambda lc: lc["WILLR_480"] > -0.7,
              lambda lc: (lc["WILLR_14"] >= -1.0) and (lc["RSI_14"] > 75.0),
@@ -7777,7 +7640,6 @@ class NostalgiaForInfinityX6(IStrategy):
              lambda lc: (lc["RSI_3"] > 90.0) and (lc["WILLR_14"] > -12.0) and (lc["AROONU_14_4h"] > 75.0) and (lc["STOCHRSIk_14_14_3_3_4h"] > 70.0),
              lambda lc: (lc["RSI_3"] > 82.0) and (lc["WILLR_14"] > -20.0) and (lc["AROONU_14_4h"] > 50.0) and (lc["top_wick_pct_1d"] > 20.0),
         ], "w_6"),
-        # Profit 7% - 8%
         (0.07, 0.08, [
             lambda lc: lc["WILLR_480"] > -0.8,
             lambda lc: (lc["WILLR_14"] >= -1.0) and (lc["RSI_14"] > 76.0),
@@ -7798,7 +7660,6 @@ class NostalgiaForInfinityX6(IStrategy):
             lambda lc: (lc["RSI_3"] > 92.0) and (lc["WILLR_14"] > -10.0) and (lc["AROONU_14_4h"] > 75.0) and (lc["STOCHRSIk_14_14_3_3_4h"] > 70.0),
             lambda lc: (lc["RSI_3"] > 84.0) and (lc["WILLR_14"] > -20.0) and (lc["AROONU_14_4h"] > 50.0) and (lc["top_wick_pct_1d"] > 20.0),
         ], "w_7"),
-        # Profit 8% - 9%
         (0.08, 0.09, [
             lambda lc: lc["WILLR_480"] > -0.9,
             lambda lc: (lc["WILLR_14"] >= -1.0) and (lc["RSI_14"] > 77.0),
@@ -7819,7 +7680,6 @@ class NostalgiaForInfinityX6(IStrategy):
             lambda lc: (lc["RSI_3"] > 94.0) and (lc["WILLR_14"] > -8.0) and (lc["AROONU_14_4h"] > 75.0) and (lc["STOCHRSIk_14_14_3_3_4h"] > 70.0),
             lambda lc: (lc["RSI_3"] > 86.0) and (lc["WILLR_14"] > -20.0) and (lc["AROONU_14_4h"] > 50.0) and (lc["top_wick_pct_1d"] > 20.0),
         ], "w_8"),
-        # Profit 9% - 10%
         (0.09, 0.1, [
             lambda lc: lc["WILLR_480"] > -1.0,
             lambda lc: (lc["WILLR_14"] >= -1.0) and (lc["RSI_14"] > 78.0),
@@ -7840,7 +7700,6 @@ class NostalgiaForInfinityX6(IStrategy):
             lambda lc: (lc["RSI_3"] > 96.0) and (lc["WILLR_14"] > -6.0) and (lc["AROONU_14_4h"] > 75.0) and (lc["STOCHRSIk_14_14_3_3_4h"] > 70.0),
             lambda lc: (lc["RSI_3"] > 88.0) and (lc["WILLR_14"] > -20.0) and (lc["AROONU_14_4h"] > 50.0) and (lc["top_wick_pct_1d"] > 20.0),
         ], "w_9"),
-        # Profit 10% - 12%
         (0.1, 0.12, [
             lambda lc: lc["WILLR_480"] > -1.1,
             lambda lc: (lc["WILLR_14"] >= -1.0) and (lc["RSI_14"] > 79.0),
@@ -7861,7 +7720,6 @@ class NostalgiaForInfinityX6(IStrategy):
             lambda lc: (lc["RSI_3"] > 98.0) and (lc["WILLR_14"] > -4.0) and (lc["AROONU_14_4h"] > 75.0) and (lc["STOCHRSIk_14_14_3_3_4h"] > 70.0),
             lambda lc: (lc["RSI_3"] > 90.0) and (lc["WILLR_14"] > -20.0) and (lc["AROONU_14_4h"] > 50.0) and (lc["top_wick_pct_1d"] > 20.0),
         ], "w_10"),
-        # Profit 12% - 20%
         (0.12, 0.2, [
             lambda lc: lc["WILLR_480"] > -0.4,
             lambda lc: (lc["WILLR_14"] >= -1.0) and (lc["RSI_14"] > 80.0),
@@ -7882,7 +7740,6 @@ class NostalgiaForInfinityX6(IStrategy):
             lambda lc: (lc["RSI_3"] > 99.0) and (lc["WILLR_14"] > -2.0) and (lc["AROONU_14_4h"] > 75.0) and (lc["STOCHRSIk_14_14_3_3_4h"] > 70.0),
             lambda lc: (lc["RSI_3"] > 92.0) and (lc["WILLR_14"] > -20.0) and (lc["AROONU_14_4h"] > 50.0) and (lc["top_wick_pct_1d"] > 20.0),
         ], "w_11"),
-        # Profit > 20%
         (0.2, float('inf'), [
             lambda lc: lc["WILLR_480"] > -0.2,
             lambda lc: (lc["WILLR_14"] >= -1.0) and (lc["RSI_14"] > 81.0),
@@ -7947,6 +7804,73 @@ class NostalgiaForInfinityX6(IStrategy):
   ) -> tuple:
     config = self._get_long_exit_williams_r_config()
     return self._check_profit_thresholds_for_williams_r_long_exit(mode_name, current_profit, last_candle, config)
+
+  # Helper function for a common condition pattern in long_exit_dec
+  def _long_exit_dec_common_condition(self, last_candle, willr_thresh, rsi_thresh, ema_12_200_1h_check, ema_12_200_4h_check, kst_check_1h, kst_check_4h, cmf_1h_thresh=None, cmf_4h_thresh=None, stoch_4h_k_thresh=None, stoch_4h_k_pct_change_thresh=None, roc_9_1h_thresh=None, roc_9_4h_thresh=None, rsi_3_thresh=None, stoch_k_thresh=None, roc_9_1d_thresh_gt=None, roc_9_1d_thresh_lt=None, change_pct_1d_thresh=None, change_pct_4h_thresh=None, aroonu_4h_thresh=None, stoch_1h_k_thresh=None, roc_2_1d_thresh=None, rsi_14_1h_thresh=None, rsi_14_4h_thresh=None, close_high_max_30_1d_ratio=None) -> bool:
+      conditions = []
+      conditions.append(last_candle["WILLR_14"] > willr_thresh)
+      conditions.append(last_candle["RSI_14"] > rsi_thresh if rsi_thresh is not None else last_candle["RSI_14"] < -rsi_thresh if rsi_thresh < 0 else True) # Handles > and < via sign
+
+      if ema_12_200_1h_check:
+          conditions.append(isinstance(last_candle["EMA_200_1h"], np.float64) and (last_candle["EMA_12_1h"] < last_candle["EMA_200_1h"]))
+      if ema_12_200_4h_check:
+          conditions.append(isinstance(last_candle["EMA_200_4h"], np.float64) and (last_candle["EMA_12_4h"] < last_candle["EMA_200_4h"]))
+
+      if kst_check_1h:
+          conditions.append(last_candle["KST_10_15_20_30_10_10_10_15_1h"] < last_candle["KSTs_9_1h"])
+      if kst_check_4h:
+          conditions.append(last_candle["KST_10_15_20_30_10_10_10_15_4h"] < last_candle["KSTs_9_4h"])
+
+      if cmf_1h_thresh is not None:
+          conditions.append(last_candle["CMF_20_1h"] < cmf_1h_thresh)
+      if cmf_4h_thresh is not None:
+          conditions.append(last_candle["CMF_20_4h"] < cmf_4h_thresh)
+
+      if stoch_4h_k_thresh is not None and stoch_4h_k_pct_change_thresh is not None:
+          conditions.append((last_candle["STOCHRSIk_14_14_3_3_4h"] > stoch_4h_k_thresh) and (last_candle["STOCHRSIk_14_14_3_3_change_pct_4h"] < stoch_4h_k_pct_change_thresh))
+      elif stoch_4h_k_thresh is not None : # Only k check
+           conditions.append(last_candle["STOCHRSIk_14_14_3_3_4h"] > stoch_4h_k_thresh)
+
+
+      if roc_9_1h_thresh is not None:
+          conditions.append(last_candle["ROC_9_1h"] < roc_9_1h_thresh if roc_9_1h_thresh > 0 else last_candle["ROC_9_1h"] > -roc_9_1h_thresh) # Handles < and > via sign
+      if roc_9_4h_thresh is not None:
+          conditions.append(last_candle["ROC_9_4h"] < roc_9_4h_thresh if roc_9_4h_thresh > 0 else last_candle["ROC_9_4h"] > -roc_9_4h_thresh)
+
+      if rsi_3_thresh is not None:
+          conditions.append(last_candle["RSI_3"] > rsi_3_thresh)
+      if stoch_k_thresh is not None:
+          conditions.append(last_candle["STOCHRSIk_14_14_3_3"] > stoch_k_thresh)
+
+      if roc_9_1d_thresh_gt is not None:
+          conditions.append(isinstance(last_candle["ROC_9_1d"], np.float64) and (last_candle["ROC_9_1d"] > roc_9_1d_thresh_gt))
+      if roc_9_1d_thresh_lt is not None: # For negative checks like ROC_9_1d < -X
+          conditions.append(isinstance(last_candle["ROC_9_1d"], np.float64) and (last_candle["ROC_9_1d"] < roc_9_1d_thresh_lt))
+
+      if change_pct_1d_thresh is not None:
+          conditions.append(last_candle["change_pct_1d"] < change_pct_1d_thresh)
+      if change_pct_4h_thresh is not None:
+          conditions.append(last_candle["change_pct_4h"] < change_pct_4h_thresh)
+
+      if aroonu_4h_thresh is not None:
+          conditions.append(last_candle["AROONU_14_4h"] > aroonu_4h_thresh)
+
+      if stoch_1h_k_thresh is not None:
+          conditions.append(last_candle["STOCHRSIk_14_14_3_3_1h"] > stoch_1h_k_thresh)
+
+      if roc_2_1d_thresh is not None:
+          conditions.append(last_candle["ROC_2_1d"] < roc_2_1d_thresh)
+
+      if rsi_14_1h_thresh is not None: # specific for d_0_109
+          conditions.append(last_candle["RSI_14_1h"] > rsi_14_1h_thresh)
+      if rsi_14_4h_thresh is not None: # specific for d_0_109
+          conditions.append(last_candle["RSI_14_4h"] > rsi_14_4h_thresh)
+
+      if close_high_max_30_1d_ratio is not None: # specific for d_0_125
+          conditions.append(last_candle["close"] < (last_candle["high_max_30_1d"] * close_high_max_30_1d_ratio))
+
+      return all(c for c in conditions if c is not None) # Filter out None from non-applicable conditions
+
 
   # Long Exit Dec
   # ---------------------------------------------------------------------------------------------
