@@ -570,22 +570,22 @@ class NostalgiaForInfinityX6(IStrategy):
   }
 
   short_entry_signal_params = {
-    # Enable/Disable conditions
-    # -------------------------------------------------------
-    "short_entry_condition_499_enable": True,
-    "short_entry_condition_500_enable": True,
-    "short_entry_condition_501_enable": True,
-    "short_entry_condition_502_enable": True,
-    "short_entry_condition_503_enable": True,
-    "short_entry_condition_504_enable": True,
-    "short_entry_condition_511_enable": True,
-    "short_entry_condition_512_enable": False,
-    "short_entry_condition_513_enable": False,
-    "short_entry_condition_514_enable": True,
-    "short_entry_condition_515_enable": True,
-    "short_entry_condition_541_enable": True,
-    "short_entry_condition_542_enable": True,
-    "short_entry_condition_543_enable": True,
+    # # Enable/Disable conditions
+    # # -------------------------------------------------------
+    # "short_entry_condition_499_enable": True,
+    # "short_entry_condition_500_enable": True,
+    # "short_entry_condition_501_enable": True,
+    # "short_entry_condition_502_enable": True,
+    # "short_entry_condition_503_enable": True,
+    # "short_entry_condition_504_enable": True,
+    # "short_entry_condition_511_enable": True,
+    # "short_entry_condition_512_enable": False,
+    # "short_entry_condition_513_enable": False,
+    # "short_entry_condition_514_enable": True,
+    # "short_entry_condition_515_enable": True,
+    # "short_entry_condition_541_enable": True,
+    # "short_entry_condition_542_enable": True,
+    # "short_entry_condition_543_enable": True,
     # "short_entry_condition_603_enable": True,
     # "short_entry_condition_641_enable": True,
     # "short_entry_condition_642_enable": True,
