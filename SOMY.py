@@ -9,6 +9,7 @@ import talib.abstract as ta
 
 from freqtrade.persistence import Trade
 from freqtrade.strategy import (IStrategy, DecimalParameter, IntParameter)
+from pandas import DataFrame, Series
 
 warnings.simplefilter(action="ignore", category=RuntimeWarning)
 
