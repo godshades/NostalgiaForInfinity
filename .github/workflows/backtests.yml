@@ -3,7 +3,7 @@ name: Backtests
 on:
   push:
     paths:
-      - 'NostalgiaForInfinityX6.py'
+      - 'SOMY.py'
 
 jobs:
   Backtest:
