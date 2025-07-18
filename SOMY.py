@@ -2,8 +2,9 @@ from datetime import datetime, timedelta
 from functools import reduce
 import warnings
 
-import freqtrade.technical as ftt
-from pandas import DataFrame
+import technical.indicators as ftt
+import pandas as pd
+import pandas_ta as pta
 import talib.abstract as ta
 
 from freqtrade.persistence import Trade
