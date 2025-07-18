@@ -225,7 +225,8 @@ class SOMY(IStrategy):
 
     # --- 9. Custom Exit Signal ---
     def custom_exit(self, pair: str, trade: 'Trade', current_time: 'datetime', current_rate: float,
-                    current_profit: float, dataframe: DataFrame, **kwargs):
+                    current_profit: float, **kwargs):
+        dataframe, _ = self.dp.get_analyzed_dataframe(pair, self.timeframe)
         last_candle = dataframe.iloc[-1].squeeze()
         if current_profit > -0.03:
             if trade.is_short and last_candle["cci"] < -80:
