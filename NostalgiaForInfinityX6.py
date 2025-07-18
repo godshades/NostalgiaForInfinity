@@ -54,7 +54,7 @@ warnings.simplefilter(action="ignore", category=pd.errors.PerformanceWarning)
 ##                                                                                                         ##
 ##  Binance: https://www.binance.com/join?ref=C68K26A9 (20% discount on trading fees)                      ##
 ##  Kucoin: https://www.kucoin.com/r/af/QBSSS5J2 (20% lifetime discount on trading fees)                   ##
-##  Gate: https://www.gate.com/share/nfinfinity (20% lifetime discount on trading fees)                    ##
+##  Gate: https://www.gate.io/share/nfinfinity (20% lifetime discount on trading fees)                     ##
 ##  OKX: https://www.okx.com/join/11749725931 (20% discount on trading fees)                               ##
 ##  MEXC: https://promote.mexc.com/a/luA6Xclb (10% discount on trading fees)                               ##
 ##  ByBit: https://partner.bybit.com/b/nfi                                                                 ##
@@ -70,7 +70,7 @@ class NostalgiaForInfinityX6(IStrategy):
   INTERFACE_VERSION = 3
 
   def version(self) -> str:
-    return "v16.5.165"
+    return "v16.5.219"
 
   stoploss = -0.99
 
@@ -4007,7 +4007,7 @@ class NostalgiaForInfinityX6(IStrategy):
     df.loc[:, "enter_long"] = ""
     df.loc[:, "enter_short"] = ""
 
-    is_backtest = self.dp.runmode.value in ["backtest", "hyperopt", "plot"]
+    is_backtest = self.dp.runmode.value in ["backtest", "hyperopt", "plot", "webserver"]
     # the number of free slots
     current_free_slots = self.config["max_open_trades"]
     if not is_backtest:
@@ -4442,6 +4442,8 @@ class NostalgiaForInfinityX6(IStrategy):
           short_entry_logic.append(
             (df["RSI_3_15m"] < 90.0) | (df["RSI_3_4h"] < 90.0) | (df["STOCHRSIk_14_14_3_3_1d"] > 30.0)
           )
+          # 15m up move, 1h still low
+          short_entry_logic.append((df["RSI_3_15m"] < 90.0) | (df["STOCHRSIk_14_14_3_3_1h"] > 50.0))
           # 15m & 1h up move, 1h still low
           short_entry_logic.append(
             (df["RSI_3_15m"] < 85.0) | (df["RSI_3_1h"] < 65.0) | (df["STOCHRSIk_14_14_3_3_1h"] > 60.0)
@@ -24215,7 +24217,13 @@ class NostalgiaForInfinityX6(IStrategy):
           is_derisk_1_found
           # only queue 4 grinds open
           and (num_open_grinds_and_buybacks == grind_4_sub_grind_count)
-          and ((slice_profit < -0.04) and (last_candle["RSI_3"] > 10.0) and (last_candle["RSI_3_15m"] > 20.0))
+          and (
+            (slice_profit < -0.04)
+            and (last_candle["RSI_3"] > 10.0)
+            and (last_candle["RSI_3_15m"] > 20.0)
+            and (last_candle["AROONU_14"] < 50.0)
+            and (last_candle["AROONU_14_15m"] < 50.0)
+          )
         )
       )
       and (current_time - timedelta(minutes=5) > filled_entries[-1].order_filled_utc)
@@ -46889,7 +46897,13 @@ class NostalgiaForInfinityX6(IStrategy):
           is_derisk_1_found
           # only queue 4 grinds open
           and (num_open_grinds_and_buybacks == grind_4_sub_grind_count)
-          and ((slice_profit > 0.04) and (last_candle["RSI_3"] < 90.0) and (last_candle["RSI_3_15m"] < 80.0))
+          and (
+            (slice_profit > 0.04)
+            and (last_candle["RSI_3"] < 90.0)
+            and (last_candle["RSI_3_15m"] < 80.0)
+            and (last_candle["AROOND_14"] < 50.0)
+            and (last_candle["AROOND_14_15m"] < 50.0)
+          )
         )
       )
       and (current_time - timedelta(minutes=5) > filled_entries[-1].order_filled_utc)

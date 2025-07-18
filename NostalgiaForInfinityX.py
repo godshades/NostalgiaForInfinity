@@ -35,64 +35,81 @@ def top_percent_change_dca(dataframe: DataFrame, length: int) -> float:
             return (dataframe['open'].rolling(length).max() - dataframe['close']) / dataframe['close']
 
 
-def EWO(dataframe, ema_length=5, ema2_length=3):
-    df = dataframe.copy()
-    ema1 = ta.EMA(df, timeperiod=ema_length)
-    ema2 = ta.EMA(df, timeperiod=ema2_length)
-    emadif = (ema1 - ema2) / df['close'] * 100
-    return emadif
-
-def williams_r(dataframe: DataFrame, period: int = 14) -> Series:
-    """Williams %R, or just %R, is a technical analysis oscillator showing the current closing price in relation to the high and low
-        of the past N days (for a given N). It was developed by a publisher and promoter of trading materials, Larry Williams.
-        Its purpose is to tell whether a stock or commodity market is trading near the high or the low, or somewhere in between,
-        of its recent trading range.
-        The oscillator is on a negative scale, from −100 (lowest) up to 0 (highest).
-    """
-
-    highest_high = dataframe["high"].rolling(center=False, window=period).max()
-    lowest_low = dataframe["low"].rolling(center=False, window=period).min()
-
-    WR = Series(
-        (highest_high - dataframe["close"]) / (highest_high - lowest_low),
-        name="{0} Williams %R".format(period),
-        )
-
-    return WR * -100
-
-def VWAPB(dataframe, window_size=20, num_of_std=1):
-    df = dataframe.copy()
-    df['vwap'] = qtpylib.rolling_vwap(df,window=window_size)
-    rolling_std = df['vwap'].rolling(window=window_size).std()
-    df['vwap_low'] = df['vwap'] - (rolling_std * num_of_std)
-    df['vwap_high'] = df['vwap'] + (rolling_std * num_of_std)
-    return df['vwap_low'], df['vwap'], df['vwap_high']
-
-def bollinger_bands(stock_price, window_size, num_of_std):
-    rolling_mean = stock_price.rolling(window=window_size).mean()
-    rolling_std = stock_price.rolling(window=window_size).std()
-    lower_band = rolling_mean - (rolling_std * num_of_std)
-    return np.nan_to_num(rolling_mean), np.nan_to_num(lower_band)
-
-def chaikin_money_flow(dataframe, n=20, fillna=False) -> Series:
-    """Chaikin Money Flow (CMF)
-    It measures the amount of Money Flow Volume over a specific period.
-    http://stockcharts.com/school/doku.php?id=chart_school:technical_indicators:chaikin_money_flow_cmf
-    Args:
-        dataframe(pandas.Dataframe): dataframe containing ohlcv
-        n(int): n period.
-        fillna(bool): if True, fill nan values.
-    Returns:
-        pandas.Series: New feature generated.
-    """
-    mfv = ((dataframe['close'] - dataframe['low']) - (dataframe['high'] - dataframe['close'])) / (dataframe['high'] - dataframe['low'])
-    mfv = mfv.fillna(0.0)  # float division by zero
-    mfv *= dataframe['volume']
-    cmf = (mfv.rolling(n, min_periods=0).sum()
-           / dataframe['volume'].rolling(n, min_periods=0).sum())
-    if fillna:
-        cmf = cmf.replace([np.inf, -np.inf], np.nan).fillna(0)
-    return Series(cmf, name='cmf')
+#############################################################################################################
+##                NostalgiaForInfinityX by iterativ                                                        ##
+##           https://github.com/iterativv/NostalgiaForInfinity                                             ##
+##                                                                                                         ##
+##    Strategy for Freqtrade https://github.com/freqtrade/freqtrade                                        ##
+##                                                                                                         ##
+#############################################################################################################
+##               GENERAL RECOMMENDATIONS                                                                   ##
+##                                                                                                         ##
+##   For optimal performance, suggested to use between 4 and 6 open trades, with unlimited stake.          ##
+##   A pairlist with 40 to 80 pairs. Volume pairlist works well.                                           ##
+##   Prefer stable coin (USDT, USDC etc) pairs, instead of BTC or ETH pairs.                              ##
+##   Highly recommended to blacklist leveraged tokens (*BULL, *BEAR, *UP, *DOWN etc).                      ##
+##   Ensure that you don't override any variables in you config.json. Especially                           ##
+##   the timeframe (must be 5m).                                                                           ##
+##     use_exit_signal must set to true (or not set at all).                                               ##
+##     exit_profit_only must set to false (or not set at all).                                             ##
+##     ignore_roi_if_entry_signal must set to true (or not set at all).                                    ##
+##                                                                                                         ##
+#############################################################################################################
+##               HOLD SUPPORT                                                                              ##
+##                                                                                                         ##
+## -------- SPECIFIC TRADES ------------------------------------------------------------------------------ ##
+##   In case you want to have SOME of the trades to only be sold when on profit, add a file named          ##
+##   "nfi-hold-trades.json" in the user_data directory                                                     ##
+##                                                                                                         ##
+##   The contents should be similar to:                                                                    ##
+##                                                                                                         ##
+##   {"trade_ids": [1, 3, 7], "profit_ratio": 0.005}                                                       ##
+##                                                                                                         ##
+##   Or, for individual profit ratios(Notice the trade ID's as strings:                                    ##
+##                                                                                                         ##
+##   {"trade_ids": {"1": 0.001, "3": -0.005, "7": 0.05}}                                                   ##
+##                                                                                                         ##
+##   NOTE:                                                                                                 ##
+##    * `trade_ids` is a list of integers, the trade ID's, which you can get from the logs or from the     ##
+##      output of the telegram status command.                                                             ##
+##    * Regardless of the defined profit ratio(s), the strategy MUST still produce a SELL signal for the   ##
+##      HOLD support logic to run                                                                          ##
+##    * This feature can be completely disabled with the holdSupportEnabled class attribute                ##
+##                                                                                                         ##
+## -------- SPECIFIC PAIRS ------------------------------------------------------------------------------- ##
+##   In case you want to have some pairs to always be on held until a specific profit, using the same      ##
+##   "nfi-hold-trades.json" file add something like:                                                       ##
+##                                                                                                         ##
+##   {"trade_pairs": {"BTC/USDT": 0.001, "ETH/USDT": -0.005}}                                              ##
+##                                                                                                         ##
+## -------- SPECIFIC TRADES AND PAIRS -------------------------------------------------------------------- ##
+##   It is also valid to include specific trades and pairs on the holds file, for example:                 ##
+##                                                                                                         ##
+##   {"trade_ids": {"1": 0.001}, "trade_pairs": {"BTC/USDT": 0.001}}                                       ##
+#############################################################################################################
+##               DONATIONS                                                                                 ##
+##                                                                                                         ##
+##   BTC: bc1qvflsvddkmxh7eqhc4jyu5z5k6xcw3ay8jl49sk                                                       ##
+##   ETH (ERC20): 0x83D3cFb8001BDC5d2211cBeBB8cB3461E5f7Ec91                                               ##
+##   BEP20/BSC (USDT, ETH, BNB, ...): 0x86A0B21a20b39d16424B7c8003E4A7e12d78ABEe                           ##
+##   TRC20/TRON (USDT, TRON, ...): TTAa9MX6zMLXNgWMhg7tkNormVHWCoq8Xk                                      ##
+##                                                                                                         ##
+##  Patreon: https://www.patreon.com/iterativ                                                              ##
+##                                                                                                         ##
+##               REFERRAL LINKS                                                                            ##
+##                                                                                                         ##
+##  Binance: https://www.binance.com/join?ref=C68K26A9 (20% discount on trading fees)                      ##
+##  Kucoin: https://www.kucoin.com/r/af/QBSSS5J2 (20% lifetime discount on trading fees)                   ##
+##  Gate: https://www.gate.io/share/nfinfinity (20% lifetime discount on trading fees)                     ##
+##  OKX: https://www.okx.com/join/11749725931 (20% discount on trading fees)                               ##
+##  MEXC: https://promote.mexc.com/a/luA6Xclb (10% discount on trading fees)                               ##
+##  ByBit: https://partner.bybit.com/b/nfi                                                                 ##
+##  Bitget: https://bonus.bitget.com/fdqe83481698435803831 (lifetime 20% +10% extra spot rebate)           ##
+##  BitMart: https://www.bitmart.com/invite/nfinfinity/en-US (20% lifetime discount on trading fees)       ##
+##  HTX: https://www.htx.com/invite/en-us/1f?invite_code=ubpt2223                                          ##
+##         (Welcome Bonus worth 241 USDT upon completion of a deposit and trade)                           ##
+##  Bitvavo: https://bitvavo.com/invite?a=D22103A4BC (no fees for the first € 10000)                       ##
+#############################################################################################################
 
 
 def ha_typical_price(bars):
