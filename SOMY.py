@@ -6,6 +6,7 @@ from freqtrade.strategy.interface import IStrategy
 from pandas import DataFrame
 from freqtrade.strategy import DecimalParameter, IntParameter
 from functools import reduce
+from technical import qtpylib
 import warnings
 
 warnings.simplefilter(action="ignore", category=RuntimeWarning)
@@ -102,9 +103,9 @@ class SOMY(IStrategy):
         dataframe['macdsignal'] = macd['macdsignal']
 
         # Bollinger Bands: corrected ftt.bollinger_bands to ta.BBANDS and variable name 'bollinger' to 'Bollinger'
-        bollinger = ta.BBANDS(dataframe, timeperiod=20, nbdevup=2, nbdevdn=2)
-        dataframe['bb_lowerband'] = bollinger['lowerband'] # Use 'lowerband' for TA-Lib output
-        dataframe['bb_upperband'] = bollinger['upperband'] # Use 'upperband' for TA-Lib output
+        bollinger = qtpylib.bollinger_bands(qtpylib.typical_price(dataframe), window=20, stds=2)
+        dataframe['bb_lowerband'] = bollinger['lower']
+        dataframe['bb_upperband'] = bollinger['upper']
 
         dataframe['atr'] = ta.ATR(dataframe, timeperiod=14) # Changed ftt.atr to ta.ATR
         dataframe['atr_sma'] = ta.SMA(dataframe['atr'], timeperiod=20) # Changed ftt.sma to ta.SMA
