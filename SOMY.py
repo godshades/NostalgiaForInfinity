@@ -208,10 +208,6 @@ class SOMY(IStrategy):
         return dataframe
 
     # --- 7. Exit Logic ---
-    def populate_exit_trend(self, dataframe: DataFrame, metadata: dict) -> DataFrame:
-        dataframe.loc[(dataframe['fastk'] > self.sell_fastx.value), ['exit_long', 'exit_tag']] = (1, 'exit_long_fastk')
-        dataframe.loc[(dataframe['fastk'] < (100 - self.sell_fastx.value)), ['exit_short', 'exit_tag']] = (1, 'exit_short_fastk')
-        return dataframe
 
     # --- 8. Custom Stoploss ---
     def custom_stoploss(self, pair: str, trade: 'Trade', current_time: datetime,
@@ -226,7 +222,13 @@ class SOMY(IStrategy):
     def custom_exit(self, pair: str, trade: 'Trade', current_time: 'datetime', current_rate: float,
                     current_profit: float, dataframe: DataFrame, **kwargs):
         last_candle = dataframe.iloc[-1].squeeze()
-        if current_profit > -0.03:
+        
+        if current_profit > 0:
+            if trade.is_short and last_candle["fastk"] < (100 - self.sell_fastx.value):
+                return "exit_short_fastk"
+            if not trade.is_short and last_candle["fastk"] > self.sell_fastx.value:
+                return "exit_long_fastk"
+        elif current_profit > -0.03:
             if trade.is_short and last_candle["cci"] < -80:
                 return "cci_exit_short"
             if not trade.is_short and last_candle["cci"] > 80:
