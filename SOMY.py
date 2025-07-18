@@ -110,12 +110,6 @@ class SOMY(IStrategy):
         dataframe['atr'] = ta.ATR(dataframe, timeperiod=14) # Changed ftt.atr to ta.ATR
         dataframe['atr_sma'] = ta.SMA(dataframe['atr'], timeperiod=20) # Changed ftt.sma to ta.SMA
 
-        # Stochastic RSI: Using pandas_ta which is already imported as pta
-        # Parameters for pta.stochrsi are typically close, rsi_length, k, d
-        stoch_rsi = pta.stochrsi(close=dataframe['close'], rsi_length=14, k=3, d=3)
-        # pandas_ta returns columns like 'STOCHRSIk_14_3_3'
-        dataframe['stoch_rsi_k'] = stoch_rsi[f'STOCHRSIk_14_3_3']
-
         # Williams %R
         dataframe['willr'] = ta.WILLR(dataframe, timeperiod=14)
 
