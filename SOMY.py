@@ -1,15 +1,12 @@
 from datetime import datetime, timedelta
+import talib.abstract as ta
+import pandas_ta as pta
+from freqtrade.persistence import Trade
+from freqtrade.strategy.interface import IStrategy
+from pandas import DataFrame
+from freqtrade.strategy import DecimalParameter, IntParameter
 from functools import reduce
 import warnings
-
-import technical.indicators as ftt
-import pandas as pd
-import pandas_ta as pta
-import talib.abstract as ta
-
-from freqtrade.persistence import Trade
-from freqtrade.strategy import (IStrategy, DecimalParameter, IntParameter)
-from pandas import DataFrame, Series
 
 warnings.simplefilter(action="ignore", category=RuntimeWarning)
 
@@ -87,43 +84,48 @@ class SOMY(IStrategy):
     # --- 5. Indicator Population ---
     def populate_indicators(self, dataframe: DataFrame, metadata: dict) -> DataFrame:
         # Original Entry indicators
-        dataframe['sma_15'] = ftt.sma(dataframe, timeperiod=15)
-        dataframe['cti'] = ftt.cti(dataframe["close"], length=20)
-        dataframe['rsi'] = ftt.rsi(dataframe, timeperiod=14)
-        dataframe['rsi_fast'] = ftt.rsi(dataframe, timeperiod=4)
-        dataframe['rsi_slow'] = ftt.rsi(dataframe, timeperiod=20)
-        dataframe['24h_change_pct'] = dataframe['close'].pct_change(periods=288) * 100
+        dataframe['sma_15'] = ta.SMA(dataframe, timeperiod=15)
+        dataframe['cti'] = pta.cti(dataframe["close"], length=20)
+        dataframe['rsi'] = ta.RSI(dataframe, timeperiod=14)
+        dataframe['rsi_fast'] = ta.RSI(dataframe, timeperiod=4)
+        dataframe['rsi_slow'] = ta.RSI(dataframe, timeperiod=20)
+        dataframe['24h_change_pct'] = (dataframe['close'].pct_change(periods=288) * 100)
 
         # Trend Indicators
-        dataframe['sma_50'] = ftt.sma(dataframe, timeperiod=50)
-        dataframe['sma_200'] = ftt.sma(dataframe, timeperiod=200)
+        dataframe['sma_50'] = ta.SMA(dataframe, timeperiod=50) # Changed ftt.sma to ta.SMA
+        dataframe['sma_200'] = ta.SMA(dataframe, timeperiod=200) # Changed ftt.sma to ta.SMA
 
         # Confluence Indicators for Safer Entries
-        dataframe['adx'] = ftt.adx(dataframe)
-        macd = ftt.macd(dataframe)
+        dataframe['adx'] = ta.ADX(dataframe) # Changed ftt.adx to ta.ADX
+        macd = ta.MACD(dataframe) # Changed ftt.macd to ta.MACD
         dataframe['macd'] = macd['macd']
         dataframe['macdsignal'] = macd['macdsignal']
-        bollinger = ftt.bollinger_bands(dataframe, timeperiod=20, window_dev=2)
-        dataframe['bb_lowerband'] = bollinger['lower']
-        dataframe['bb_upperband'] = bollinger['upper']
-        dataframe['atr'] = ftt.atr(dataframe, timeperiod=14)
-        dataframe['atr_sma'] = ftt.sma(dataframe['atr'], timeperiod=20) # Average of ATR
 
-        # Stochastic RSI
-        stoch_rsi = ftt.stochrsi(dataframe, period=14, smooth_k=3, smooth_d=3)
-        dataframe['stoch_rsi_k'] = stoch_rsi['fastk']
+        # Bollinger Bands: corrected ftt.bollinger_bands to ta.BBANDS and variable name 'bollinger' to 'Bollinger'
+        bollinger = ta.BBANDS(dataframe, timeperiod=20, nbdevup=2, nbdevdn=2)
+        dataframe['bb_lowerband'] = bollinger['lowerband'] # Use 'lowerband' for TA-Lib output
+        dataframe['bb_upperband'] = bollinger['upperband'] # Use 'upperband' for TA-Lib output
+
+        dataframe['atr'] = ta.ATR(dataframe, timeperiod=14) # Changed ftt.atr to ta.ATR
+        dataframe['atr_sma'] = ta.SMA(dataframe['atr'], timeperiod=20) # Changed ftt.sma to ta.SMA
+
+        # Stochastic RSI: Using pandas_ta which is already imported as pta
+        # Parameters for pta.stochrsi are typically close, rsi_length, k, d
+        stoch_rsi = pta.stochrsi(close=dataframe['close'], rsi_length=14, k=3, d=3)
+        # pandas_ta returns columns like 'STOCHRSIk_14_3_3'
+        dataframe['stoch_rsi_k'] = stoch_rsi[f'STOCHRSIk_14_3_3']
 
         # Williams %R
         dataframe['willr'] = ta.WILLR(dataframe, timeperiod=14)
 
         # Add longer-term EMA for trend confirmation
-        dataframe['ema_50'] = ftt.ema(dataframe, timeperiod=50)
-        dataframe['ema_100'] = ftt.ema(dataframe, timeperiod=100)
+        dataframe['ema_50'] = ta.EMA(dataframe, timeperiod=50) # Changed ftt.ema to ta.EMA
+        dataframe['ema_100'] = ta.EMA(dataframe, timeperiod=100) # Changed ftt.ema to ta.EMA
 
         # Exit indicators
-        stoch_fast = ftt.stochf(dataframe, 5, 3, 0, 3, 0)
+        stoch_fast = ta.STOCHF(dataframe, 5, 3, 0, 3, 0)
         dataframe['fastk'] = stoch_fast['fastk']
-        dataframe['cci'] = ftt.cci(dataframe, timeperiod=20)
+        dataframe['cci'] = ta.CCI(dataframe, timeperiod=20)
         
         return dataframe
 
