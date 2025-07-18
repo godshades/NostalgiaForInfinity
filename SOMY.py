@@ -14,7 +14,7 @@ warnings.simplefilter(action="ignore", category=RuntimeWarning)
 
 class SOMY(IStrategy):
     """
-    SOMY Strategy with Safer, Confluence-Based Entries
+    SOMY Strategy with Safer, Confluence-Based Entries 
     """
     # Set a default timeframe
     timeframe = '5m'
