@@ -476,8 +476,6 @@ class AlexNexusForgeV7(IStrategy):
       - FIXED: Trailing stop properly disabled
       - NEW: Market correlation filters for better entry timing
     """
-    def version(self) -> str:
-        return "v0.1"
 
     # General strategy parameters
     timeframe = "15m"
