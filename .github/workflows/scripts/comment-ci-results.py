@@ -2,7 +2,6 @@ import argparse
 import json
 import os
 import pathlib
-import pprint
 import sys
 import time
 
@@ -45,20 +44,17 @@ def comment_results(options, results_data):
 
   targets = set()
   for exchange in results_data:
-    for tradingmode in ("spot", "futures"):
-      if tradingmode in results_data[exchange]:
-        targets.add((exchange, tradingmode))
+    for tradingmode in results_data[exchange].keys():
+      targets.add((exchange, tradingmode))
 
   comment_ids = set()
 
   # Clean up old comments before adding new ones
   delete_previous_comments(commit, comment_ids, targets)
 
-  # Create new commits
+  # Create new comments
   for exchange in sorted(results_data):
-    for tradingmode in ("spot", "futures"):
-      if tradingmode not in results_data[exchange]:
-        continue
+    for tradingmode in results_data[exchange].keys():
       mode_data = results_data[exchange][tradingmode]
       sorted_report_names = sorted(mode_data["names"], key=sort_report_names)
       for timerange in mode_data["timeranges"]:
@@ -81,6 +77,8 @@ def comment_results(options, results_data):
         comment_body += report_table_header_1
         comment_body += report_table_header_2
         for key in sorted(mode_data["timeranges"][timerange]):
+          if key == "profit_sum_pct":
+            continue
           row_line = "| "
           if key == "max_drawdown":
             label = "Max Drawdown"
@@ -93,15 +91,6 @@ def comment_results(options, results_data):
             comment_body += f"{row_line}\n"
           elif key == "profit_mean_pct":
             label = "Profit Mean"
-            row_line += f" {label} |"
-            for report_name in sorted_report_names:
-              value = mode_data["timeranges"][timerange][key][report_name]
-              if not isinstance(value, str):
-                value = f"{round(value, 4)} %"
-              row_line += f" {value} |"
-            comment_body += f"{row_line}\n"
-          elif key == "profit_sum_pct":
-            label = "Profit Sum"
             row_line += f" {label} |"
             for report_name in sorted_report_names:
               value = mode_data["timeranges"][timerange][key][report_name]
@@ -209,6 +198,8 @@ def main():
         for timerange in reports_data[exchange][tradingmode][name]["results"]:
           timeranges.add(timerange)
           for key in reports_data[exchange][tradingmode][name]["results"][timerange]:
+            if key == "profit_sum_pct":
+              continue
             keys.add(key)
             for oname in names:
               if oname == name:
@@ -226,7 +217,6 @@ def main():
             value = reports_data[exchange][tradingmode][name]["results"][timerange][key]
             reports_data[exchange][tradingmode]["timeranges"][timerange][key][name] = value
 
-  pprint.pprint(reports_data)
   try:
     comment_results(options, reports_data)
     parser.exit(0)

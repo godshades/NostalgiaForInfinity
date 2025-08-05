@@ -70,7 +70,7 @@ class NostalgiaForInfinityX6(IStrategy):
   INTERFACE_VERSION = 3
 
   def version(self) -> str:
-    return "v16.5.219"
+    return "v16.6.4"
 
   stoploss = -0.99
 
@@ -173,9 +173,9 @@ class NostalgiaForInfinityX6(IStrategy):
   short_scalp_mode_name = "short_scalp"
 
   is_futures_mode = False
-  futures_mode_leverage = 6.0
-  futures_mode_leverage_rebuy_mode = 6.0
-  futures_mode_leverage_grind_mode = 6.0
+  futures_mode_leverage = 3.0
+  futures_mode_leverage_rebuy_mode = 3.0
+  futures_mode_leverage_grind_mode = 3.0
 
   # Limit the number of long/short trades for futures (0 for no limit)
   futures_max_open_trades_long = 0
@@ -370,7 +370,7 @@ class NostalgiaForInfinityX6(IStrategy):
 
   # Grinding v2
   grinding_v2_max_stake = 1.0  # ratio of first entry
-  grinding_v2_max_grinds_and_buybacks = 10  # current open
+  grinding_v2_max_grinds_and_buybacks = 20  # current open
 
   grinding_v2_derisk_level_1_enable = True
   grinding_v2_derisk_level_1_spot = -0.12
@@ -392,15 +392,15 @@ class NostalgiaForInfinityX6(IStrategy):
   grinding_v2_derisk_global_futures = -0.30
 
   grinding_v2_grind_1_enable = True
-  grinding_v2_grind_1_stakes_spot = [0.25, 0.30, 0.35, 0.40]
+  grinding_v2_grind_1_stakes_spot = [0.25, 0.26, 0.27, 0.28]
   grinding_v2_grind_1_thresholds_spot = [-0.12, -0.14, -0.16, -0.18]
-  grinding_v2_grind_1_stakes_futures = [0.25, 0.30, 0.35, 0.40]
+  grinding_v2_grind_1_stakes_futures = [0.25, 0.26, 0.27, 0.28]
   grinding_v2_grind_1_thresholds_futures = [-0.12, -0.14, -0.16, -0.18]
   grinding_v2_grind_1_profit_threshold_spot = 0.028
   grinding_v2_grind_1_profit_threshold_futures = 0.028
   grinding_v2_grind_1_use_derisk = True
-  grinding_v2_grind_1_derisk_spot = -0.35
-  grinding_v2_grind_1_derisk_futures = -0.35
+  grinding_v2_grind_1_derisk_spot = -0.05
+  grinding_v2_grind_1_derisk_futures = -0.05
 
   grinding_v2_grind_2_enable = True
   grinding_v2_grind_2_stakes_spot = [0.10, 0.11, 0.12, 0.13, 0.14, 0.15, 0.16, 0.17, 0.18]
@@ -410,8 +410,8 @@ class NostalgiaForInfinityX6(IStrategy):
   grinding_v2_grind_2_profit_threshold_spot = 0.05
   grinding_v2_grind_2_profit_threshold_futures = 0.05
   grinding_v2_grind_2_use_derisk = True
-  grinding_v2_grind_2_derisk_spot = -0.35
-  grinding_v2_grind_2_derisk_futures = -0.35
+  grinding_v2_grind_2_derisk_spot = -0.05
+  grinding_v2_grind_2_derisk_futures = -0.05
 
   grinding_v2_grind_3_enable = True
   grinding_v2_grind_3_stakes_spot = [0.10, 0.11, 0.12, 0.13, 0.14, 0.15, 0.16, 0.17, 0.18]
@@ -421,19 +421,30 @@ class NostalgiaForInfinityX6(IStrategy):
   grinding_v2_grind_3_profit_threshold_spot = 0.05
   grinding_v2_grind_3_profit_threshold_futures = 0.05
   grinding_v2_grind_3_use_derisk = True
-  grinding_v2_grind_3_derisk_spot = -0.35
-  grinding_v2_grind_3_derisk_futures = -0.35
+  grinding_v2_grind_3_derisk_spot = -0.05
+  grinding_v2_grind_3_derisk_futures = -0.05
 
   grinding_v2_grind_4_enable = True
-  grinding_v2_grind_4_stakes_spot = [0.05, 0.07, 0.10, 0.14, 0.18]
-  grinding_v2_grind_4_thresholds_spot = [-0.06, -0.07, -0.09, -0.12, -0.16]
-  grinding_v2_grind_4_stakes_futures = [0.05, 0.07, 0.10, 0.14, 0.18]
-  grinding_v2_grind_4_thresholds_futures = [-0.06, -0.07, -0.09, -0.12, -0.16]
+  grinding_v2_grind_4_stakes_spot = [0.05, 0.06, 0.07, 0.08, 0.09, 0.10, 0.11]
+  grinding_v2_grind_4_thresholds_spot = [-0.06, -0.07, -0.09, -0.12, -0.16, -0.21, -0.27]
+  grinding_v2_grind_4_stakes_futures = [0.05, 0.06, 0.07, 0.08, 0.09, 0.10, 0.11]
+  grinding_v2_grind_4_thresholds_futures = [-0.06, -0.07, -0.09, -0.12, -0.16, -0.21, -0.27]
   grinding_v2_grind_4_profit_threshold_spot = 0.10
   grinding_v2_grind_4_profit_threshold_futures = 0.10
   grinding_v2_grind_4_use_derisk = True
-  grinding_v2_grind_4_derisk_spot = -0.35
-  grinding_v2_grind_4_derisk_futures = -0.35
+  grinding_v2_grind_4_derisk_spot = -0.05
+  grinding_v2_grind_4_derisk_futures = -0.05
+
+  grinding_v2_grind_5_enable = True
+  grinding_v2_grind_5_stakes_spot = [0.05, 0.06, 0.07, 0.08, 0.09, 0.10, 0.11]
+  grinding_v2_grind_5_thresholds_spot = [-0.10, -0.11, -0.12, -0.13, -0.14, -0.15, -0.16]
+  grinding_v2_grind_5_stakes_futures = [0.05, 0.06, 0.07, 0.08, 0.09, 0.10, 0.11]
+  grinding_v2_grind_5_thresholds_futures = [-0.10, -0.11, -0.12, -0.13, -0.14, -0.15, -0.16]
+  grinding_v2_grind_5_profit_threshold_spot = 0.10
+  grinding_v2_grind_5_profit_threshold_futures = 0.10
+  grinding_v2_grind_5_use_derisk = True
+  grinding_v2_grind_5_derisk_spot = -0.05
+  grinding_v2_grind_5_derisk_futures = -0.05
 
   grinding_v2_buyback_1_enable = True
   grinding_v2_buyback_1_stake_spot = 0.20
@@ -443,8 +454,8 @@ class NostalgiaForInfinityX6(IStrategy):
   grinding_v2_buyback_1_profit_threshold_spot = 0.05
   grinding_v2_buyback_1_profit_threshold_futures = 0.05
   grinding_v2_buyback_1_use_derisk = True
-  grinding_v2_buyback_1_derisk_spot = -0.35
-  grinding_v2_buyback_1_derisk_futures = -0.35
+  grinding_v2_buyback_1_derisk_spot = -0.05
+  grinding_v2_buyback_1_derisk_futures = -0.05
 
   grinding_v2_buyback_2_enable = True
   grinding_v2_buyback_2_stake_spot = 0.20
@@ -454,8 +465,8 @@ class NostalgiaForInfinityX6(IStrategy):
   grinding_v2_buyback_2_profit_threshold_spot = 0.05
   grinding_v2_buyback_2_profit_threshold_futures = 0.05
   grinding_v2_buyback_2_use_derisk = True
-  grinding_v2_buyback_2_derisk_spot = -0.35
-  grinding_v2_buyback_2_derisk_futures = -0.35
+  grinding_v2_buyback_2_derisk_spot = -0.05
+  grinding_v2_buyback_2_derisk_futures = -0.05
 
   grinding_v2_buyback_3_enable = True
   grinding_v2_buyback_3_stake_spot = 0.20
@@ -465,8 +476,8 @@ class NostalgiaForInfinityX6(IStrategy):
   grinding_v2_buyback_3_profit_threshold_spot = 0.05
   grinding_v2_buyback_3_profit_threshold_futures = 0.05
   grinding_v2_buyback_3_use_derisk = True
-  grinding_v2_buyback_3_derisk_spot = -0.35
-  grinding_v2_buyback_3_derisk_futures = -0.35
+  grinding_v2_buyback_3_derisk_spot = -0.05
+  grinding_v2_buyback_3_derisk_futures = -0.05
 
   # Rebuy mode
   rebuy_mode_stake_multiplier = 0.35
@@ -482,7 +493,7 @@ class NostalgiaForInfinityX6(IStrategy):
   rapid_mode_stake_multiplier_futures = [0.75]
 
   # Scalp mode
-  min_free_slots_scalp_mode = 6
+  min_free_slots_scalp_mode = 1
 
   # Grind mode
   grind_mode_stake_multiplier_spot = [0.20, 0.30, 0.40, 0.50, 0.60, 0.70]
@@ -628,24 +639,24 @@ class NostalgiaForInfinityX6(IStrategy):
   short_entry_signal_params = {
     # Enable/Disable conditions
     # -------------------------------------------------------
-    # "short_entry_condition_499_enable": True,
-    # "short_entry_condition_500_enable": True,
-    # "short_entry_condition_501_enable": True,
-    # "short_entry_condition_502_enable": True,
-    # "short_entry_condition_503_enable": True,
-    # "short_entry_condition_504_enable": True,
-    # "short_entry_condition_511_enable": False,
-    # "short_entry_condition_512_enable": False,
-    # "short_entry_condition_513_enable": False,
-    # "short_entry_condition_514_enable": True,
-    # "short_entry_condition_515_enable": True,
-    # "short_entry_condition_541_enable": True,
-    # "short_entry_condition_542_enable": True,
-    # "short_entry_condition_543_enable": True,
-    # "short_entry_condition_603_enable": True,
-    # "short_entry_condition_641_enable": True,
-    # "short_entry_condition_642_enable": True,
-    # "short_entry_condition_661_enable": True,
+    "short_entry_condition_499_enable": False,
+    "short_entry_condition_500_enable": False,
+    "short_entry_condition_501_enable": True,
+    "short_entry_condition_502_enable": True,
+    "short_entry_condition_503_enable": True,
+    "short_entry_condition_504_enable": True,
+    "short_entry_condition_511_enable": True,
+    "short_entry_condition_512_enable": True,
+    "short_entry_condition_513_enable": True,
+    "short_entry_condition_514_enable": True,
+    "short_entry_condition_515_enable": True,
+    "short_entry_condition_541_enable": True,
+    "short_entry_condition_542_enable": True,
+    "short_entry_condition_543_enable": True,
+    "short_entry_condition_603_enable": True,
+    "short_entry_condition_641_enable": True,
+    "short_entry_condition_642_enable": True,
+    "short_entry_condition_661_enable": True,
   }
 
   hold_trades_cache = None
@@ -666,6 +677,8 @@ class NostalgiaForInfinityX6(IStrategy):
       "stop_threshold_doom_futures",
       "stop_threshold_rapid_spot",
       "stop_threshold_rapid_futures",
+      "stop_threshold_scalp_spot",
+      "stop_threshold_scalp_futures",
       "derisk_enable",
       "stops_enable",
       "regular_mode_derisk_1_spot",
@@ -3265,7 +3278,1141 @@ class NostalgiaForInfinityX6(IStrategy):
     df["RSI_14_1h"] = df["RSI_14_1h"].astype(np.float64).replace(to_replace=[np.nan, None], value=(50.0))
 
     # Global protections Long
-    df["protections_long_global"] = True
+    df["protections_long_global"] = (
+      # 5m & 4h & 1d down move, 15m & 1h & 4h still not low enough, 1d still high
+      (
+        (df["RSI_3"] > 1.0)
+        | (df["RSI_3_4h"] > 10.0)
+        | (df["RSI_3_1d"] > 35.0)
+        | (df["RSI_14_15m"] < 30.0)
+        | (df["RSI_14_1h"] < 30.0)
+        | (df["RSI_14_4h"] < 30.0)
+        | (df["STOCHRSIk_14_14_3_3_15m"] < 20.0)
+        | (df["STOCHRSIk_14_14_3_3_1d"] < 50.0)
+      )
+      # 1h & 4h down move, 15m & 1h & 4h downtrend, 1h still high
+      & (
+        (df["RSI_3"] > 5.0)
+        | (df["RSI_3_15m"] > 10.0)
+        | (df["RSI_3_1h"] > 40.0)
+        | (df["RSI_3_4h"] > 55.0)
+        | (df["CMF_20_15m"] > -0.25)
+        | (df["AROONU_14_4h"] < 60.0)
+        | (df["ROC_9_1d"] < 80.0)
+      )
+      # 5m & 15m & 1h & 4h down move, 4h high
+      & (
+        (df["RSI_3"] > 5.0)
+        | (df["RSI_3_15m"] > 15.0)
+        | (df["RSI_3_1h"] > 45.0)
+        | (df["RSI_3_4h"] > 55.0)
+        | (df["RSI_14_4h"] < 50.0)
+        | (df["AROONU_14_4h"] < 80.0)
+        | (df["STOCHRSIk_14_14_3_3_4h"] < 70.0)
+      )
+      # 15m & 1h & 4h down move, 1h & 4h still not low enough, 15m downtrend
+      & (
+        (df["RSI_3_15m"] > 3.0)
+        | (df["RSI_3_1h"] > 15.0)
+        | (df["RSI_3_4h"] > 25.0)
+        | (df["RSI_14_1h"] < 30.0)
+        | (df["RSI_14_4h"] < 40.0)
+        | (df["CMF_20_15m"] > -0.25)
+        | (df["AROONU_14_4h"] < 25.0)
+      )
+      # 15m & 1h & 4h down move, 15m & 1h downtrend, 4h still high
+      & (
+        (df["RSI_3_15m"] > 5.0)
+        | (df["RSI_3_1h"] > 5.0)
+        | (df["RSI_14_1h"] < 20.0)
+        | (df["CMF_20_15m"] > -0.25)
+        | (df["CMF_20_15m"] > -0.40)
+        | (df["STOCHRSIk_14_14_3_3_4h"] < 50.0)
+      )
+      # 15m & 1h down move, 1h & 4h high
+      & (
+        (df["RSI_3_15m"] > 5.0)
+        | (df["RSI_3_1h"] > 20.0)
+        | (df["RSI_14_1h"] < 50.0)
+        | (df["RSI_14_4h"] < 70.0)
+        | (df["AROONU_14_1h"] < 80.0)
+        | (df["AROONU_14_4h"] < 100.0)
+      )
+      # 15m & 1h & 4h & 1d down move, 15m downtrend
+      & (
+        (df["RSI_3_15m"] > 5.0)
+        | (df["RSI_3_1h"] > 20.0)
+        | (df["RSI_3_4h"] > 25.0)
+        | (df["RSI_3_1d"] > 5.0)
+        | (df["CMF_20_15m"] > -0.40)
+      )
+      # 15m & 1h & 4h down move, 1h & 4h still high, 15m downtrend
+      & (
+        (df["RSI_3_15m"] > 5.0)
+        | (df["RSI_3_1h"] > 30.0)
+        | (df["RSI_3_4h"] > 50.0)
+        | (df["RSI_14_1h"] < 40.0)
+        | (df["RSI_14_4h"] < 50.0)
+        | (df["CMF_20_15m"] > -0.30)
+        | (df["AROONU_14_4h"] < 50.0)
+        | (df["STOCHRSIk_14_14_3_3_4h"] < 50.0)
+      )
+      # 15m & 1h & 3h down move, 1h & 4h still not low enough, 15m downtrend, 1h still high
+      & (
+        (df["RSI_3_15m"] > 5.0)
+        | (df["RSI_3_1h"] > 35.0)
+        | (df["RSI_3_4h"] > 35.0)
+        | (df["RSI_14_1h"] < 30.0)
+        | (df["RSI_14_4h"] < 30.0)
+        | (df["CMF_20_15m"] > -0.30)
+        | (df["STOCHRSIk_14_14_3_3_1h"] < 50.0)
+      )
+      # 15m & 1h & 4h down move, 1h downtrend, 4h high
+      & (
+        (df["RSI_3_15m"] > 10.0)
+        | (df["RSI_3_1h"] > 15.0)
+        | (df["RSI_3_4h"] > 55.0)
+        | (df["RSI_14_4h"] < 50.0)
+        | (df["CMF_20_1h"] > -0.4)
+        | (df["AROONU_14_4h"] < 80.0)
+        | (df["STOCHRSIk_14_14_3_3_4h"] < 70.0)
+      )
+      # 15m & 1h & 4h down move, 15m still not low enough, 1h & 4h high
+      & (
+        (df["RSI_3_15m"] > 10.0)
+        | (df["RSI_3_1h"] > 20.0)
+        | (df["RSI_3_4h"] > 25.0)
+        | (df["AROONU_14_15m"] < 30.0)
+        | (df["AROONU_14_1h"] < 60.0)
+        | (df["AROONU_14_4h"] < 100.0)
+      )
+      # 15m & 1h & 4h down move, 15m still not low enough, 1h & 4h still high, 4h overbought
+      & (
+        (df["RSI_3_15m"] > 10.0)
+        | (df["RSI_3_1h"] > 20.0)
+        | (df["RSI_3_4h"] > 35.0)
+        | (df["RSI_14_15m"] < 30.0)
+        | (df["RSI_14_1h"] < 40.0)
+        | (df["RSI_14_4h"] < 40.0)
+        | (df["STOCHRSIk_14_14_3_3_4h"] < 50.0)
+        | (df["ROC_9_4h"] < 10.0)
+      )
+      # 15m & 1h & 4h down move, 1h & 4h not low enouhg, 15m downtrend, 4h high, 1d overbought
+      & (
+        (df["RSI_3_15m"] > 10.0)
+        | (df["RSI_3_1h"] > 25.0)
+        | (df["RSI_3_4h"] > 25.0)
+        | (df["RSI_14_1h"] < 30.0)
+        | (df["RSI_14_4h"] < 30.0)
+        | (df["CMF_20_15m"] > -0.30)
+        | (df["AROONU_14_4h"] < 60.0)
+        | (df["ROC_9_1d"] < 25.0)
+      )
+      # 15m & 1h & 4h & 1d down move, 15m & 1h still not low enough, 4h still high. 1d high & overbought
+      & (
+        (df["RSI_3_15m"] > 10.0)
+        | (df["RSI_3_1h"] > 25.0)
+        | (df["RSI_3_4h"] > 25.0)
+        | (df["RSI_3_1d"] > 60.0)
+        | (df["RSI_14_15m"] < 30.0)
+        | (df["RSI_14_1h"] < 30.0)
+        | (df["RSI_14_4h"] < 40.0)
+        | (df["AROONU_14_1d"] < 70.0)
+        | (df["ROC_9_1d"] < 80.0)
+      )
+      # 15m & 1h down move, 4h high, 1d downtrend, 1h still not low enough, 1d overbought
+      & (
+        (df["RSI_3_15m"] > 10.0)
+        | (df["RSI_3_1h"] > 30.0)
+        | (df["RSI_14_4h"] < 70.0)
+        | (df["CMF_20_1d"] > -0.3)
+        | (df["AROONU_14_1h"] < 30.0)
+        | (df["ROC_9_1d"] < 100.0)
+      )
+      # 15m & 1h & 4h & 1d down move, 15m & 1h not low enough, 4h high
+      & (
+        (df["RSI_3_15m"] > 10.0)
+        | (df["RSI_3_1h"] > 35.0)
+        | (df["RSI_3_4h"] > 35.0)
+        | (df["RSI_3_1d"] > 15.0)
+        | (df["RSI_14_15m"] < 30.0)
+        | (df["RSI_14_1h"] < 35.0)
+        | (df["STOCHRSIk_14_14_3_3_15m"] < 30.0)
+        | (df["STOCHRSIk_14_14_3_3_4h"] < 85.0)
+      )
+      # 15m & 1h & 4h down move, 15m still not low enough, 1h still high, 4h high & overbought
+      & (
+        (df["RSI_3_15m"] > 10.0)
+        | (df["RSI_3_1h"] > 35.0)
+        | (df["RSI_3_4h"] > 60.0)
+        | (df["RSI_14_15m"] < 30.0)
+        | (df["RSI_14_1h"] < 40.0)
+        | (df["RSI_14_4h"] < 50.0)
+        | (df["AROONU_14_4h"] < 80.0)
+        | (df["ROC_9_4h"] < 80.0)
+      )
+      # 15m & 1h down move, 4h still high, 15m downtrend, 1h & 1d high
+      & (
+        (df["RSI_3_15m"] > 10.0)
+        | (df["RSI_3_1h"] > 40.0)
+        | (df["RSI_14_4h"] < 50.0)
+        | (df["CMF_20_15m"] > -0.3)
+        | (df["AROONU_14_1h"] < 60.0)
+        | (df["AROONU_14_1d"] < 90.0)
+        | (df["STOCHRSIk_14_14_3_3_1d"] < 80.0)
+      )
+      # 15m & 1h down move, 15m & 1h still high, 1h & 4h high, 1d overbought
+      & (
+        (df["RSI_3_15m"] > 10.0)
+        | (df["RSI_3_1h"] > 40.0)
+        | (df["RSI_14_15m"] < 40.0)
+        | (df["RSI_14_1h"] < 50.0)
+        | (df["RSI_14_4h"] < 70.0)
+        | (df["AROONU_14_1h"] < 80.0)
+        | (df["AROONU_14_4h"] < 100.0)
+        | (df["ROC_9_1d"] < 50.0)
+      )
+      # 15m & 1h & 4h down move, 15m & 1h & 4h still high, 1h & 4h high, 4h overbought
+      & (
+        (df["RSI_3_15m"] > 10.0)
+        | (df["RSI_3_1h"] > 45.0)
+        | (df["RSI_3_4h"] > 60.0)
+        | (df["RSI_14_15m"] < 40.0)
+        | (df["RSI_14_1h"] < 50.0)
+        | (df["RSI_14_4h"] < 50.0)
+        | (df["AROONU_14_1h"] < 70.0)
+        | (df["AROONU_14_4h"] < 100.0)
+        | (df["ROC_9_4h"] < 25.0)
+      )
+      # 15m & 1h down move, 15m still not low enough, 1h & 4h high, 4h overbought
+      & (
+        (df["RSI_3_15m"] > 10.0)
+        | (df["RSI_3_1h"] > 50.0)
+        | (df["RSI_14_4h"] < 70.0)
+        | (df["AROONU_14_15m"] < 20.0)
+        | (df["AROONU_14_1h"] < 80.0)
+        | (df["AROONU_14_4h"] < 100.0)
+        | (df["ROC_9_4h"] < 30.0)
+      )
+      # 15m & 1h & 4h down move, 1h & 4h downtrend, 15m still high, 1h high
+      & (
+        (df["RSI_3_15m"] > 10.0)
+        | (df["RSI_3_1h"] > 55.0)
+        | (df["RSI_3_4h"] > 55.0)
+        | (df["CMF_20_1h"] > -0.0)
+        | (df["CMF_20_4h"] > -0.4)
+        | (df["AROONU_14_15m"] < 50.0)
+        | (df["STOCHRSIk_14_14_3_3_1h"] < 90.0)
+      )
+      # 15m & 1h down move, 15m & 4h high, 4h overbought
+      & (
+        (df["RSI_3_15m"] > 10.0)
+        | (df["RSI_3_1h"] > 65.0)
+        | (df["AROONU_14_15m"] < 80.0)
+        | (df["AROONU_14_4h"] < 85.0)
+        | (df["ROC_9_4h"] < 100.0)
+      )
+      # 15m & 1h & 4h down move, 1h still not low enough, 4h high, 1h downtrend
+      & (
+        (df["RSI_3_15m"] > 15.0)
+        | (df["RSI_3_1h"] > 15.0)
+        | (df["RSI_3_4h"] > 45.0)
+        | (df["RSI_14_1h"] < 30.0)
+        | (df["RSI_14_4h"] < 45.0)
+        | (df["AROONU_14_1h"] < 40.0)
+        | (df["AROONU_14_4h"] < 90.0)
+        | (df["ROC_9_1h"] > -30.0)
+      )
+      # 15m & 1h & 4h down move, 4h high, 1d overbought
+      & (
+        (df["RSI_3_15m"] > 15.0)
+        | (df["RSI_3_1h"] > 15.0)
+        | (df["RSI_3_4h"] > 45.0)
+        | (df["AROONU_14_4h"] < 80.0)
+        | (df["ROC_9_1d"] < 150.0)
+      )
+      # 15m & 1h & 4h down move, 1h still high, 4h high, 4h & 1d overbought
+      & (
+        (df["RSI_3_15m"] > 15.0)
+        | (df["RSI_3_1h"] > 30.0)
+        | (df["RSI_3_4h"] > 45.0)
+        | (df["RSI_14_1h"] < 35.0)
+        | (df["RSI_14_4h"] < 50.0)
+        | (df["AROONU_14_4h"] < 70.0)
+        | (df["ROC_9_4h"] < 25.0)
+        | (df["ROC_9_1d"] < 100.0)
+      )
+      # 15m & 1h down move, 15m still not low enough, 1h still high, 4h high
+      & (
+        (df["RSI_3_15m"] > 15.0)
+        | (df["RSI_3_1h"] > 30.0)
+        | (df["RSI_14_15m"] < 30.0)
+        | (df["RSI_14_1h"] < 50.0)
+        | (df["RSI_14_4h"] < 70.0)
+        | (df["AROONU_14_1h"] < 60.0)
+        | (df["AROONU_14_4h"] < 100.0)
+      )
+      # 15m & 1h down move, 15m still high, 1h & dh high, 1d overbought
+      & (
+        (df["RSI_3_15m"] > 15.0)
+        | (df["RSI_3_1h"] > 30.0)
+        | (df["RSI_14_15m"] < 40.0)
+        | (df["AROONU_14_1h"] < 70.0)
+        | (df["AROONU_14_4h"] < 100.0)
+        | (df["ROC_9_1d"] < 50.0)
+      )
+      # 15m & 1h & 4h down move, 15m & 1h still not low enough, 4h high & overbought, 1d overbought
+      & (
+        (df["RSI_3_15m"] > 15.0)
+        | (df["RSI_3_1h"] > 35.0)
+        | (df["RSI_3_4h"] > 55.0)
+        | (df["RSI_14_15m"] < 30.0)
+        | (df["RSI_14_1h"] < 40.0)
+        | (df["RSI_14_4h"] < 50.0)
+        | (df["AROONU_14_4h"] < 80.0)
+        | (df["ROC_9_4h"] < 20.0)
+        | (df["ROC_9_1d"] < 50.0)
+      )
+      # 15m & 1h & 4h & 1d down move, 1h still high, 4h still not low enough, 4h downtrend
+      & (
+        (df["RSI_3_15m"] > 15.0)
+        | (df["RSI_3_1h"] > 40.0)
+        | (df["RSI_3_4h"] > 20.0)
+        | (df["RSI_3_1d"] > 30.0)
+        | (df["RSI_14_1h"] < 30.0)
+        | (df["RSI_14_4h"] < 30.0)
+        | (df["STOCHRSIk_14_14_3_3_1h"] < 50.0)
+        | (df["CCI_20_1h"] < -250.0)
+        | (df["CCI_20_4h"] < -250.0)
+        | (df["ROC_9_4h"] > -15.0)
+      )
+      # 15m & 1h & 4h & 1d down move, 15m & 1h & 4h downtrend, 1h & 4h still not low enough, 1d downtrend
+      & (
+        (df["RSI_3_15m"] > 15.0)
+        | (df["RSI_3_1h"] > 40.0)
+        | (df["RSI_3_4h"] > 35.0)
+        | (df["RSI_3_1d"] > 30.0)
+        | (df["RSI_14_1h"] < 35.0)
+        | (df["RSI_14_4h"] < 35.0)
+        | (df["CMF_20_15m"] > -0.30)
+        | (df["CMF_20_1h"] > -0.30)
+        | (df["CMF_20_4h"] > -0.30)
+        | (df["CCI_20_1h"] < -200.0)
+        | (df["CCI_20_4h"] < -200.0)
+        | (df["ROC_9_1d"] > -25.0)
+      )
+      # 15m & 1h & 1d down move, 15m still not low enough, 1h & 4h high, 1d overbought
+      & (
+        (df["RSI_3_15m"] > 15.0)
+        | (df["RSI_3_1h"] > 55.0)
+        | (df["RSI_3_1d"] > 55.0)
+        | (df["RSI_14_15m"] < 30.0)
+        | (df["RSI_14_1h"] < 50.0)
+        | (df["RSI_14_4h"] < 50.0)
+        | (df["AROONU_14_1h"] < 80.0)
+        | (df["AROONU_14_4h"] < 100.0)
+        | (df["ROC_9_1d"] < 50.0)
+      )
+      # 15m & 1h & 1d down move, 15m still not low enough, 1h & 4h still high, 1d overbought
+      & (
+        (df["RSI_3_15m"] > 15.0)
+        | (df["RSI_3_1h"] > 60.0)
+        | (df["RSI_3_1d"] > 60.0)
+        | (df["RSI_14_15m"] < 30.0)
+        | (df["RSI_14_1h"] < 50.0)
+        | (df["RSI_14_4h"] < 50.0)
+        | (df["AROONU_14_1h"] < 70.0)
+        | (df["ROC_9_1d"] < 80.0)
+      )
+      # 15m & 4h & 1d down move, 15m & 1h & 4h still not low enough, 15m & 1d downtrend
+      & (
+        (df["RSI_3_15m"] > 15.0)
+        | (df["RSI_3_4h"] > 15.0)
+        | (df["RSI_3_1d"] > 25.0)
+        | (df["RSI_14_15m"] > 25.0)
+        | (df["RSI_14_1h"] < 30.0)
+        | (df["RSI_14_4h"] < 30.0)
+        | (df["CMF_20_15m"] > -0.3)
+        | (df["CMF_20_1d"] > -0.3)
+        | (df["AROONU_14_15m"] < 30.0)
+      )
+      # 15m & 1d down move, 15m still not low enough, 1h & 4h high
+      & (
+        (df["RSI_3_15m"] > 15.0)
+        | (df["RSI_3_1d"] > 5.0)
+        | (df["RSI_14_15m"] < 30.0)
+        | (df["STOCHRSIk_14_14_3_3_1h"] < 70.0)
+        | (df["STOCHRSIk_14_14_3_3_4h"] < 70.0)
+      )
+      # 15m down move, 15m still not low enough, 1h & 4h high, 1d overbought
+      & (
+        (df["RSI_3_15m"] > 15.0)
+        | (df["AROONU_14_15m"] < 30.0)
+        | (df["AROONU_14_1h"] < 85.0)
+        | (df["AROONU_14_4h"] < 100.0)
+        | (df["ROC_9_1d"] < 250.0)
+      )
+      # 15m down move, 15m still high, 1h & 4h high, 1h & 1d overbought
+      & (
+        (df["RSI_3_15m"] > 15.0)
+        | (df["RSI_14_15m"] < 40.0)
+        | (df["RSI_14_1h"] < 70.0)
+        | (df["RSI_14_4h"] < 70.0)
+        | (df["AROONU_14_1h"] < 80.0)
+        | (df["ROC_9_1h"] < 40.0)
+        | (df["ROC_9_1d"] < 100.0)
+      )
+      # 15m & 1h down move, 15m still not low enough, 1h & 4h still high, 1d overbought
+      & (
+        (df["RSI_3_15m"] > 20.0)
+        | (df["RSI_3_1h"] > 25.0)
+        | (df["RSI_14_15m"] < 30.0)
+        | (df["RSI_14_1h"] < 40.0)
+        | (df["RSI_14_4h"] < 50.0)
+        | (df["STOCHRSIk_14_14_3_3_1h"] < 50.0)
+        | (df["ROC_9_1d"] < 150.0)
+      )
+      # 15m & 1h & 1d down move, 1h & 4h still high, 15m downtrend, 1d overbought
+      & (
+        (df["RSI_3_15m"] > 20.0)
+        | (df["RSI_3_1h"] > 25.0)
+        | (df["RSI_3_1d"] > 55.0)
+        | (df["RSI_14_1h"] < 40.0)
+        | (df["RSI_14_4h"] < 50.0)
+        | (df["CMF_20_15m"] > -0.3)
+        | (df["ROC_9_1d"] < 80.0)
+      )
+      # 15m & 1h & 4h down move, 15m still not low enough, 1h & 4h still high, 4h overbought
+      & (
+        (df["RSI_3_15m"] > 20.0)
+        | (df["RSI_3_1h"] > 30.0)
+        | (df["RSI_3_4h"] > 45.0)
+        | (df["RSI_14_15m"] < 30.0)
+        | (df["RSI_14_1h"] < 40.0)
+        | (df["RSI_14_4h"] < 50.0)
+        | (df["AROONU_14_4h"] < 50.0)
+        | (df["ROC_9_4h"] < 70.0)
+      )
+      # 15m & 1h & 4h down move, 15m still not low enough, 1h still high, 4h high, 4h & 1d overbought
+      & (
+        (df["RSI_3_15m"] > 20.0)
+        | (df["RSI_3_1h"] > 30.0)
+        | (df["RSI_3_4h"] > 60.0)
+        | (df["RSI_14_15m"] < 30.0)
+        | (df["RSI_14_1h"] < 40.0)
+        | (df["RSI_14_4h"] < 50.0)
+        | (df["AROONU_14_4h"] < 85.0)
+        | (df["ROC_9_4h"] < 20.0)
+        | (df["ROC_9_1d"] < 50.0)
+      )
+      # 15m & 1h & 4h & 1d down move, 1d still high, 1h still high, 4h high
+      & (
+        (df["RSI_3_15m"] > 20.0)
+        | (df["RSI_3_1h"] > 35.0)
+        | (df["RSI_3_4h"] > 45.0)
+        | (df["RSI_3_1d"] > 25.0)
+        | (df["MFI_14_1d"] < 50.0)
+        | (df["AROONU_14_1h"] < 50.0)
+        | (df["AROONU_14_4h"] < 85.0)
+      )
+      # 15m & 1h & 4h down move, 15m still not low enough, 1h still high, 4h high & overbought
+      & (
+        (df["RSI_3_15m"] > 20.0)
+        | (df["RSI_3_1h"] > 40.0)
+        | (df["RSI_3_4h"] > 60.0)
+        | (df["RSI_14_15m"] < 30.0)
+        | (df["AROONU_14_15m"] < 30.0)
+        | (df["AROONU_14_1h"] < 50.0)
+        | (df["AROONU_14_4h"] < 85.0)
+        | (df["ROC_9_4h"] < 30.0)
+      )
+      # 15m & 1h & 4h down move, 1h & 4h still high, 4h overbought
+      & (
+        (df["RSI_3_15m"] > 20.0)
+        | (df["RSI_3_1h"] > 40.0)
+        | (df["RSI_3_4h"] > 65.0)
+        | (df["RSI_14_15m"] < 30.0)
+        | (df["RSI_14_1h"] < 50.0)
+        | (df["RSI_14_4h"] < 50.0)
+        | (df["AROONU_14_1h"] < 50.0)
+        | (df["AROONU_14_4h"] < 50.0)
+        | (df["CCI_20_1h"] < 0.0)
+        | (df["CCI_20_4h"] < 0.0)
+        | (df["ROC_9_4h"] < 40.0)
+      )
+      # 15m & 1h & 4h down move, 1h & 4h high, 4h & 1d overbought
+      & (
+        (df["RSI_3_15m"] > 20.0)
+        | (df["RSI_3_1h"] > 55.0)
+        | (df["RSI_3_4h"] > 60.0)
+        | (df["RSI_14_1h"] < 40.0)
+        | (df["RSI_14_4h"] < 60.0)
+        | (df["AROONU_14_4h"] < 75.0)
+        | (df["ROC_9_4h"] < 25.0)
+        | (df["ROC_9_1d"] < 150.0)
+      )
+      # 15m & 1h down move, 15m still high, 1h high & overbought
+      & (
+        (df["RSI_3_15m"] > 20.0)
+        | (df["RSI_3_1h"] > 60.0)
+        | (df["RSI_14_15m"] < 40.0)
+        | (df["RSI_14_1h"] < 50.0)
+        | (df["AROONU_14_1h"] < 70.0)
+        | (df["ROC_9_1h"] < 80.0)
+      )
+      # 15m down move, 15m still high, 1h & 4h high, 4h overbought
+      & (
+        (df["RSI_3_15m"] > 20.0)
+        | (df["RSI_14_15m"] < 40.0)
+        | (df["RSI_14_1h"] < 60.0)
+        | (df["RSI_14_4h"] < 80.0)
+        | (df["AROONU_14_4h"] < 80.0)
+        | (df["STOCHRSIk_14_14_3_3_1h"] < 40.0)
+        | (df["STOCHRSIk_14_14_3_3_4h"] < 90.0)
+        | (df["ROC_9_4h"] < 75.0)
+      )
+      # 15m down move, 15m & 1h & 4h high, 1h & 4h overbought
+      & (
+        (df["RSI_3_15m"] > 20.0)
+        | (df["RSI_14_15m"] < 50.0)
+        | (df["RSI_14_1h"] < 60.0)
+        | (df["RSI_14_4h"] < 60.0)
+        | (df["AROONU_14_1h"] < 70.0)
+        | (df["AROONU_14_4h"] < 100.0)
+        | (df["ROC_9_1h"] < 50.0)
+        | (df["ROC_9_4h"] < 50.0)
+      )
+      # 15m & 1h & 4h down move, 15m still not low enough, 1h & 4h still high, 4h overbought
+      & (
+        (df["RSI_3_15m"] > 25.0)
+        | (df["RSI_3_1h"] > 25.0)
+        | (df["RSI_3_4h"] > 35.0)
+        | (df["RSI_14_15m"] < 30.0)
+        | (df["RSI_14_1h"] < 40.0)
+        | (df["RSI_14_4h"] < 50.0)
+        | (df["AROONU_14_4h"] < 50.0)
+        | (df["ROC_9_4h"] < 70.0)
+      )
+      # 15m & 1h down move, 15m still not low enough, 1h still high, 4h high & overbought
+      & (
+        (df["RSI_3_15m"] > 25.0)
+        | (df["RSI_3_1h"] > 30.0)
+        | (df["RSI_14_15m"] < 30.0)
+        | (df["RSI_14_1h"] < 40.0)
+        | (df["RSI_14_4h"] < 70.0)
+        | (df["AROONU_14_1h"] < 70.0)
+        | (df["AROONU_14_4h"] < 100.0)
+        | (df["ROC_9_4h"] < 50.0)
+      )
+      # 15m & 1h down move, 15m still not low enough, 1h still high, 4h high, 4h & 1d overbought
+      & (
+        (df["RSI_3_15m"] > 25.0)
+        | (df["RSI_3_1h"] > 35.0)
+        | (df["RSI_14_15m"] < 30.0)
+        | (df["RSI_14_1h"] < 40.0)
+        | (df["RSI_14_4h"] < 70.0)
+        | (df["AROONU_14_4h"] < 80.0)
+        | (df["ROC_9_4h"] < 80.0)
+        | (df["ROC_9_1d"] < 100.0)
+      )
+      # 15m & 1h & 1d down move, 4h & 1d downtrend, 1h & 4h high, 1d downtrend
+      & (
+        (df["RSI_3_15m"] > 25.0)
+        | (df["RSI_3_1h"] > 35.0)
+        | (df["RSI_3_1d"] > 35.0)
+        | (df["CMF_20_4h"] > -0.1)
+        | (df["CMF_20_1d"] > -0.1)
+        | (df["AROONU_14_1h"] < 75.0)
+        | (df["STOCHRSIk_14_14_3_3_4h"] < 70.0)
+        | (df["ROC_2_1d"] > -20.0)
+      )
+      # 15m & 1h & 1d down move, 15m & 1h & 4h still high, 15m & 1d downtrend
+      & (
+        (df["RSI_3_15m"] > 25.0)
+        | (df["RSI_3_1h"] > 45.0)
+        | (df["RSI_3_1d"] > 55.0)
+        | (df["RSI_14_15m"] < 40.0)
+        | (df["RSI_14_1h"] < 45.0)
+        | (df["RSI_14_4h"] < 45.0)
+        | (df["AROONU_14_15m"] < 25.0)
+        | (df["AROONU_14_1h"] < 80.0)
+        | (df["ROC_9_15m"] > -40.0)
+        | (df["ROC_9_1d"] > -40.0)
+      )
+      # 15m & 1h & 4h down move, 15m still not low enough, 1h still high, 4h high & overbought
+      & (
+        (df["RSI_3_15m"] > 25.0)
+        | (df["RSI_3_1h"] > 45.0)
+        | (df["RSI_3_4h"] > 45.0)
+        | (df["RSI_14_15m"] < 30.0)
+        | (df["RSI_14_1h"] < 40.0)
+        | (df["RSI_14_4h"] < 50.0)
+        | (df["AROONU_14_1h"] < 50.0)
+        | (df["AROONU_14_4h"] < 85.0)
+        | (df["ROC_9_4h"] < 70.0)
+      )
+      # 15m & 1h down move, 1h & 4h high, 4h overbought
+      & (
+        (df["RSI_3_15m"] > 25.0)
+        | (df["RSI_3_1h"] > 60.0)
+        | (df["RSI_14_1h"] < 50.0)
+        | (df["RSI_14_4h"] < 70.0)
+        | (df["AROONU_14_1h"] < 80.0)
+        | (df["AROONU_14_4h"] < 90.0)
+        | (df["ROC_9_4h"] < 120.0)
+      )
+      # 15m & 1h down move, 15m still high, 1h & 4h high, 1h & 4h & 1d overbought
+      & (
+        (df["RSI_3_15m"] > 25.0)
+        | (df["RSI_3_1h"] > 65.0)
+        | (df["RSI_14_15m"] < 40.0)
+        | (df["RSI_14_1h"] < 60.0)
+        | (df["RSI_14_4h"] < 70.0)
+        | (df["AROONU_14_1h"] < 80.0)
+        | (df["AROONU_14_4h"] < 100.0)
+        | (df["ROC_9_1h"] < 20.0)
+        | (df["ROC_9_4h"] < 50.0)
+        | (df["ROC_9_1d"] < 250.0)
+      )
+      # 15m down move, 15m still high, 1h & 4h high, 1d downtrend, 4h overbought
+      & (
+        (df["RSI_3_15m"] > 25.0)
+        | (df["RSI_14_15m"] < 40.0)
+        | (df["RSI_14_1h"] < 70.0)
+        | (df["RSI_14_4h"] < 75.0)
+        | (df["CMF_20_1d"] > -0.0)
+        | (df["AROONU_14_4h"] < 90.0)
+        | (df["ROC_9_4h"] < 50.0)
+      )
+      # 15m & 1h down move, 15m still high, 1h & 4h high & overbought
+      & (
+        (df["RSI_3_15m"] > 30.0)
+        | (df["RSI_3_1h"] > 60.0)
+        | (df["RSI_14_15m"] < 40.0)
+        | (df["RSI_14_1h"] < 50.0)
+        | (df["RSI_14_4h"] < 80.0)
+        | (df["AROONU_14_1h"] < 60.0)
+        | (df["AROONU_14_4h"] < 90.0)
+        | (df["ROC_9_1h"] < 50.0)
+        | (df["ROC_9_4h"] < 100.0)
+      )
+      # 15m & 1h down move, 15m still high, 1h & 4h high, 4h overbought
+      & (
+        (df["RSI_3_15m"] > 30.0)
+        | (df["RSI_3_1h"] > 65.0)
+        | (df["RSI_14_15m"] < 40.0)
+        | (df["RSI_14_1h"] < 60.0)
+        | (df["RSI_14_4h"] < 80.0)
+        | (df["AROONU_14_4h"] < 90.0)
+        | (df["ROC_9_4h"] < 130.0)
+      )
+      # 15m & 1h down move, 15m & 1h & 4h high, 1h overbought
+      & (
+        (df["RSI_3_15m"] > 35.0)
+        | (df["RSI_3_1h"] > 65.0)
+        | (df["RSI_14_15m"] < 50.0)
+        | (df["AROONU_14_1h"] < 80.0)
+        | (df["AROONU_14_4h"] < 90.0)
+        | (df["ROC_9_1h"] < 30.0)
+      )
+      # 1h & 4h & 1d down move, 1d still not low enough, 1d downtrend
+      & (
+        (df["RSI_3_1h"] > 5.0)
+        | (df["RSI_3_4h"] > 5.0)
+        | (df["RSI_3_1d"] > 10.0)
+        | (df["AROONU_14_1d"] < 25.0)
+        | (df["ROC_9_1d"] > -30.0)
+      )
+      # 1h & 4h down move, 1h & 4h downtrend
+      & ((df["RSI_3_1h"] > 5.0) | (df["RSI_3_4h"] > 10.0) | (df["CMF_20_1h"] > -0.5) | (df["CMF_20_4h"] > -0.5))
+      # 1h & 4h down move, 1h still high, 4h high, 1d overbought
+      & (
+        (df["RSI_3_1h"] > 5.0)
+        | (df["RSI_3_4h"] > 30.0)
+        | (df["AROONU_14_1h"] < 50.0)
+        | (df["AROONU_14_4h"] < 85.0)
+        | (df["ROC_9_1d"] < 50.0)
+      )
+      # 1h & 4h & 1d down move, 1h & 4h still not low enough, 1d high & overbought
+      & (
+        (df["RSI_3_1h"] > 20.0)
+        | (df["RSI_3_4h"] > 40.0)
+        | (df["RSI_3_1d"] > 60.0)
+        | (df["RSI_14_1h"] < 30.0)
+        | (df["RSI_14_4h"] < 40.0)
+        | (df["AROONU_14_4h"] < 40.0)
+        | (df["AROONU_14_1d"] < 70.0)
+        | (df["ROC_9_1d"] < 100.0)
+      )
+      # 5m & 15m & 1h & 4h down move, 15m downtrend, 4h high, 1d overbought
+      & (
+        (df["RSI_3_1h"] > 25.0)
+        | (df["RSI_3_4h"] > 25.0)
+        | (df["CMF_20_15m"] > -0.5)
+        | (df["CMF_20_1h"] > -0.3)
+        | (df["CMF_20_4h"] > -0.3)
+        | (df["AROONU_14_1h"] < 50.0)
+      )
+      # 1h & 4h down move, 1h & 4h high, 4h overbought
+      & (
+        (df["RSI_3_1h"] > 25.0)
+        | (df["RSI_3_4h"] > 60.0)
+        | (df["RSI_14_1h"] < 50.0)
+        | (df["RSI_14_4h"] < 70.0)
+        | (df["AROONU_14_4h"] < 80.0)
+        | (df["STOCHRSIk_14_14_3_3_4h"] < 80.0)
+        | (df["ROC_9_4h"] < 80.0)
+      )
+      # 1h & 1d down move, 1h & 4h & 1d still high, 1h & 4h high, 4h overbought
+      & (
+        (df["RSI_3_1h"] > 60.0)
+        | (df["RSI_3_1d"] > 25.0)
+        | (df["RSI_14_1h"] < 50.0)
+        | (df["RSI_14_4h"] < 60.0)
+        | (df["MFI_14_1d"] < 50.0)
+        | (df["AROONU_14_1h"] < 70.0)
+        | (df["AROONU_14_4h"] < 90.0)
+        | (df["ROC_9_4h"] < 25.0)
+      )
+      # 4h down move, 1h & 4h downtrend, 15m high
+      & (
+        (df["RSI_3_4h"] > 3.0)
+        | (df["CMF_20_1h"] > -0.25)
+        | (df["CMF_20_4h"] > -0.30)
+        | (df["STOCHRSIk_14_14_3_3_15m"] < 70.0)
+      )
+      # 4h & 1d down move, 1h still high, 4h high, 1d downtrend
+      & (
+        (df["RSI_3_4h"] > 25.0)
+        | (df["RSI_3_1d"] > 30.0)
+        | (df["RSI_14_1h"] < 30.0)
+        | (df["RSI_14_4h"] < 30.0)
+        | (df["AROONU_14_1h"] < 50.0)
+        | (df["AROONU_14_4h"] < 100.0)
+        | (df["ROC_9_1d"] > -40.0)
+      )
+      # 1d down move, 15m still not low enough, 1h high, 1d downtrend
+      & (
+        (df["RSI_3_1d"] > 5.0)
+        | (df["RSI_14_15m"] < 30.0)
+        | (df["STOCHRSIk_14_14_3_3_1h"] < 80.0)
+        | (df["ROC_2_1d"] > -40.0)
+      )
+      # 1d down move, 15m high, 1h & 4h downtrend
+      & (
+        (df["RSI_3_1d"] > 5.0)
+        | (df["STOCHRSIk_14_14_3_3_15m"] < 70.0)
+        | (df["ROC_9_1h"] > -60.0)
+        | (df["ROC_9_4h"] > -60.0)
+      )
+      # 15m & 1h & 4h still high, 4h downtrend, 4h overbought
+      & (
+        (df["RSI_14_15m"] < 50.0)
+        | (df["RSI_14_1h"] < 50.0)
+        | (df["RSI_14_4h"] < 60.0)
+        | (df["CMF_20_4h"] > -0.2)
+        | (df["ROC_9_4h"] < 250.0)
+      )
+      # 4h green with top wick, 15m & 1h down move, 15m still not low enough, 1h & 4h high
+      & (
+        (df["change_pct_4h"] < 10.0)
+        | (df["top_wick_pct_4h"] < 10.0)
+        | (df["RSI_3_15m"] > 5.0)
+        | (df["RSI_3_1h"] > 40.0)
+        | (df["RSI_14_15m"] < 30.0)
+        | (df["RSI_14_1h"] < 50.0)
+        | (df["RSI_14_4h"] < 50.0)
+        | (df["AROONU_14_1h"] < 60.0)
+        | (df["AROONU_14_4h"] < 90.0)
+      )
+      # 4h green with top wick, 1h down move, 1h still high, 4h high, 1d overbought
+      & (
+        (df["change_pct_4h"] < 10.0)
+        | (df["top_wick_pct_4h"] < 10.0)
+        | (df["RSI_3_1h"] > 45.0)
+        | (df["RSI_14_1h"] < 40.0)
+        | (df["RSI_14_4h"] < 60.0)
+        | (df["AROONU_14_1h"] < 70.0)
+        | (df["AROONU_14_4h"] < 90.0)
+        | (df["ROC_9_1d"] < 20.0)
+      )
+      # 4h green with top wick, 15m & 1h down move, 1h still high, 4h high
+      & (
+        (df["change_pct_4h"] < 15.0)
+        | (df["top_wick_pct_4h"] < 15.0)
+        | (df["RSI_3_15m"] > 10.0)
+        | (df["RSI_3_1h"] > 35.0)
+        | (df["AROONU_14_1h"] < 50.0)
+        | (df["AROONU_14_4h"] < 100.0)
+      )
+      # 4h green with top wick, 15m & 1h down move, 1h & 4h high
+      & (
+        (df["change_pct_4h"] < 15.0)
+        | (df["top_wick_pct_4h"] < 10.0)
+        | (df["RSI_3_15m"] > 20.0)
+        | (df["RSI_3_1h"] > 40.0)
+        | (df["AROONU_14_1h"] < 80.0)
+        | (df["AROONU_14_4h"] < 100.0)
+      )
+      # 1d red, 1h & 4h down move, 1h still high, 4d downtrend
+      & (
+        (df["change_pct_1d"] > -40.0)
+        | (df["RSI_3_1h"] > 55.0)
+        | (df["RSI_3_4h"] > 10.0)
+        | (df["STOCHRSIk_14_14_3_3_1h"] < 50.0)
+        | (df["ROC_9_4h"] > -35.0)
+      )
+      # 1d P&D, 15m & 1h & 4h & 1d down move, 4h still not low enough
+      & (
+        (df["change_pct_1d"] > -10.0)
+        | (df["change_pct_1d"].shift(288) < 10.0)
+        | (df["RSI_3_15m"] > 10.0)
+        | (df["RSI_3_1h"] > 25.0)
+        | (df["RSI_3_4h"] > 10.0)
+        | (df["RSI_3_1d"] > 40.0)
+        | (df["RSI_14_4h"] < 30.0)
+      )
+      # 1d red with top wick, 15m & 1h down move, 1h downtrend, 1h high
+      & (
+        (df["change_pct_1d"] > -10.0)
+        | (df["top_wick_pct_1d"] < 10.0)
+        | (df["RSI_3_15m"] > 10.0)
+        | (df["RSI_3_1h"] > 25.0)
+        | (df["CMF_20_1h"] > -0.2)
+        | (df["AROONU_14_1h"] < 70.0)
+        | (df["STOCHRSIk_14_14_3_3_1h"] < 40.0)
+      )
+      # 1d P&D, 15m & 1h down move, 15m still not low enough, 1h & 4h still high, 1d overbought
+      & (
+        (df["change_pct_1d"] > -5.0)
+        | (df["change_pct_1d"].shift(288) < 10.0)
+        | (df["RSI_3_15m"] > 20.0)
+        | (df["RSI_3_1h"] > 45.0)
+        | (df["RSI_14_15m"] < 30.0)
+        | (df["RSI_14_1h"] < 40.0)
+        | (df["RSI_14_4h"] < 50.0)
+        | (df["ROC_9_1d"] < 100.0)
+      )
+      # 1d P&D, 15m & 1h & 4h down move, 1h & 4h still not low enough, 1h & 4h downtrend, 1d overbought
+      & (
+        (df["change_pct_1d"] > -5.0)
+        | (df["change_pct_1d"].shift(288) < 10.0)
+        | (df["RSI_3_15m"] > 25.0)
+        | (df["RSI_3_1h"] > 30.0)
+        | (df["RSI_3_4h"] > 30.0)
+        | (df["AROONU_14_1h"] < 30.0)
+        | (df["AROONU_14_4h"] < 30.0)
+        | (df["ROC_9_1h"] > -25.0)
+        | (df["ROC_9_4h"] > -25.0)
+        | (df["ROC_9_1d"] < 50.0)
+      )
+      # 1d green with top wick, 15m down move, 1h & 4h high, 1d overbought
+      & (
+        (df["change_pct_1d"] < 10.0)
+        | (df["top_wick_pct_1d"] < 10.0)
+        | (df["RSI_3_15m"] > 10.0)
+        | (df["RSI_14_1h"] < 70.0)
+        | (df["RSI_14_4h"] < 80.0)
+        | (df["STOCHRSIk_14_14_3_3_4h"] < 90.0)
+        | (df["ROC_9_1d"] < 40.0)
+      )
+      # 1d green with top wick, 1h & 4h down move, 1h & 4h still high
+      & (
+        (df["change_pct_1d"] < 10.0)
+        | (df["top_wick_pct_1d"] < 10.0)
+        | (df["RSI_3_1h"] > 55.0)
+        | (df["RSI_3_4h"] > 55.0)
+        | (df["AROONU_14_1h"] < 50.0)
+        | (df["AROONU_14_4h"] < 50.0)
+      )
+      # 1d green with top wick, 15m & 1h & 4h down move, 15m still not low enough, 4h high, 1d overbought
+      & (
+        (df["change_pct_1d"] < 30.0)
+        | (df["top_wick_pct_1d"] < 10.0)
+        | (df["RSI_3_15m"] > 30.0)
+        | (df["RSI_3_1h"] > 30.0)
+        | (df["RSI_3_4h"] > 70.0)
+        | (df["RSI_14_4h"] < 60.0)
+        | (df["AROONU_14_15m"] < 25.0)
+        | (df["AROONU_14_4h"] < 70.0)
+        | (df["ROC_9_1d"] < 40.0)
+      )
+      # 1d green with top wick, 15m & 1h & 4h down move, 1h still not low enough, 4h still high, 1d overbought
+      & (
+        (df["change_pct_1d"] < 30.0)
+        | (df["top_wick_pct_1d"] < 20.0)
+        | (df["RSI_3_15m"] > 10.0)
+        | (df["RSI_3_1h"] > 40.0)
+        | (df["RSI_3_4h"] > 40.0)
+        | (df["AROONU_14_1h"] < 20.0)
+        | (df["AROONU_14_4h"] < 50.0)
+        | (df["ROC_9_1d"] < 100.0)
+      )
+      # 1d green with top wick, 1h down move, 1h still high, 4h high & overbought, 1d overbought
+      & (
+        (df["change_pct_1d"] < 30.0)
+        | (df["top_wick_pct_1d"] < 20.0)
+        | (df["RSI_3_1h"] > 50.0)
+        | (df["RSI_14_1h"] < 40.0)
+        | (df["RSI_14_4h"] < 60.0)
+        | (df["AROONU_14_4h"] < 70.0)
+        | (df["ROC_9_4h"] < 40.0)
+        | (df["ROC_9_1d"] < 50.0)
+      )
+      # 1d green with top wick, 15m & 1h down move, 1h & 4h still high, 4h overbought
+      & (
+        (df["change_pct_1d"] < 30.0)
+        | (df["top_wick_pct_1d"] < 30.0)
+        | (df["RSI_3_15m"] > 25.0)
+        | (df["RSI_3_1h"] > 25.0)
+        | (df["RSI_14_1h"] < 40.0)
+        | (df["RSI_14_4h"] < 40.0)
+        | (df["AROONU_14_4h"] < 80.0)
+        | (df["ROC_9_4h"] < 30.0)
+      )
+      # 1d green, 15m & 4h down move, 4h still high, 4h & 1d overbought
+      & (
+        (df["change_pct_1d"] < 50.0)
+        | (df["RSI_3_15m"] > 15.0)
+        | (df["RSI_3_4h"] > 25.0)
+        | (df["RSI_14_4h"] < 50.0)
+        | (df["ROC_9_4h"] < 40.0)
+        | (df["ROC_9_1d"] < 100.0)
+      )
+      # 4h top wick, 15m down move, 15m still not low enough, 1h & 4h still high, 4h overbought
+      & (
+        (df["top_wick_pct_4h"] < 20.0)
+        | (df["RSI_3_15m"] > 25.0)
+        | (df["RSI_14_15m"] < 30.0)
+        | (df["RSI_14_1h"] < 40.0)
+        | (df["RSI_14_4h"] < 50.0)
+        | (df["STOCHRSIk_14_14_3_3_1h"] < 50.0)
+        | (df["STOCHRSIk_14_14_3_3_4h"] < 50.0)
+        | (df["ROC_9_4h"] < 50.0)
+      )
+      # 1d top wick, 1h & 4h down move, 15m downtrend, 4h still high, 1d overbought
+      & (
+        (df["top_wick_pct_1d"] < 20.0)
+        | (df["RSI_3_1h"] > 10.0)
+        | (df["RSI_3_4h"] > 45.0)
+        | (df["CMF_20_15m"] > -0.2)
+        | (df["AROONU_14_4h"] < 50.0)
+        | (df["ROC_9_1d"] < 80.0)
+      )
+      # 1d top wick, 4h down move, 4h still high, 1d overbought
+      & (
+        (df["top_wick_pct_1d"] < 25.0)
+        | (df["RSI_3_4h"] > 25.0)
+        | (df["RSI_14_4h"] < 45.0)
+        | (df["AROONU_14_4h"] < 40.0)
+        | (df["ROC_9_1d"] < 200.0)
+      )
+      # 1d top wick, 15m & 1h & 4h down move, 15m & 1h downtrend, 4h still high
+      & (
+        (df["top_wick_pct_1d"] < 25.0)
+        | (df["RSI_3_15m"] > 10.0)
+        | (df["RSI_3_1h"] > 30.0)
+        | (df["RSI_3_4h"] > 50.0)
+        | (df["CMF_20_15m"] > -0.25)
+        | (df["CMF_20_1h"] > -0.25)
+        | (df["AROONU_14_4h"] < 50.0)
+      )
+      # 1d top wick, 15m down move, 15m stil high, 1h & 4h high, 4h overbought
+      & (
+        (df["top_wick_pct_1d"] < 25.0)
+        | (df["RSI_3_15m"] > 35.0)
+        | (df["RSI_14_15m"] < 40.0)
+        | (df["RSI_14_1h"] < 50.0)
+        | (df["RSI_14_4h"] < 80.0)
+        | (df["AROONU_14_1h"] < 80.0)
+        | (df["AROONU_14_4h"] < 80.0)
+        | (df["ROC_9_4h"] < 50.0)
+      )
+      # pump, drop but not yet near the previous lows, 15m & 1h & 4h & 1d down move, 1d overbought
+      & (
+        (((df["high_max_6_1d"] - df["low_min_6_1d"]) / df["low_min_6_1d"]) < 1.5)
+        | (df["close"] > (df["high_max_6_4h"] * 0.70))
+        | (df["close"] < (df["low_min_6_1d"] * 1.25))
+        | (df["RSI_3_15m"] > 15.0)
+        | (df["RSI_3_1h"] > 25.0)
+        | (df["RSI_3_4h"] > 25.0)
+        | (df["RSI_3_1d"] > 45.0)
+        | (df["ROC_9_1d"] < 20.0)
+      )
+      # pump, drop in lays days, 1h & 4h down move, 1h & 4h still not low enough, 1d overbought
+      & (
+        (((df["high_max_12_1d"] - df["low_min_12_1d"]) / df["low_min_12_1d"]) < 3.0)
+        | (df["close"] > (df["high_max_24_4h"] * 0.70))
+        | (df["RSI_3_1h"] > 15.0)
+        | (df["RSI_3_1d"] > 50.0)
+        | (df["RSI_14_1h"] < 30.0)
+        | (df["RSI_14_4h"] < 40.0)
+        | (df["ROC_9_1d"] < 20.0)
+      )
+      # drop in last 12 hours, 14m & 1h & 4h down move, 15m still not low enough, 1h still high, 4h high & overbought
+      & (
+        (df["close"] > (df["high_max_12_1h"] * 0.50))
+        | (df["RSI_3_15m"] > 20.0)
+        | (df["RSI_3_1h"] > 35.0)
+        | (df["RSI_3_4h"] > 55.0)
+        | (df["RSI_14_15m"] < 30.0)
+        | (df["RSI_14_1h"] < 40.0)
+        | (df["RSI_14_4h"] < 50.0)
+        | (df["AROONU_14_4h"] < 80.0)
+        | (df["ROC_9_4h"] < 25.0)
+      )
+      # drop in last 12 hours, 1h & 4h down move, 1h & 4h downtrend
+      & (
+        (df["close"] > (df["high_max_12_1h"] * 0.35))
+        | (df["RSI_3_1h"] > 15.0)
+        | (df["RSI_3_4h"] > 5.0)
+        | (df["ROC_9_1h"] > -50.0)
+        | (df["ROC_9_4h"] > -50.0)
+      )
+      # drop in last 4 days, 15m & 1h & 4h down move, 15m still not low enough, 1h still high, 4h overbought
+      & (
+        (df["close"] > (df["high_max_24_4h"] * 0.40))
+        | (df["RSI_3_15m"] > 10.0)
+        | (df["RSI_3_1h"] > 25.0)
+        | (df["RSI_3_4h"] > 50.0)
+        | (df["RSI_14_15m"] < 30.0)
+        | (df["RSI_14_1h"] < 40.0)
+        | (df["ROC_9_4h"] < 20.0)
+      )
+      # drop in last 4 days, 15m & 1h & 4h & 1d down move, 4h high
+      & (
+        (df["close"] > (df["high_max_24_4h"] * 0.40))
+        | (df["RSI_3_15m"] > 10.0)
+        | (df["RSI_3_1h"] > 40.0)
+        | (df["RSI_3_4h"] > 60.0)
+        | (df["RSI_3_1d"] > 10.0)
+        | (df["STOCHRSIk_14_14_3_3_4h"] < 80.0)
+      )
+      # drop in last 6 days, 15m & 1h & 4h & 1d down move, 1d high, 4h downtrend
+      & (
+        (df["close"] > (df["high_max_24_4h"] * 0.35))
+        | (df["RSI_3_15m"] > 5.0)
+        | (df["RSI_3_1h"] > 25.0)
+        | (df["RSI_3_4h"] > 25.0)
+        | (df["RSI_3_1d"] > 30.0)
+        | (df["AROONU_14_1d"] < 80.0)
+        | (df["ROC_9_4h"] > -40.0)
+      )
+      # drop in last 4 days, 15m & 1d down move, 15m still not low enough, 1h still high, 1d high, 4h downtrend
+      & (
+        (df["close"] > (df["high_max_24_4h"] * 0.35))
+        | (df["RSI_3_15m"] > 15.0)
+        | (df["RSI_3_1d"] > 30.0)
+        | (df["AROONU_14_15m"] < 25.0)
+        | (df["AROONU_14_1h"] < 40.0)
+        | (df["AROONU_14_1d"] < 80.0)
+        | (df["ROC_9_4h"] > -50.0)
+      )
+      # drop in last 4 days, 1h & 5h & 1d down move, 1h still high, 1h & 4h downtrend
+      & (
+        (df["close"] > (df["high_max_24_4h"] * 0.25))
+        | (df["RSI_3_1h"] > 20.0)
+        | (df["RSI_3_4h"] > 25.0)
+        | (df["RSI_3_1d"] > 25.0)
+        | (df["AROONU_14_1h"] < 50.0)
+        | (df["ROC_9_1h"] > -20.0)
+        | (df["ROC_9_4h"] > -35.0)
+      )
+      # drop in last 4 days, 1d down move, 1h & 4h downtrend, 15m & 4h downtrend
+      & (
+        (df["close"] > (df["high_max_24_4h"] * 0.25))
+        | (df["RSI_3_1d"] > 15.0)
+        | (df["CMF_20_1h"] > -0.20)
+        | (df["CMF_20_4h"] > -0.20)
+        | (df["ROC_9_15m"] > -15.0)
+        | (df["ROC_9_4h"] > -20.0)
+      )
+      # drop in last 6 days, 15m & 1d down move, 1h still high, 4h high, 4h downtrend
+      & (
+        (df["close"] > (df["high_max_6_1d"] * 0.25))
+        | (df["RSI_3_15m"] > 15.0)
+        | (df["RSI_3_1d"] > 15.0)
+        | (df["STOCHRSIk_14_14_3_3_1h"] < 40.0)
+        | (df["STOCHRSIk_14_14_3_3_4h"] < 60.0)
+        | (df["ROC_9_4h"] > -25.0)
+      )
+      # drop in last 6 days, 15m & 1h down move, 15m & 1h still not low enough, 15m & 1h & 4h & 1d downtrend
+      & (
+        (df["close"] > (df["high_max_6_1d"] * 0.25))
+        | (df["RSI_3_15m"] > 25.0)
+        | (df["RSI_3_1h"] > 30.0)
+        | (df["RSI_14_15m"] < 30.0)
+        | (df["CMF_20_15m"] > -0.10)
+        | (df["CMF_20_1h"] > -0.10)
+        | (df["CMF_20_4h"] > -0.40)
+        | (df["CMF_20_1d"] > -0.50)
+        | (df["AROONU_14_1h"] < 30.0)
+      )
+      # drop in last 4 days, 1d down move, 1d downtrendm 1h still high, 1d downtrend
+      & (
+        (df["close"] > (df["high_max_24_4h"] * 0.15))
+        | (df["RSI_3_1d"] > 20.0)
+        | (df["CMF_20_1d"] > -0.30)
+        | (df["AROONU_14_1h"] < 50.0)
+        | (df["ROC_2_1d"] > -40.0)
+      )
+      # drop in last 6 days, 1d down move, 1h & 4h & 1d downtrend, 1d still high, 4h downtrend
+      & (
+        (df["close"] > (df["high_max_6_1d"] * 0.15))
+        | (df["RSI_3_1d"] > 20.0)
+        | (df["CMF_20_1h"] > -0.10)
+        | (df["CMF_20_4h"] > -0.40)
+        | (df["CMF_20_1d"] > -0.50)
+        | (df["AROONU_14_1d"] < 50.0)
+        | (df["ROC_9_4h"] > -30.0)
+      )
+      # drop in last 12 days. 15m & 1h & 4h & 1d down move, 4h still high, 1d downtrend
+      & (
+        (df["close"] > (df["high_max_12_1d"] * 0.25))
+        | (df["RSI_3_15m"] > 10.0)
+        | (df["RSI_3_1h"] > 10.0)
+        | (df["RSI_3_4h"] > 35.0)
+        | (df["RSI_3_1d"] > 35.0)
+        | (df["STOCHRSIk_14_14_3_3_4h"] < 50.0)
+        | (df["ROC_9_1d"] > -40.0)
+      )
+      # drop in last 12 days, 15m & 1h down move, 1h still not low enough, 4h high
+      & (
+        (df["close"] > (df["high_max_12_1d"] * 0.25))
+        | (df["RSI_3_15m"] > 15.0)
+        | (df["RSI_3_1h"] > 30.0)
+        | (df["RSI_14_1h"] < 30.0)
+        | (df["RSI_14_4h"] < 30.0)
+        | (df["STOCHRSIk_14_14_3_3_1h"] < 40.0)
+        | (df["STOCHRSIk_14_14_3_3_4h"] < 70.0)
+      )
+      # drop in last 20 days, 15m & 1h & 1d down move, 15m still not low enough, 1h high
+      & (
+        (df["close"] > (df["high_max_20_1d"] * 0.05))
+        | (df["RSI_3_15m"] > 10.0)
+        | (df["RSI_3_1h"] > 25.0)
+        | (df["RSI_3_1d"] > 25.0)
+        | (df["AROONU_14_15m"] < 30.0)
+        | (df["AROONU_14_1h"] < 80.0)
+      )
+      # drop in last 30 days, 15m & 1h down move, 1h still high, 4h high & overbought
+      & (
+        (df["close"] > (df["high_max_30_1d"] * 0.10))
+        | (df["RSI_3_15m"] > 10.0)
+        | (df["RSI_3_1h"] > 55.0)
+        | (df["AROONU_14_1h"] < 40.0)
+        | (df["AROONU_14_4h"] < 85.0)
+        | (df["ROC_9_4h"] < 80.0)
+      )
+      # drop in last 30 days, 15m down move, 15m & 1h high
+      & (
+        (df["close"] > (df["high_max_30_1d"] * 0.05))
+        | (df["RSI_3_15m"] > 15.0)
+        | (df["RSI_3_4h"] > 50.0)
+        | (df["AROONU_14_15m"] < 80.0)
+        | (df["STOCHRSIk_14_14_3_3_1h"] < 85.0)
+      )
+    )
 
     df["global_protections_long_pump"] = True
 
@@ -4042,6 +5189,7 @@ class NostalgiaForInfinityX6(IStrategy):
         if long_entry_condition_index == 31:
           # Protections
           long_entry_logic.append(df["num_empty_288"] <= allowed_empty_candles_288)
+          long_entry_logic.append(df["protections_long_global"] == True)
           long_entry_logic.append(df["RSI_14_1h"] < 75.0) # Avoid entering when 1h is too overbought
           long_entry_logic.append(df["RSI_14_4h"] < 70.0) # Avoid entering when 4h is too overbought
 
@@ -4062,6 +5210,7 @@ class NostalgiaForInfinityX6(IStrategy):
         if long_entry_condition_index == 32:
           # Protections
           long_entry_logic.append(df["num_empty_288"] <= allowed_empty_candles_288)
+          long_entry_logic.append(df["protections_long_global"] == True)
           long_entry_logic.append(df["RSI_14_4h"] < 75.0)  # Protection: Avoid extreme 4h overbought
           long_entry_logic.append(df["RSI_14_1h"] < 78.0)  # Protection: Avoid extreme 1h overbought
 
@@ -4085,7 +5234,8 @@ class NostalgiaForInfinityX6(IStrategy):
         # Dip Catching with CMF Confirmation (Long).
         if long_entry_condition_index == 33:
           # Protections
-          long_entry_logic.append(df["num_empty_288"] <= allowed_empty_candles_288) # Ensure sufficient candle data
+          long_entry_logic.append(df["num_empty_288"] <= allowed_empty_candles_288)
+          long_entry_logic.append(df["protections_long_global"] == True)
 
           # Primary Dip Indicators (5m timeframe)
           long_entry_logic.append(df["RSI_14"] < 38.0) # RSI is currently in the lower zone
@@ -4108,6 +5258,7 @@ class NostalgiaForInfinityX6(IStrategy):
         if long_entry_condition_index == 34:
           # Protections
           long_entry_logic.append(df["num_empty_288"] <= allowed_empty_candles_288)
+          long_entry_logic.append(df["protections_long_global"] == True)
 
           # Context (Higher Timeframes) - Avoid catching falling knives / ensure not extremely overbought
           long_entry_logic.append(df["RSI_14_1h"] < 65.0)          # 1h RSI not excessively overbought
@@ -4128,6 +5279,7 @@ class NostalgiaForInfinityX6(IStrategy):
         if long_entry_condition_index == 35:
           # Protections (using standard protection from existing code)
           long_entry_logic.append(df["num_empty_288"] <= allowed_empty_candles_288)
+          long_entry_logic.append(df["protections_long_global"] == True)
 
           # Context: Ensure underlying accumulation and avoid extended 4h conditions
           long_entry_logic.append(df['CMF_20'] > 0.05)               # Chaikin Money Flow indicating accumulation pressure
@@ -4167,6 +5319,7 @@ class NostalgiaForInfinityX6(IStrategy):
         if short_entry_condition_index == 501:
           # Protections
           short_entry_logic.append(df["num_empty_288"] <= allowed_empty_candles_288)
+          short_entry_logic.append(df["protections_short_global"] == True)
           short_entry_logic.append(df["global_protections_short_pump"] == True)
           short_entry_logic.append(df["global_protections_short_dump"] == True)
 
@@ -4389,6 +5542,7 @@ class NostalgiaForInfinityX6(IStrategy):
         if short_entry_condition_index == 502:
           # Protections
           short_entry_logic.append(df["num_empty_288"] <= allowed_empty_candles_288)
+          short_entry_logic.append(df["protections_short_global"] == True)
 
           # 5m & 4h up move
           short_entry_logic.append((df["RSI_3"] < 97.0) | (df["RSI_3_4h"] < 95.0))
@@ -5069,6 +6223,7 @@ class NostalgiaForInfinityX6(IStrategy):
         if short_entry_condition_index == 542:
           # Protections
           short_entry_logic.append(df["num_empty_288"] <= allowed_empty_candles_288)
+          short_entry_logic.append(df["protections_short_global"] == True)
 
           # 5m & 15m up move, 15m stil low
           short_entry_logic.append((df["RSI_3"] < 90.0) | (df["RSI_3_15m"] < 80.0) | (df["AROONU_14_15m"] > 60.0))
@@ -5156,6 +6311,8 @@ class NostalgiaForInfinityX6(IStrategy):
           )
           # 4h up move, 15m low
           short_entry_logic.append((df["RSI_3_4h"] < 90.0) | (df["STOCHRSIk_14_14_3_3_15m"] > 45.0))
+          # 4h up move, 15m still not high enough
+          short_entry_logic.append((df["RSI_3_4h"] < 85.0) | (df["AROONU_14_15m"] > 60.0))
           # 4h up move, 15m low
           short_entry_logic.append((df["RSI_3_4h"] < 85.0) | (df["STOCHRSIk_14_14_3_3_15m"] > 30.0))
           # 4h up move, 15m still low, 4h still not high enough
@@ -23456,6 +24613,29 @@ class NostalgiaForInfinityX6(IStrategy):
       else self.grinding_v2_grind_4_profit_threshold_spot
     )
 
+    grind_5_max_sub_grinds = 0
+    grind_5_stakes = (
+      self.grinding_v2_grind_5_stakes_futures.copy()
+      if self.is_futures_mode
+      else self.grinding_v2_grind_5_stakes_spot.copy()
+    )
+    grind_5_sub_thresholds = (
+      self.grinding_v2_grind_5_thresholds_futures if self.is_futures_mode else self.grinding_v2_grind_5_thresholds_spot
+    )
+    if (slice_amount * grind_5_stakes[0] / (trade.leverage if self.is_futures_mode else 1.0)) < min_stake:
+      multi = min_stake / slice_amount / grind_5_stakes[0] * trade.leverage
+      for i, _ in enumerate(grind_5_stakes):
+        grind_5_stakes[i] *= multi
+    grind_5_max_sub_grinds = len(grind_5_stakes)
+    grind_5_derisk_grinds = (
+      self.grinding_v2_grind_5_derisk_futures if self.is_futures_mode else self.grinding_v2_grind_5_derisk_spot
+    )
+    grind_5_profit_threshold = (
+      self.grinding_v2_grind_5_profit_threshold_futures
+      if self.is_futures_mode
+      else self.grinding_v2_grind_5_profit_threshold_spot
+    )
+
     is_derisk_1 = False
     is_derisk_1_found = False  # derisk_level_1 de-risk exit
     derisk_1_order = None
@@ -23556,6 +24736,19 @@ class NostalgiaForInfinityX6(IStrategy):
     grind_4_distance_ratio = 0.0
     grind_4_exit_order = None
     grind_4_exit_distance_ratio = 0.0
+    grind_5_sub_grind_count = 0
+    grind_5_total_amount = 0.0
+    grind_5_total_cost = 0.0
+    grind_5_current_open_rate = 0.0
+    grind_5_current_grind_stake = 0.0
+    grind_5_current_grind_stake_profit = 0.0
+    grind_5_is_exit_found = False
+    grind_5_found = False
+    grind_5_buy_orders = []
+    grind_5_orders = []
+    grind_5_distance_ratio = 0.0
+    grind_5_exit_order = None
+    grind_5_exit_distance_ratio = 0.0
     for order in reversed(filled_orders):
       if (order.ft_order_side == "buy") and (order is not filled_orders[0]):
         order_tag = ""
@@ -23625,6 +24818,15 @@ class NostalgiaForInfinityX6(IStrategy):
           if not grind_4_found:
             grind_4_distance_ratio = (exit_rate - order.safe_price) / order.safe_price
             grind_4_found = True
+        elif not grind_5_is_exit_found and order_tag == "grind_5_entry":
+          grind_5_sub_grind_count += 1
+          grind_5_total_amount += order.safe_filled
+          grind_5_total_cost += order.safe_filled * order.safe_price
+          grind_5_buy_orders.append(order.id)
+          grind_5_orders.append(order)
+          if not grind_5_found:
+            grind_5_distance_ratio = (exit_rate - order.safe_price) / order.safe_price
+            grind_5_found = True
       elif order.ft_order_side == "sell":
         if (
           order is filled_exits[-1]
@@ -23675,6 +24877,9 @@ class NostalgiaForInfinityX6(IStrategy):
         elif not grind_4_is_exit_found and order_tag in ["grind_4_exit", "grind_4_derisk"]:
           grind_4_is_exit_found = True
           grind_4_exit_order = order
+        elif not grind_5_is_exit_found and order_tag in ["grind_5_exit", "grind_5_derisk"]:
+          grind_5_is_exit_found = True
+          grind_5_exit_order = order
         elif order_tag in ["derisk_global"]:
           if not buyback_1_is_exit_found:
             buyback_1_is_exit_found = True
@@ -23697,6 +24902,9 @@ class NostalgiaForInfinityX6(IStrategy):
           if not grind_4_is_exit_found:
             grind_4_is_exit_found = True
             grind_4_exit_order = order
+          if not grind_5_is_exit_found:
+            grind_5_is_exit_found = True
+            grind_5_exit_order = order
 
     if buyback_1_sub_grind_count > 0:
       buyback_1_current_open_rate = buyback_1_total_cost / buyback_1_total_amount
@@ -23726,6 +24934,10 @@ class NostalgiaForInfinityX6(IStrategy):
       grind_4_current_open_rate = grind_4_total_cost / grind_4_total_amount
       grind_4_current_grind_stake = grind_4_total_amount * exit_rate * (1 - trade.fee_close)
       grind_4_current_grind_stake_profit = grind_4_current_grind_stake - grind_4_total_cost
+    if grind_5_sub_grind_count > 0:
+      grind_5_current_open_rate = grind_5_total_cost / grind_5_total_amount
+      grind_5_current_grind_stake = grind_5_total_amount * exit_rate * (1 - trade.fee_close)
+      grind_5_current_grind_stake_profit = grind_5_current_grind_stake - grind_5_total_cost
 
     if grind_1_is_exit_found:
       grind_1_exit_distance_ratio = (exit_rate - grind_1_exit_order.safe_price) / grind_1_exit_order.safe_price
@@ -23757,6 +24969,7 @@ class NostalgiaForInfinityX6(IStrategy):
       + grind_2_current_grind_stake_profit
       + grind_3_current_grind_stake_profit
       + grind_4_current_grind_stake_profit
+      + grind_5_current_grind_stake_profit
     )
     num_open_grinds_and_buybacks = (
       buyback_1_sub_grind_count
@@ -23766,6 +24979,7 @@ class NostalgiaForInfinityX6(IStrategy):
       + grind_2_sub_grind_count
       + grind_3_sub_grind_count
       + grind_4_sub_grind_count
+      + grind_5_sub_grind_count
     )
 
     # Rebuy mode, the first entry is lower than normal slot stake
@@ -23979,17 +25193,18 @@ class NostalgiaForInfinityX6(IStrategy):
           else:
             return -ft_sell_amount
 
+    # if (
+    #   self.grinding_v2_grind_1_use_derisk
+    #   and (grind_1_sub_grind_count > 0)
+    #   and (((exit_rate - grind_1_current_open_rate) / grind_1_current_open_rate) < grind_1_derisk_grinds)
+    #   and (grind_1_orders[-1].order_date_utc.replace(tzinfo=None) >= datetime(2025, 8, 3) or is_backtest)
+    # ):
     if (
       self.grinding_v2_grind_1_use_derisk
       and (grind_1_sub_grind_count > 0)
-      and (((exit_rate - grind_1_current_open_rate) / grind_1_current_open_rate) < grind_1_derisk_grinds)
-      and (grind_1_orders[-1].order_date_utc.replace(tzinfo=None) >= datetime(2025, 6, 20) or is_backtest)
+      and (grind_1_current_grind_stake_profit < (slice_amount * grind_1_derisk_grinds))
+      and (grind_1_orders[-1].order_date_utc.replace(tzinfo=None) >= datetime(2025, 8, 3) or is_backtest)
     ):
-      # if (
-      #   self.grinding_v2_grind_1_use_derisk
-      #   and (grind_1_sub_grind_count > 0)
-      #   and (grind_1_current_grind_stake_profit < (slice_amount * grind_1_derisk_grinds))
-      # ):
       sell_amount = grind_1_total_amount * exit_rate / trade.leverage
       if ((current_stake_amount / trade.leverage) - sell_amount) < (min_stake * 1.55):
         sell_amount = (trade.amount * exit_rate / trade.leverage) - (min_stake * 1.55)
@@ -24006,7 +25221,7 @@ class NostalgiaForInfinityX6(IStrategy):
           f"Grinding de-risk (grind_1_derisk) [{trade.pair}] | Rate: {exit_rate} | Stake amount: {sell_amount} | Coin amount: {grind_1_total_amount} | Profit (stake): {profit_stake} | Profit: {(profit_ratio * 100.0):.2f}% | Grind profit: {(grind_profit * 100.0):.2f}%"
         )
         log.info(
-          f"Grinding de-risk (grind_1_derisk) [{current_time}] [{trade.pair}] | Rate: {exit_rate} | Stake amount: {sell_amount} | Coin amount: {grind_1_total_amount} | Profit (stake): {profit_stake} | Profit: {(profit_ratio * 100.0):.2f}% | Grind profit: {(grind_profit * 100.0):.2f}%"
+          f"Grinding de-risk (grind_1_derisk) [{current_time}] [{trade.pair}] | Rate: {exit_rate} | Stake amount: {sell_amount} | Coin amount: {grind_1_total_amount} | Profit (stake): {profit_stake} | Profit: {(profit_ratio * 100.0):.2f}% | Grind profit: {(grind_profit * 100.0):.2f}% ({grind_1_current_grind_stake_profit} {self.config['stake_currency']})"
         )
         order_tag = "grind_1_derisk"
         for grind_entry_id in grind_1_buy_orders:
@@ -24074,17 +25289,18 @@ class NostalgiaForInfinityX6(IStrategy):
           else:
             return -ft_sell_amount
 
+    # if (
+    #   self.grinding_v2_grind_2_use_derisk
+    #   and (grind_2_sub_grind_count > 0)
+    #   and (((exit_rate - grind_2_current_open_rate) / grind_2_current_open_rate) < grind_2_derisk_grinds)
+    #   and (grind_2_orders[-1].order_date_utc.replace(tzinfo=None) >= datetime(2025, 8, 3) or is_backtest)
+    # ):
     if (
       self.grinding_v2_grind_2_use_derisk
       and (grind_2_sub_grind_count > 0)
-      and (((exit_rate - grind_2_current_open_rate) / grind_2_current_open_rate) < grind_2_derisk_grinds)
-      and (grind_2_orders[-1].order_date_utc.replace(tzinfo=None) >= datetime(2025, 6, 20) or is_backtest)
+      and (grind_2_current_grind_stake_profit < (slice_amount * grind_2_derisk_grinds))
+      and (grind_2_orders[-1].order_date_utc.replace(tzinfo=None) >= datetime(2025, 8, 3) or is_backtest)
     ):
-      # if (
-      #   self.grinding_v2_grind_2_use_derisk
-      #   and (grind_2_sub_grind_count > 0)
-      #   and (grind_2_current_grind_stake_profit < (slice_amount * grind_2_derisk_grinds))
-      # ):
       sell_amount = grind_2_total_amount * exit_rate / trade.leverage
       if ((current_stake_amount / trade.leverage) - sell_amount) < (min_stake * 1.55):
         sell_amount = (trade.amount * exit_rate / trade.leverage) - (min_stake * 1.55)
@@ -24101,7 +25317,7 @@ class NostalgiaForInfinityX6(IStrategy):
           f"Grinding de-risk (grind_2_derisk) [{trade.pair}] | Rate: {exit_rate} | Stake amount: {sell_amount} | Coin amount: {grind_2_total_amount} | Profit (stake): {profit_stake} | Profit: {(profit_ratio * 100.0):.2f}% | Grind profit: {(grind_profit * 100.0):.2f}%"
         )
         log.info(
-          f"Grinding de-risk (grind_2_derisk) [{current_time}] [{trade.pair}] | Rate: {exit_rate} | Stake amount: {sell_amount} | Coin amount: {grind_2_total_amount} | Profit (stake): {profit_stake} | Profit: {(profit_ratio * 100.0):.2f}% | Grind profit: {(grind_profit * 100.0):.2f}%"
+          f"Grinding de-risk (grind_2_derisk) [{current_time}] [{trade.pair}] | Rate: {exit_rate} | Stake amount: {sell_amount} | Coin amount: {grind_2_total_amount} | Profit (stake): {profit_stake} | Profit: {(profit_ratio * 100.0):.2f}% | Grind profit: {(grind_profit * 100.0):.2f}% ({grind_2_current_grind_stake_profit} {self.config['stake_currency']})"
         )
         order_tag = "grind_2_derisk"
         for grind_entry_id in grind_2_buy_orders:
@@ -24169,17 +25385,18 @@ class NostalgiaForInfinityX6(IStrategy):
           else:
             return -ft_sell_amount
 
+    # if (
+    #   self.grinding_v2_grind_3_use_derisk
+    #   and (grind_3_sub_grind_count > 0)
+    #   and (((exit_rate - grind_3_current_open_rate) / grind_3_current_open_rate) < grind_3_derisk_grinds)
+    #   and (grind_3_orders[-1].order_date_utc.replace(tzinfo=None) >= datetime(2025, 8, 3) or is_backtest)
+    # ):
     if (
       self.grinding_v2_grind_3_use_derisk
       and (grind_3_sub_grind_count > 0)
-      and (((exit_rate - grind_3_current_open_rate) / grind_3_current_open_rate) < grind_3_derisk_grinds)
-      and (grind_3_orders[-1].order_date_utc.replace(tzinfo=None) >= datetime(2025, 6, 20) or is_backtest)
+      and (grind_3_current_grind_stake_profit < (slice_amount * grind_3_derisk_grinds))
+      and (grind_3_orders[-1].order_date_utc.replace(tzinfo=None) >= datetime(2025, 8, 3) or is_backtest)
     ):
-      # if (
-      #   self.grinding_v2_grind_3_use_derisk
-      #   and (grind_3_sub_grind_count > 0)
-      #   and (grind_3_current_grind_stake_profit < (slice_amount * grind_3_derisk_grinds))
-      # ):
       sell_amount = grind_3_total_amount * exit_rate / trade.leverage
       if ((current_stake_amount / trade.leverage) - sell_amount) < (min_stake * 1.55):
         sell_amount = (trade.amount * exit_rate / trade.leverage) - (min_stake * 1.55)
@@ -24196,7 +25413,7 @@ class NostalgiaForInfinityX6(IStrategy):
           f"Grinding de-risk (grind_3_derisk) [{trade.pair}] | Rate: {exit_rate} | Stake amount: {sell_amount} | Coin amount: {grind_3_total_amount} | Profit (stake): {profit_stake} | Profit: {(profit_ratio * 100.0):.2f}% | Grind profit: {(grind_profit * 100.0):.2f}%"
         )
         log.info(
-          f"Grinding de-risk (grind_3_derisk) [{current_time}] [{trade.pair}] | Rate: {exit_rate} | Stake amount: {sell_amount} | Coin amount: {grind_3_total_amount} | Profit (stake): {profit_stake} | Profit: {(profit_ratio * 100.0):.2f}% | Grind profit: {(grind_profit * 100.0):.2f}%"
+          f"Grinding de-risk (grind_3_derisk) [{current_time}] [{trade.pair}] | Rate: {exit_rate} | Stake amount: {sell_amount} | Coin amount: {grind_3_total_amount} | Profit (stake): {profit_stake} | Profit: {(profit_ratio * 100.0):.2f}% | Grind profit: {(grind_profit * 100.0):.2f}% ({grind_3_current_grind_stake_profit} {self.config['stake_currency']})"
         )
         order_tag = "grind_3_derisk"
         for grind_entry_id in grind_3_buy_orders:
@@ -24217,6 +25434,7 @@ class NostalgiaForInfinityX6(IStrategy):
           is_derisk_1_found
           # only queue 4 grinds open
           and (num_open_grinds_and_buybacks == grind_4_sub_grind_count)
+          and (last_candle["protections_long_global"] == True)
           and (
             (slice_profit < -0.04)
             and (last_candle["RSI_3"] > 10.0)
@@ -24278,17 +25496,18 @@ class NostalgiaForInfinityX6(IStrategy):
           else:
             return -ft_sell_amount
 
+    # if (
+    #   self.grinding_v2_grind_4_use_derisk
+    #   and (grind_4_sub_grind_count > 0)
+    #   and (((exit_rate - grind_4_current_open_rate) / grind_4_current_open_rate) < grind_4_derisk_grinds)
+    #   and (grind_4_orders[-1].order_date_utc.replace(tzinfo=None) >= datetime(2025, 8, 3) or is_backtest)
+    # ):
     if (
       self.grinding_v2_grind_4_use_derisk
       and (grind_4_sub_grind_count > 0)
-      and (((exit_rate - grind_4_current_open_rate) / grind_4_current_open_rate) < grind_4_derisk_grinds)
-      and (grind_4_orders[-1].order_date_utc.replace(tzinfo=None) >= datetime(2025, 6, 20) or is_backtest)
+      and (grind_4_current_grind_stake_profit < (slice_amount * grind_4_derisk_grinds))
+      and (grind_4_orders[-1].order_date_utc.replace(tzinfo=None) >= datetime(2025, 8, 3) or is_backtest)
     ):
-      # if (
-      #   self.grinding_v2_grind_4_use_derisk
-      #   and (grind_4_sub_grind_count > 0)
-      #   and (grind_4_current_grind_stake_profit < (slice_amount * grind_4_derisk_grinds))
-      # ):
       sell_amount = grind_4_total_amount * exit_rate / trade.leverage
       if ((current_stake_amount / trade.leverage) - sell_amount) < (min_stake * 1.55):
         sell_amount = (trade.amount * exit_rate / trade.leverage) - (min_stake * 1.55)
@@ -24305,10 +25524,121 @@ class NostalgiaForInfinityX6(IStrategy):
           f"Grinding de-risk (grind_4_derisk) [{trade.pair}] | Rate: {exit_rate} | Stake amount: {sell_amount} | Coin amount: {grind_4_total_amount} | Profit (stake): {profit_stake} | Profit: {(profit_ratio * 100.0):.2f}% | Grind profit: {(grind_profit * 100.0):.2f}%"
         )
         log.info(
-          f"Grinding de-risk (grind_4_derisk) [{current_time}] [{trade.pair}] | Rate: {exit_rate} | Stake amount: {sell_amount} | Coin amount: {grind_4_total_amount} | Profit (stake): {profit_stake} | Profit: {(profit_ratio * 100.0):.2f}% | Grind profit: {(grind_profit * 100.0):.2f}%"
+          f"Grinding de-risk (grind_4_derisk) [{current_time}] [{trade.pair}] | Rate: {exit_rate} | Stake amount: {sell_amount} | Coin amount: {grind_4_total_amount} | Profit (stake): {profit_stake} | Profit: {(profit_ratio * 100.0):.2f}% | Grind profit: {(grind_profit * 100.0):.2f}% ({grind_4_current_grind_stake_profit} {self.config['stake_currency']})"
         )
         order_tag = "grind_4_derisk"
         for grind_entry_id in grind_4_buy_orders:
+          order_tag += " " + str(grind_entry_id)
+        if has_order_tags:
+          return -ft_sell_amount, order_tag
+        else:
+          return -ft_sell_amount
+
+    # Grinding 5
+
+    if (
+      (self.grinding_v2_grind_5_enable)
+      and (is_derisk_1_found or is_derisk_2_found or is_derisk_3_found)
+      and (
+        is_long_grind_entry
+        or (
+          is_derisk_1_found
+          and (slice_profit_entry < -0.10)
+          and (slice_profit_exit < -0.04)
+          and (last_candle["protections_long_global"] == True)
+          # and (
+          #   (slice_profit < -0.04)
+          #   and (last_candle["RSI_3"] > 10.0)
+          #   and (last_candle["RSI_3_15m"] > 20.0)
+          #   and (last_candle["AROONU_14"] < 50.0)
+          #   and (last_candle["AROONU_14_15m"] < 50.0)
+          # )
+        )
+      )
+      and (current_time - timedelta(minutes=5) > filled_entries[-1].order_filled_utc)
+      and ((current_time - timedelta(hours=2) > filled_orders[-1].order_filled_utc) or (slice_profit < -0.02))
+      and (
+        (current_stake_amount < (filled_entries[0].cost * 0.50))
+        or (current_time - timedelta(hours=6) > filled_orders[-1].order_filled_utc)
+        or (slice_profit < -0.06)
+      )
+      and (grind_5_sub_grind_count < grind_5_max_sub_grinds)
+      and (grind_5_sub_grind_count == 0 or (grind_5_distance_ratio < grind_5_sub_thresholds[grind_5_sub_grind_count]))
+      and is_not_trade_max_stake
+    ):
+      buy_amount = slice_amount * grind_5_stakes[grind_5_sub_grind_count] / trade.leverage
+      if buy_amount < (min_stake * 1.5):
+        buy_amount = min_stake * 1.5
+      if buy_amount > max_stake:
+        return None
+      self.dp.send_msg(
+        f"Grinding entry (grind_5_entry) [{trade.pair}] | Rate: {current_rate} | Stake amount: {buy_amount} | Profit (stake): {profit_stake} | Profit: {(profit_ratio * 100.0):.2f}%"
+      )
+      log.info(
+        f"Grinding entry (grind_5_entry) [{current_time}] [{trade.pair}] | Rate: {current_rate} | Stake amount: {buy_amount} | Profit (stake): {profit_stake} | Profit: {(profit_ratio * 100.0):.2f}%"
+      )
+      order_tag = "grind_5_entry"
+      if has_order_tags:
+        return buy_amount, order_tag
+      else:
+        return buy_amount
+
+    if grind_5_sub_grind_count > 0:
+      grind_profit = (exit_rate - grind_5_current_open_rate) / grind_5_current_open_rate
+      if (grind_profit > (grind_5_profit_threshold + fee_open_rate + fee_close_rate)) and self.long_grind_exit_v2(
+        last_candle, previous_candle, slice_profit, True
+      ):
+        sell_amount = grind_5_total_amount * exit_rate / trade.leverage
+        if ((current_stake_amount / trade.leverage) - sell_amount) < (min_stake * 1.55):
+          sell_amount = (trade.amount * exit_rate / trade.leverage) - (min_stake * 1.55)
+        ft_sell_amount = sell_amount * trade.leverage * (trade.stake_amount / trade.amount) / exit_rate
+        if sell_amount > min_stake and ft_sell_amount > min_stake:
+          self.dp.send_msg(
+            f"Grinding exit (grind_5_exit) [{trade.pair}] | Rate: {exit_rate} | Stake amount: {sell_amount} | Coin amount: {grind_5_total_amount} | Profit (stake): {profit_stake} | Profit: {(profit_ratio * 100.0):.2f}% | Grind profit: {(grind_profit * 100.0):.2f}% ({grind_profit * sell_amount * trade.leverage} {self.config['stake_currency']})"
+          )
+          log.info(
+            f"Grinding exit (grind_5_exit) [{current_time}] [{trade.pair}] | Rate: {exit_rate} | Stake amount: {sell_amount} | Coin amount: {grind_5_total_amount} | Profit (stake): {profit_stake} | Profit: {(profit_ratio * 100.0):.2f}% | Grind profit: {(grind_profit * 100.0):.2f}% ({grind_profit * sell_amount * trade.leverage} {self.config['stake_currency']})"
+          )
+          order_tag = "grind_5_exit"
+          for grind_entry_id in grind_5_buy_orders:
+            order_tag += " " + str(grind_entry_id)
+          if has_order_tags:
+            return -ft_sell_amount, order_tag
+          else:
+            return -ft_sell_amount
+
+    # if (
+    #   self.grinding_v2_grind_5_use_derisk
+    #   and (grind_5_sub_grind_count > 0)
+    #   and (((exit_rate - grind_5_current_open_rate) / grind_5_current_open_rate) < grind_5_derisk_grinds)
+    #   and (grind_5_orders[-1].order_date_utc.replace(tzinfo=None) >= datetime(2025, 8, 3) or is_backtest)
+    # ):
+    if (
+      self.grinding_v2_grind_5_use_derisk
+      and (grind_5_sub_grind_count > 0)
+      and (grind_5_current_grind_stake_profit < (slice_amount * grind_5_derisk_grinds))
+      and (grind_5_orders[-1].order_date_utc.replace(tzinfo=None) >= datetime(2025, 8, 3) or is_backtest)
+    ):
+      sell_amount = grind_5_total_amount * exit_rate / trade.leverage
+      if ((current_stake_amount / trade.leverage) - sell_amount) < (min_stake * 1.55):
+        sell_amount = (trade.amount * exit_rate / trade.leverage) - (min_stake * 1.55)
+      ft_sell_amount = sell_amount * trade.leverage * (trade.stake_amount / trade.amount) / exit_rate
+      if sell_amount > min_stake and ft_sell_amount > min_stake:
+        grind_profit = 0.0
+        if grind_5_current_open_rate > 0.0:
+          grind_profit = (
+            ((exit_rate - grind_5_current_open_rate) / grind_5_current_open_rate)
+            if grind_5_is_exit_found
+            else profit_ratio
+          )
+        self.dp.send_msg(
+          f"Grinding de-risk (grind_5_derisk) [{trade.pair}] | Rate: {exit_rate} | Stake amount: {sell_amount} | Coin amount: {grind_5_total_amount} | Profit (stake): {profit_stake} | Profit: {(profit_ratio * 100.0):.2f}% | Grind profit: {(grind_profit * 100.0):.2f}%"
+        )
+        log.info(
+          f"Grinding de-risk (grind_5_derisk) [{current_time}] [{trade.pair}] | Rate: {exit_rate} | Stake amount: {sell_amount} | Coin amount: {grind_5_total_amount} | Profit (stake): {profit_stake} | Profit: {(profit_ratio * 100.0):.2f}% | Grind profit: {(grind_profit * 100.0):.2f}% ({grind_5_current_grind_stake_profit} {self.config['stake_currency']})"
+        )
+        order_tag = "grind_5_derisk"
+        for grind_entry_id in grind_5_buy_orders:
           order_tag += " " + str(grind_entry_id)
         if has_order_tags:
           return -ft_sell_amount, order_tag
@@ -24393,32 +25723,33 @@ class NostalgiaForInfinityX6(IStrategy):
           else:
             return -ft_sell_amount
 
+    # if (
+    #   self.grinding_v2_buyback_1_use_derisk
+    #   and (buyback_1_sub_grind_count > 0)
+    #   and (
+    #     ((exit_rate - buyback_1_current_open_rate) / buyback_1_current_open_rate)
+    #     < (
+    #       self.grinding_v2_buyback_1_derisk_futures if self.is_futures_mode else self.grinding_v2_buyback_1_derisk_spot
+    #     )
+    #   )
+    #   and (buyback_1_orders[-1].order_date_utc.replace(tzinfo=None) >= datetime(2025, 8, 3) or is_backtest)
+    # ):
     if (
       self.grinding_v2_buyback_1_use_derisk
       and (buyback_1_sub_grind_count > 0)
       and (
-        ((exit_rate - buyback_1_current_open_rate) / buyback_1_current_open_rate)
+        buyback_1_current_grind_stake_profit
         < (
-          self.grinding_v2_buyback_1_derisk_futures if self.is_futures_mode else self.grinding_v2_buyback_1_derisk_spot
+          slice_amount
+          * (
+            self.grinding_v2_buyback_1_derisk_futures
+            if self.is_futures_mode
+            else self.grinding_v2_buyback_1_derisk_spot
+          )
         )
       )
-      and (buyback_1_orders[-1].order_date_utc.replace(tzinfo=None) >= datetime(2025, 6, 20) or is_backtest)
+      and (buyback_1_orders[-1].order_date_utc.replace(tzinfo=None) >= datetime(2025, 8, 3) or is_backtest)
     ):
-      # if (
-      #   self.grinding_v2_buyback_1_use_derisk
-      #   and (buyback_1_sub_grind_count > 0)
-      #   and (
-      #     buyback_1_current_grind_stake_profit
-      #     < (
-      #       slice_amount
-      #       * (
-      #         self.grinding_v2_buyback_1_derisk_futures
-      #         if self.is_futures_mode
-      #         else self.grinding_v2_buyback_1_derisk_spot
-      #       )
-      #     )
-      #   )
-      # ):
       sell_amount = buyback_1_total_amount * exit_rate / trade.leverage
       if ((current_stake_amount / trade.leverage) - sell_amount) < (min_stake * 1.55):
         sell_amount = (trade.amount * exit_rate / trade.leverage) - (min_stake * 1.55)
@@ -24435,7 +25766,7 @@ class NostalgiaForInfinityX6(IStrategy):
           f"Buyback de-risk (buyback_1_derisk) [{trade.pair}] | Rate: {exit_rate} | Stake amount: {sell_amount} | Coin amount: {buyback_1_total_amount} | Profit (stake): {profit_stake} | Profit: {(profit_ratio * 100.0):.2f}% | Grind profit: {(grind_profit * 100.0):.2f}%"
         )
         log.info(
-          f"Buyback de-risk (buyback_1_derisk) [{current_time}] [{trade.pair}] | Rate: {exit_rate} | Stake amount: {sell_amount} | Coin amount: {buyback_1_total_amount} | Profit (stake): {profit_stake} | Profit: {(profit_ratio * 100.0):.2f}% | Grind profit: {(grind_profit * 100.0):.2f}%"
+          f"Buyback de-risk (buyback_1_derisk) [{current_time}] [{trade.pair}] | Rate: {exit_rate} | Stake amount: {sell_amount} | Coin amount: {buyback_1_total_amount} | Profit (stake): {profit_stake} | Profit: {(profit_ratio * 100.0):.2f}% | Grind profit: {(grind_profit * 100.0):.2f}% ({buyback_1_current_grind_stake_profit} {self.config['stake_currency']})"
         )
         order_tag = "buyback_1_derisk"
         for grind_entry_id in buyback_1_buy_orders:
@@ -24523,32 +25854,33 @@ class NostalgiaForInfinityX6(IStrategy):
           else:
             return -ft_sell_amount
 
+    # if (
+    #   self.grinding_v2_buyback_2_use_derisk
+    #   and (buyback_2_sub_grind_count > 0)
+    #   and (
+    #     ((exit_rate - buyback_2_current_open_rate) / buyback_2_current_open_rate)
+    #     < (
+    #       self.grinding_v2_buyback_2_derisk_futures if self.is_futures_mode else self.grinding_v2_buyback_2_derisk_spot
+    #     )
+    #   )
+    #   and (buyback_2_orders[-1].order_date_utc.replace(tzinfo=None) >= datetime(2025, 8, 3) or is_backtest)
+    # ):
     if (
       self.grinding_v2_buyback_2_use_derisk
       and (buyback_2_sub_grind_count > 0)
       and (
-        ((exit_rate - buyback_2_current_open_rate) / buyback_2_current_open_rate)
+        buyback_2_current_grind_stake_profit
         < (
-          self.grinding_v2_buyback_2_derisk_futures if self.is_futures_mode else self.grinding_v2_buyback_2_derisk_spot
+          slice_amount
+          * (
+            self.grinding_v2_buyback_2_derisk_futures
+            if self.is_futures_mode
+            else self.grinding_v2_buyback_2_derisk_spot
+          )
         )
       )
-      and (buyback_2_orders[-1].order_date_utc.replace(tzinfo=None) >= datetime(2025, 6, 20) or is_backtest)
+      and (buyback_2_orders[-1].order_date_utc.replace(tzinfo=None) >= datetime(2025, 8, 3) or is_backtest)
     ):
-      # if (
-      #   self.grinding_v2_buyback_2_use_derisk
-      #   and (buyback_2_sub_grind_count > 0)
-      #   and (
-      #     buyback_2_current_grind_stake_profit
-      #     < (
-      #       slice_amount
-      #       * (
-      #         self.grinding_v2_buyback_2_derisk_futures
-      #         if self.is_futures_mode
-      #         else self.grinding_v2_buyback_2_derisk_spot
-      #       )
-      #     )
-      #   )
-      # ):
       sell_amount = buyback_2_total_amount * exit_rate / trade.leverage
       if ((current_stake_amount / trade.leverage) - sell_amount) < (min_stake * 1.55):
         sell_amount = (trade.amount * exit_rate / trade.leverage) - (min_stake * 1.55)
@@ -24565,7 +25897,7 @@ class NostalgiaForInfinityX6(IStrategy):
           f"Buyback de-risk (buyback_2_derisk) [{trade.pair}] | Rate: {exit_rate} | Stake amount: {sell_amount} | Coin amount: {buyback_2_total_amount} | Profit (stake): {profit_stake} | Profit: {(profit_ratio * 100.0):.2f}% | Grind profit: {(grind_profit * 100.0):.2f}%"
         )
         log.info(
-          f"Buyback de-risk (buyback_2_derisk) [{current_time}] [{trade.pair}] | Rate: {exit_rate} | Stake amount: {sell_amount} | Coin amount: {buyback_2_total_amount} | Profit (stake): {profit_stake} | Profit: {(profit_ratio * 100.0):.2f}% | Grind profit: {(grind_profit * 100.0):.2f}%"
+          f"Buyback de-risk (buyback_2_derisk) [{current_time}] [{trade.pair}] | Rate: {exit_rate} | Stake amount: {sell_amount} | Coin amount: {buyback_2_total_amount} | Profit (stake): {profit_stake} | Profit: {(profit_ratio * 100.0):.2f}% | Grind profit: {(grind_profit * 100.0):.2f}% ({buyback_2_current_grind_stake_profit} {self.config['stake_currency']})"
         )
         order_tag = "buyback_2_derisk"
         for grind_entry_id in buyback_2_buy_orders:
@@ -24653,32 +25985,33 @@ class NostalgiaForInfinityX6(IStrategy):
           else:
             return -ft_sell_amount
 
+    # if (
+    #   self.grinding_v2_buyback_3_use_derisk
+    #   and (buyback_3_sub_grind_count > 0)
+    #   and (
+    #     ((exit_rate - buyback_3_current_open_rate) / buyback_3_current_open_rate)
+    #     < (
+    #       self.grinding_v2_buyback_3_derisk_futures if self.is_futures_mode else self.grinding_v2_buyback_3_derisk_spot
+    #     )
+    #   )
+    #   and (buyback_3_orders[-1].order_date_utc.replace(tzinfo=None) >= datetime(2025, 8, 3) or is_backtest)
+    # ):
     if (
       self.grinding_v2_buyback_3_use_derisk
       and (buyback_3_sub_grind_count > 0)
       and (
-        ((exit_rate - buyback_3_current_open_rate) / buyback_3_current_open_rate)
+        buyback_3_current_grind_stake_profit
         < (
-          self.grinding_v2_buyback_3_derisk_futures if self.is_futures_mode else self.grinding_v2_buyback_3_derisk_spot
+          slice_amount
+          * (
+            self.grinding_v2_buyback_3_derisk_futures
+            if self.is_futures_mode
+            else self.grinding_v2_buyback_3_derisk_spot
+          )
         )
       )
-      and (buyback_3_orders[-1].order_date_utc.replace(tzinfo=None) >= datetime(2025, 6, 20) or is_backtest)
+      and (buyback_3_orders[-1].order_date_utc.replace(tzinfo=None) >= datetime(2025, 8, 3) or is_backtest)
     ):
-      # if (
-      #   self.grinding_v2_buyback_3_use_derisk
-      #   and (buyback_3_sub_grind_count > 0)
-      #   and (
-      #     buyback_3_current_grind_stake_profit
-      #     < (
-      #       slice_amount
-      #       * (
-      #         self.grinding_v2_buyback_3_derisk_futures
-      #         if self.is_futures_mode
-      #         else self.grinding_v2_buyback_3_derisk_spot
-      #       )
-      #     )
-      #   )
-      # ):
       sell_amount = buyback_3_total_amount * exit_rate / trade.leverage
       if ((current_stake_amount / trade.leverage) - sell_amount) < (min_stake * 1.55):
         sell_amount = (trade.amount * exit_rate / trade.leverage) - (min_stake * 1.55)
@@ -24695,7 +26028,7 @@ class NostalgiaForInfinityX6(IStrategy):
           f"Buyback de-risk (buyback_3_derisk) [{trade.pair}] | Rate: {exit_rate} | Stake amount: {sell_amount} | Coin amount: {buyback_3_total_amount} | Profit (stake): {profit_stake} | Profit: {(profit_ratio * 100.0):.2f}% | Grind profit: {(grind_profit * 100.0):.2f}%"
         )
         log.info(
-          f"Buyback de-risk (buyback_3_derisk) [{current_time}] [{trade.pair}] | Rate: {exit_rate} | Stake amount: {sell_amount} | Coin amount: {buyback_3_total_amount} | Profit (stake): {profit_stake} | Profit: {(profit_ratio * 100.0):.2f}% | Grind profit: {(grind_profit * 100.0):.2f}%"
+          f"Buyback de-risk (buyback_3_derisk) [{current_time}] [{trade.pair}] | Rate: {exit_rate} | Stake amount: {sell_amount} | Coin amount: {buyback_3_total_amount} | Profit (stake): {profit_stake} | Profit: {(profit_ratio * 100.0):.2f}% | Grind profit: {(grind_profit * 100.0):.2f}% ({buyback_3_current_grind_stake_profit} {self.config['stake_currency']})"
         )
         order_tag = "buyback_3_derisk"
         for grind_entry_id in buyback_3_buy_orders:
@@ -24710,14 +26043,14 @@ class NostalgiaForInfinityX6(IStrategy):
   def long_buyback_entry_v2(
     self, last_candle: Series, previous_candle: Series, slice_profit: float, is_derisk: bool
   ) -> float:
-    if (
+    if (last_candle["protections_long_global"] == True) and (
       (last_candle["enter_long"] == True)
       or (
         (last_candle["RSI_14"] < 36.0)
         and (last_candle["RSI_3"] > 20.0)
-        and (last_candle["RSI_3_15m"] > 30.0)
-        and (last_candle["RSI_3_1h"] > 30.0)
-        and (last_candle["RSI_3_4h"] > 30.0)
+        and (last_candle["RSI_3_15m"] > 20.0)
+        # and (last_candle["RSI_3_1h"] > 20.0)
+        # and (last_candle["RSI_3_4h"] > 20.0)
         and (last_candle["AROONU_14"] < 25.0)
         and (last_candle["ROC_2_1h"] > -5.0)
         and (last_candle["ROC_2_4h"] > -5.0)
@@ -24801,7 +26134,7 @@ class NostalgiaForInfinityX6(IStrategy):
   def long_grind_entry_v2(
     self, last_candle: Series, previous_candle: Series, slice_profit: float, is_derisk: bool
   ) -> float:
-    if (
+    if (last_candle["protections_long_global"] == True) and (
       (last_candle["enter_long"] == True)
       or (
         (last_candle["RSI_14"] < 46.0)
@@ -28179,6 +29512,10 @@ class NostalgiaForInfinityX6(IStrategy):
       return None
     last_candle = df.iloc[-1].squeeze()
     previous_candle = df.iloc[-2].squeeze()
+
+    # we already waiting for an order to get filled
+    if trade.has_open_orders:
+      return None
 
     filled_orders = trade.select_filled_orders()
     filled_entries = trade.select_filled_orders(trade.entry_side)
@@ -46136,6 +47473,29 @@ class NostalgiaForInfinityX6(IStrategy):
       else self.grinding_v2_grind_4_profit_threshold_spot
     )
 
+    grind_5_max_sub_grinds = 0
+    grind_5_stakes = (
+      self.grinding_v2_grind_5_stakes_futures.copy()
+      if self.is_futures_mode
+      else self.grinding_v2_grind_5_stakes_spot.copy()
+    )
+    grind_5_sub_thresholds = (
+      self.grinding_v2_grind_5_thresholds_futures if self.is_futures_mode else self.grinding_v2_grind_5_thresholds_spot
+    )
+    if (slice_amount * grind_5_stakes[0] / (trade.leverage if self.is_futures_mode else 1.0)) < min_stake:
+      multi = min_stake / slice_amount / grind_5_stakes[0] * trade.leverage
+      for i, _ in enumerate(grind_5_stakes):
+        grind_5_stakes[i] *= multi
+    grind_5_max_sub_grinds = len(grind_5_stakes)
+    grind_5_derisk_grinds = (
+      self.grinding_v2_grind_5_derisk_futures if self.is_futures_mode else self.grinding_v2_grind_5_derisk_spot
+    )
+    grind_5_profit_threshold = (
+      self.grinding_v2_grind_5_profit_threshold_futures
+      if self.is_futures_mode
+      else self.grinding_v2_grind_5_profit_threshold_spot
+    )
+
     is_derisk_1 = False
     is_derisk_1_found = False  # derisk_level_1 de-risk exit
     derisk_1_order = None
@@ -46236,6 +47596,19 @@ class NostalgiaForInfinityX6(IStrategy):
     grind_4_distance_ratio = 0.0
     grind_4_exit_order = None
     grind_4_exit_distance_ratio = 0.0
+    grind_5_sub_grind_count = 0
+    grind_5_total_amount = 0.0
+    grind_5_total_cost = 0.0
+    grind_5_current_open_rate = 0.0
+    grind_5_current_grind_stake = 0.0
+    grind_5_current_grind_stake_profit = 0.0
+    grind_5_is_exit_found = False
+    grind_5_found = False
+    grind_5_buy_orders = []
+    grind_5_orders = []
+    grind_5_distance_ratio = 0.0
+    grind_5_exit_order = None
+    grind_5_exit_distance_ratio = 0.0
     for order in reversed(filled_orders):
       if (order.ft_order_side == "sell") and (order is not filled_orders[0]):
         order_tag = ""
@@ -46305,6 +47678,15 @@ class NostalgiaForInfinityX6(IStrategy):
           if not grind_4_found:
             grind_4_distance_ratio = (exit_rate - order.safe_price) / order.safe_price
             grind_4_found = True
+        elif not grind_5_is_exit_found and order_tag == "grind_5_entry":
+          grind_5_sub_grind_count += 1
+          grind_5_total_amount += order.safe_filled
+          grind_5_total_cost += order.safe_filled * order.safe_price
+          grind_5_buy_orders.append(order.id)
+          grind_5_orders.append(order)
+          if not grind_5_found:
+            grind_5_distance_ratio = (exit_rate - order.safe_price) / order.safe_price
+            grind_5_found = True
       elif order.ft_order_side == "buy":
         if (
           order is filled_exits[-1]
@@ -46355,6 +47737,9 @@ class NostalgiaForInfinityX6(IStrategy):
         elif not grind_4_is_exit_found and order_tag in ["grind_4_exit", "grind_4_derisk"]:
           grind_4_is_exit_found = True
           grind_4_exit_order = order
+        elif not grind_5_is_exit_found and order_tag in ["grind_5_exit", "grind_5_derisk"]:
+          grind_5_is_exit_found = True
+          grind_5_exit_order = order
         elif order_tag in ["derisk_global"]:
           if not buyback_1_is_exit_found:
             buyback_1_is_exit_found = True
@@ -46377,6 +47762,9 @@ class NostalgiaForInfinityX6(IStrategy):
           if not grind_4_is_exit_found:
             grind_4_is_exit_found = True
             grind_4_exit_order = order
+          if not grind_5_is_exit_found:
+            grind_5_is_exit_found = True
+            grind_5_exit_order = order
 
     if buyback_1_sub_grind_count > 0:
       buyback_1_current_open_rate = buyback_1_total_cost / buyback_1_total_amount
@@ -46406,6 +47794,10 @@ class NostalgiaForInfinityX6(IStrategy):
       grind_4_current_open_rate = grind_4_total_cost / grind_4_total_amount
       grind_4_current_grind_stake = grind_4_total_amount * exit_rate * (1 - trade.fee_close)
       grind_4_current_grind_stake_profit = grind_4_current_grind_stake - grind_4_total_cost
+    if grind_5_sub_grind_count > 0:
+      grind_5_current_open_rate = grind_5_total_cost / grind_5_total_amount
+      grind_5_current_grind_stake = grind_5_total_amount * exit_rate * (1 - trade.fee_close)
+      grind_5_current_grind_stake_profit = grind_5_current_grind_stake - grind_5_total_cost
 
     if grind_1_is_exit_found:
       grind_1_exit_distance_ratio = (exit_rate - grind_1_exit_order.safe_price) / grind_1_exit_order.safe_price
@@ -46437,6 +47829,7 @@ class NostalgiaForInfinityX6(IStrategy):
       + grind_2_current_grind_stake_profit
       + grind_3_current_grind_stake_profit
       + grind_4_current_grind_stake_profit
+      + grind_5_current_grind_stake_profit
     )
     num_open_grinds_and_buybacks = (
       buyback_1_sub_grind_count
@@ -46446,6 +47839,7 @@ class NostalgiaForInfinityX6(IStrategy):
       + grind_2_sub_grind_count
       + grind_3_sub_grind_count
       + grind_4_sub_grind_count
+      + grind_5_sub_grind_count
     )
 
     # Rebuy mode, the first entry is lower than normal slot stake
@@ -46659,17 +48053,18 @@ class NostalgiaForInfinityX6(IStrategy):
           else:
             return -ft_sell_amount
 
+    # if (
+    #   self.grinding_v2_grind_1_use_derisk
+    #   and (grind_1_sub_grind_count > 0)
+    #   and ((-(exit_rate - grind_1_current_open_rate) / grind_1_current_open_rate) < grind_1_derisk_grinds)
+    #   and (grind_1_orders[-1].order_date_utc.replace(tzinfo=None) >= datetime(2025, 8, 3) or is_backtest)
+    # ):
     if (
       self.grinding_v2_grind_1_use_derisk
       and (grind_1_sub_grind_count > 0)
-      and ((-(exit_rate - grind_1_current_open_rate) / grind_1_current_open_rate) < grind_1_derisk_grinds)
-      and (grind_1_orders[-1].order_date_utc.replace(tzinfo=None) >= datetime(2025, 6, 20) or is_backtest)
+      and (grind_1_current_grind_stake_profit < (slice_amount * grind_1_derisk_grinds))
+      and (grind_1_orders[-1].order_date_utc.replace(tzinfo=None) >= datetime(2025, 8, 3) or is_backtest)
     ):
-      # if (
-      #   self.grinding_v2_grind_1_use_derisk
-      #   and (grind_1_sub_grind_count > 0)
-      #   and (grind_1_current_grind_stake_profit < (slice_amount * grind_1_derisk_grinds))
-      # ):
       sell_amount = grind_1_total_amount * exit_rate / trade.leverage
       if ((current_stake_amount / trade.leverage) - sell_amount) < (min_stake * 1.55):
         sell_amount = (trade.amount * exit_rate / trade.leverage) - (min_stake * 1.55)
@@ -46754,17 +48149,18 @@ class NostalgiaForInfinityX6(IStrategy):
           else:
             return -ft_sell_amount
 
+    # if (
+    #   self.grinding_v2_grind_2_use_derisk
+    #   and (grind_2_sub_grind_count > 0)
+    #   and ((-(exit_rate - grind_2_current_open_rate) / grind_2_current_open_rate) < grind_2_derisk_grinds)
+    #   and (grind_2_orders[-1].order_date_utc.replace(tzinfo=None) >= datetime(2025, 8, 3) or is_backtest)
+    # ):
     if (
       self.grinding_v2_grind_2_use_derisk
       and (grind_2_sub_grind_count > 0)
-      and ((-(exit_rate - grind_2_current_open_rate) / grind_2_current_open_rate) < grind_2_derisk_grinds)
-      and (grind_2_orders[-1].order_date_utc.replace(tzinfo=None) >= datetime(2025, 6, 20) or is_backtest)
+      and (grind_2_current_grind_stake_profit < (slice_amount * grind_2_derisk_grinds))
+      and (grind_2_orders[-1].order_date_utc.replace(tzinfo=None) >= datetime(2025, 8, 3) or is_backtest)
     ):
-      # if (
-      #   self.grinding_v2_grind_2_use_derisk
-      #   and (grind_2_sub_grind_count > 0)
-      #   and (grind_2_current_grind_stake_profit < (slice_amount * grind_2_derisk_grinds))
-      # ):
       sell_amount = grind_2_total_amount * exit_rate / trade.leverage
       if ((current_stake_amount / trade.leverage) - sell_amount) < (min_stake * 1.55):
         sell_amount = (trade.amount * exit_rate / trade.leverage) - (min_stake * 1.55)
@@ -46849,17 +48245,18 @@ class NostalgiaForInfinityX6(IStrategy):
           else:
             return -ft_sell_amount
 
+    # if (
+    #   self.grinding_v2_grind_3_use_derisk
+    #   and (grind_3_sub_grind_count > 0)
+    #   and ((-(exit_rate - grind_3_current_open_rate) / grind_3_current_open_rate) < grind_3_derisk_grinds)
+    #   and (grind_3_orders[-1].order_date_utc.replace(tzinfo=None) >= datetime(2025, 8, 3) or is_backtest)
+    # ):
     if (
       self.grinding_v2_grind_3_use_derisk
       and (grind_3_sub_grind_count > 0)
-      and ((-(exit_rate - grind_3_current_open_rate) / grind_3_current_open_rate) < grind_3_derisk_grinds)
-      and (grind_3_orders[-1].order_date_utc.replace(tzinfo=None) >= datetime(2025, 6, 20) or is_backtest)
+      and (grind_3_current_grind_stake_profit < (slice_amount * grind_3_derisk_grinds))
+      and (grind_3_orders[-1].order_date_utc.replace(tzinfo=None) >= datetime(2025, 8, 3) or is_backtest)
     ):
-      # if (
-      #   self.grinding_v2_grind_3_use_derisk
-      #   and (grind_3_sub_grind_count > 0)
-      #   and (grind_3_current_grind_stake_profit < (slice_amount * grind_3_derisk_grinds))
-      # ):
       sell_amount = grind_3_total_amount * exit_rate / trade.leverage
       if ((current_stake_amount / trade.leverage) - sell_amount) < (min_stake * 1.55):
         sell_amount = (trade.amount * exit_rate / trade.leverage) - (min_stake * 1.55)
@@ -46897,6 +48294,7 @@ class NostalgiaForInfinityX6(IStrategy):
           is_derisk_1_found
           # only queue 4 grinds open
           and (num_open_grinds_and_buybacks == grind_4_sub_grind_count)
+          and (last_candle["protections_short_global"] == True)
           and (
             (slice_profit > 0.04)
             and (last_candle["RSI_3"] < 90.0)
@@ -46958,17 +48356,18 @@ class NostalgiaForInfinityX6(IStrategy):
           else:
             return -ft_sell_amount
 
+    # if (
+    #   self.grinding_v2_grind_4_use_derisk
+    #   and (grind_4_sub_grind_count > 0)
+    #   and ((-(exit_rate - grind_4_current_open_rate) / grind_4_current_open_rate) < grind_4_derisk_grinds)
+    #   and (grind_4_orders[-1].order_date_utc.replace(tzinfo=None) >= datetime(2025, 8, 3) or is_backtest)
+    # ):
     if (
       self.grinding_v2_grind_4_use_derisk
       and (grind_4_sub_grind_count > 0)
-      and ((-(exit_rate - grind_4_current_open_rate) / grind_4_current_open_rate) < grind_4_derisk_grinds)
-      and (grind_4_orders[-1].order_date_utc.replace(tzinfo=None) >= datetime(2025, 6, 20) or is_backtest)
+      and (grind_4_current_grind_stake_profit < (slice_amount * grind_4_derisk_grinds))
+      and (grind_4_orders[-1].order_date_utc.replace(tzinfo=None) >= datetime(2025, 8, 3) or is_backtest)
     ):
-      # if (
-      #   self.grinding_v2_grind_4_use_derisk
-      #   and (grind_4_sub_grind_count > 0)
-      #   and (grind_4_current_grind_stake_profit < (slice_amount * grind_4_derisk_grinds))
-      # ):
       sell_amount = grind_4_total_amount * exit_rate / trade.leverage
       if ((current_stake_amount / trade.leverage) - sell_amount) < (min_stake * 1.55):
         sell_amount = (trade.amount * exit_rate / trade.leverage) - (min_stake * 1.55)
@@ -46989,6 +48388,117 @@ class NostalgiaForInfinityX6(IStrategy):
         )
         order_tag = "grind_4_derisk"
         for grind_entry_id in grind_4_buy_orders:
+          order_tag += " " + str(grind_entry_id)
+        if has_order_tags:
+          return -ft_sell_amount, order_tag
+        else:
+          return -ft_sell_amount
+
+    # Grinding 5
+
+    if (
+      (self.grinding_v2_grind_5_enable)
+      and (is_derisk_1_found or is_derisk_2_found or is_derisk_3_found)
+      and (
+        is_short_grind_entry
+        or (
+          is_derisk_1_found
+          and (slice_profit_entry > 0.10)
+          and (slice_profit_exit > 0.04)
+          and (last_candle["protections_short_global"] == True)
+          # and (
+          #   (slice_profit > 0.04)
+          #   and (last_candle["RSI_3"] < 90.0)
+          #   and (last_candle["RSI_3_15m"] < 80.0)
+          #   and (last_candle["AROOND_14"] < 50.0)
+          #   and (last_candle["AROOND_14_15m"] < 50.0)
+          # )
+        )
+      )
+      and (current_time - timedelta(minutes=5) > filled_entries[-1].order_filled_utc)
+      and ((current_time - timedelta(hours=2) > filled_orders[-1].order_filled_utc) or (slice_profit > 0.02))
+      and (
+        (current_stake_amount < (filled_entries[0].cost * 0.50))
+        or (current_time - timedelta(hours=6) > filled_orders[-1].order_filled_utc)
+        or (slice_profit > 0.06)
+      )
+      and (grind_5_sub_grind_count < grind_5_max_sub_grinds)
+      and (grind_5_sub_grind_count == 0 or (-grind_5_distance_ratio < grind_5_sub_thresholds[grind_5_sub_grind_count]))
+      and is_not_trade_max_stake
+    ):
+      buy_amount = slice_amount * grind_5_stakes[grind_5_sub_grind_count] / trade.leverage
+      if buy_amount < (min_stake * 1.5):
+        buy_amount = min_stake * 1.5
+      if buy_amount > max_stake:
+        return None
+      self.dp.send_msg(
+        f"Grinding entry (grind_5_entry) [{trade.pair}] | Rate: {current_rate} | Stake amount: {buy_amount} | Profit (stake): {profit_stake} | Profit: {(profit_ratio * 100.0):.2f}%"
+      )
+      log.info(
+        f"Grinding entry (grind_5_entry) [{current_time}] [{trade.pair}] | Rate: {current_rate} | Stake amount: {buy_amount} | Profit (stake): {profit_stake} | Profit: {(profit_ratio * 100.0):.2f}%"
+      )
+      order_tag = "grind_5_entry"
+      if has_order_tags:
+        return buy_amount, order_tag
+      else:
+        return buy_amount
+
+    if grind_5_sub_grind_count > 0:
+      grind_profit = -(exit_rate - grind_5_current_open_rate) / grind_5_current_open_rate
+      if (grind_profit > (grind_5_profit_threshold + fee_open_rate + fee_close_rate)) and self.short_grind_exit_v2(
+        last_candle, previous_candle, slice_profit, True
+      ):
+        sell_amount = grind_5_total_amount * exit_rate / trade.leverage
+        if ((current_stake_amount / trade.leverage) - sell_amount) < (min_stake * 1.55):
+          sell_amount = (trade.amount * exit_rate / trade.leverage) - (min_stake * 1.55)
+        ft_sell_amount = sell_amount * trade.leverage * (trade.stake_amount / trade.amount) / exit_rate
+        if sell_amount > min_stake and ft_sell_amount > min_stake:
+          self.dp.send_msg(
+            f"Grinding exit (grind_5_exit) [{trade.pair}] | Rate: {exit_rate} | Stake amount: {sell_amount} | Coin amount: {grind_5_total_amount} | Profit (stake): {profit_stake} | Profit: {(profit_ratio * 100.0):.2f}% | Grind profit: {(grind_profit * 100.0):.2f}% ({grind_profit * sell_amount * trade.leverage} {self.config['stake_currency']})"
+          )
+          log.info(
+            f"Grinding exit (grind_5_exit) [{current_time}] [{trade.pair}] | Rate: {exit_rate} | Stake amount: {sell_amount} | Coin amount: {grind_5_total_amount} | Profit (stake): {profit_stake} | Profit: {(profit_ratio * 100.0):.2f}% | Grind profit: {(grind_profit * 100.0):.2f}% ({grind_profit * sell_amount * trade.leverage} {self.config['stake_currency']})"
+          )
+          order_tag = "grind_5_exit"
+          for grind_entry_id in grind_5_buy_orders:
+            order_tag += " " + str(grind_entry_id)
+          if has_order_tags:
+            return -ft_sell_amount, order_tag
+          else:
+            return -ft_sell_amount
+
+    # if (
+    #   self.grinding_v2_grind_5_use_derisk
+    #   and (grind_5_sub_grind_count > 0)
+    #   and ((-(exit_rate - grind_5_current_open_rate) / grind_5_current_open_rate) < grind_5_derisk_grinds)
+    #   and (grind_5_orders[-1].order_date_utc.replace(tzinfo=None) >= datetime(2025, 8, 3) or is_backtest)
+    # ):
+    if (
+      self.grinding_v2_grind_5_use_derisk
+      and (grind_5_sub_grind_count > 0)
+      and (grind_5_current_grind_stake_profit < (slice_amount * grind_5_derisk_grinds))
+      and (grind_5_orders[-1].order_date_utc.replace(tzinfo=None) >= datetime(2025, 8, 3) or is_backtest)
+    ):
+      sell_amount = grind_5_total_amount * exit_rate / trade.leverage
+      if ((current_stake_amount / trade.leverage) - sell_amount) < (min_stake * 1.55):
+        sell_amount = (trade.amount * exit_rate / trade.leverage) - (min_stake * 1.55)
+      ft_sell_amount = sell_amount * trade.leverage * (trade.stake_amount / trade.amount) / exit_rate
+      if sell_amount > min_stake and ft_sell_amount > min_stake:
+        grind_profit = 0.0
+        if grind_5_current_open_rate > 0.0:
+          grind_profit = (
+            -((exit_rate - grind_5_current_open_rate) / grind_5_current_open_rate)
+            if grind_5_is_exit_found
+            else profit_ratio
+          )
+        self.dp.send_msg(
+          f"Grinding de-risk (grind_5_derisk) [{trade.pair}] | Rate: {exit_rate} | Stake amount: {sell_amount} | Coin amount: {grind_5_total_amount} | Profit (stake): {profit_stake} | Profit: {(profit_ratio * 100.0):.2f}% | Grind profit: {(grind_profit * 100.0):.2f}%"
+        )
+        log.info(
+          f"Grinding de-risk (grind_5_derisk) [{current_time}] [{trade.pair}] | Rate: {exit_rate} | Stake amount: {sell_amount} | Coin amount: {grind_5_total_amount} | Profit (stake): {profit_stake} | Profit: {(profit_ratio * 100.0):.2f}% | Grind profit: {(grind_profit * 100.0):.2f}%"
+        )
+        order_tag = "grind_5_derisk"
+        for grind_entry_id in grind_5_buy_orders:
           order_tag += " " + str(grind_entry_id)
         if has_order_tags:
           return -ft_sell_amount, order_tag
@@ -47073,32 +48583,33 @@ class NostalgiaForInfinityX6(IStrategy):
           else:
             return -ft_sell_amount
 
+    # if (
+    #   self.grinding_v2_buyback_1_use_derisk
+    #   and (buyback_1_sub_grind_count > 0)
+    #   and (
+    #     (-(exit_rate - buyback_1_current_open_rate) / buyback_1_current_open_rate)
+    #     < (
+    #       self.grinding_v2_buyback_1_derisk_futures if self.is_futures_mode else self.grinding_v2_buyback_1_derisk_spot
+    #     )
+    #   )
+    #   and (buyback_1_orders[-1].order_date_utc.replace(tzinfo=None) >= datetime(2025, 8, 3) or is_backtest)
+    # ):
     if (
       self.grinding_v2_buyback_1_use_derisk
       and (buyback_1_sub_grind_count > 0)
       and (
-        (-(exit_rate - buyback_1_current_open_rate) / buyback_1_current_open_rate)
+        buyback_1_current_grind_stake_profit
         < (
-          self.grinding_v2_buyback_1_derisk_futures if self.is_futures_mode else self.grinding_v2_buyback_1_derisk_spot
+          slice_amount
+          * (
+            self.grinding_v2_buyback_1_derisk_futures
+            if self.is_futures_mode
+            else self.grinding_v2_buyback_1_derisk_spot
+          )
         )
       )
-      and (buyback_1_orders[-1].order_date_utc.replace(tzinfo=None) >= datetime(2025, 6, 20) or is_backtest)
+      and (buyback_1_orders[-1].order_date_utc.replace(tzinfo=None) >= datetime(2025, 8, 3) or is_backtest)
     ):
-      # if (
-      #   self.grinding_v2_buyback_1_use_derisk
-      #   and (buyback_1_sub_grind_count > 0)
-      #   and (
-      #     buyback_1_current_grind_stake_profit
-      #     < (
-      #       slice_amount
-      #       * (
-      #         self.grinding_v2_buyback_1_derisk_futures
-      #         if self.is_futures_mode
-      #         else self.grinding_v2_buyback_1_derisk_spot
-      #       )
-      #     )
-      #   )
-      # ):
       sell_amount = buyback_1_total_amount * exit_rate / trade.leverage
       if ((current_stake_amount / trade.leverage) - sell_amount) < (min_stake * 1.55):
         sell_amount = (trade.amount * exit_rate / trade.leverage) - (min_stake * 1.55)
@@ -47203,32 +48714,33 @@ class NostalgiaForInfinityX6(IStrategy):
           else:
             return -ft_sell_amount
 
+    # if (
+    #   self.grinding_v2_buyback_2_use_derisk
+    #   and (buyback_2_sub_grind_count > 0)
+    #   and (
+    #     (-(exit_rate - buyback_2_current_open_rate) / buyback_2_current_open_rate)
+    #     < (
+    #       self.grinding_v2_buyback_2_derisk_futures if self.is_futures_mode else self.grinding_v2_buyback_2_derisk_spot
+    #     )
+    #   )
+    #   and (buyback_2_orders[-1].order_date_utc.replace(tzinfo=None) >= datetime(2025, 8, 3) or is_backtest)
+    # ):
     if (
       self.grinding_v2_buyback_2_use_derisk
       and (buyback_2_sub_grind_count > 0)
       and (
-        (-(exit_rate - buyback_2_current_open_rate) / buyback_2_current_open_rate)
+        buyback_2_current_grind_stake_profit
         < (
-          self.grinding_v2_buyback_2_derisk_futures if self.is_futures_mode else self.grinding_v2_buyback_2_derisk_spot
+          slice_amount
+          * (
+            self.grinding_v2_buyback_2_derisk_futures
+            if self.is_futures_mode
+            else self.grinding_v2_buyback_2_derisk_spot
+          )
         )
       )
-      and (buyback_2_orders[-1].order_date_utc.replace(tzinfo=None) >= datetime(2025, 6, 20) or is_backtest)
+      and (buyback_2_orders[-1].order_date_utc.replace(tzinfo=None) >= datetime(2025, 8, 3) or is_backtest)
     ):
-      # if (
-      #   self.grinding_v2_buyback_2_use_derisk
-      #   and (buyback_2_sub_grind_count > 0)
-      #   and (
-      #     buyback_2_current_grind_stake_profit
-      #     < (
-      #       slice_amount
-      #       * (
-      #         self.grinding_v2_buyback_2_derisk_futures
-      #         if self.is_futures_mode
-      #         else self.grinding_v2_buyback_2_derisk_spot
-      #       )
-      #     )
-      #   )
-      # ):
       sell_amount = buyback_2_total_amount * exit_rate / trade.leverage
       if ((current_stake_amount / trade.leverage) - sell_amount) < (min_stake * 1.55):
         sell_amount = (trade.amount * exit_rate / trade.leverage) - (min_stake * 1.55)
@@ -47333,32 +48845,33 @@ class NostalgiaForInfinityX6(IStrategy):
           else:
             return -ft_sell_amount
 
+    # if (
+    #   self.grinding_v2_buyback_3_use_derisk
+    #   and (buyback_3_sub_grind_count > 0)
+    #   and (
+    #     (-(exit_rate - buyback_3_current_open_rate) / buyback_3_current_open_rate)
+    #     < (
+    #       self.grinding_v2_buyback_3_derisk_futures if self.is_futures_mode else self.grinding_v2_buyback_3_derisk_spot
+    #     )
+    #   )
+    #   and (buyback_3_orders[-1].order_date_utc.replace(tzinfo=None) >= datetime(2025, 8, 3) or is_backtest)
+    # ):
     if (
       self.grinding_v2_buyback_3_use_derisk
       and (buyback_3_sub_grind_count > 0)
       and (
-        (-(exit_rate - buyback_3_current_open_rate) / buyback_3_current_open_rate)
+        buyback_3_current_grind_stake_profit
         < (
-          self.grinding_v2_buyback_3_derisk_futures if self.is_futures_mode else self.grinding_v2_buyback_3_derisk_spot
+          slice_amount
+          * (
+            self.grinding_v2_buyback_3_derisk_futures
+            if self.is_futures_mode
+            else self.grinding_v2_buyback_3_derisk_spot
+          )
         )
       )
-      and (buyback_3_orders[-1].order_date_utc.replace(tzinfo=None) >= datetime(2025, 6, 20) or is_backtest)
+      and (buyback_3_orders[-1].order_date_utc.replace(tzinfo=None) >= datetime(2025, 8, 3) or is_backtest)
     ):
-      # if (
-      #   self.grinding_v2_buyback_3_use_derisk
-      #   and (buyback_3_sub_grind_count > 0)
-      #   and (
-      #     buyback_3_current_grind_stake_profit
-      #     < (
-      #       slice_amount
-      #       * (
-      #         self.grinding_v2_buyback_3_derisk_futures
-      #         if self.is_futures_mode
-      #         else self.grinding_v2_buyback_3_derisk_spot
-      #       )
-      #     )
-      #   )
-      # ):
       sell_amount = buyback_3_total_amount * exit_rate / trade.leverage
       if ((current_stake_amount / trade.leverage) - sell_amount) < (min_stake * 1.55):
         sell_amount = (trade.amount * exit_rate / trade.leverage) - (min_stake * 1.55)
@@ -47390,7 +48903,7 @@ class NostalgiaForInfinityX6(IStrategy):
   def short_buyback_entry_v2(
     self, last_candle: Series, previous_candle: Series, slice_profit: float, is_derisk: bool
   ) -> float:
-    if (
+    if (last_candle["protections_short_global"] == True) and (
       (last_candle["enter_short"] == True)
       or (
         (last_candle["RSI_14"] > 64.0)
@@ -47481,7 +48994,7 @@ class NostalgiaForInfinityX6(IStrategy):
   def short_grind_entry_v2(
     self, last_candle: Series, previous_candle: Series, slice_profit: float, is_derisk: bool
   ) -> float:
-    if (
+    if (last_candle["protections_short_global"] == True) and (
       (last_candle["enter_short"] == True)
       or (
         (last_candle["RSI_14"] > 54.0)
@@ -50797,6 +52310,10 @@ class NostalgiaForInfinityX6(IStrategy):
       return None
     last_candle = df.iloc[-1].squeeze()
     previous_candle = df.iloc[-2].squeeze()
+
+    # we already waiting for an order to get filled
+    if trade.has_open_orders:
+      return None
 
     filled_orders = trade.select_filled_orders()
     filled_entries = trade.select_filled_orders(trade.entry_side)

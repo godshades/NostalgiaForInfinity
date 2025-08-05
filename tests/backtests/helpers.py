@@ -80,7 +80,7 @@ class Backtest:
     cmdline = [
       "freqtrade",
       "backtesting",
-      "--strategy=SOMY",
+      "--strategy=AlexNexusForgeV7",
       f"--timerange={start_date}-{end_date}",
       "--user-data-dir=user_data",
       "--config=configs/exampleconfig.json",
@@ -233,13 +233,13 @@ class BacktestResults:
     strategy_data = self.raw_data.get("strategy")
 
     if isinstance(strategy_data, dict):
-      # Expected structure: {"strategy": {"SOMY": {...}}}
-      return strategy_data.get("SOMY")
+      # Expected structure: {"strategy": {"AlexNexusForgeV7": {...}}}
+      return strategy_data.get("AlexNexusForgeV7")
 
-    elif isinstance(strategy_data, str) and strategy_data == "SOMY":
-      # Fallback structure: {"strategy": "SOMY"}
+    elif isinstance(strategy_data, str) and strategy_data == "AlexNexusForgeV7":
+      # Fallback structure: {"strategy": "AlexNexusForgeV7"}
       # Then use the top-level key instead
-      return self.raw_data.get("SOMY")
+      return self.raw_data.get("AlexNexusForgeV7")
 
     else:
       raise TypeError(f"Unsupported 'strategy' value: {strategy_data!r}. Expected a dict or strategy name.")
@@ -269,7 +269,6 @@ class BacktestResults:
   def _set__stats_pct(self):
     return {
       "duration_avg": self.full_stats.duration_avg,
-      "profit_sum_pct": self.full_stats.profit_sum_pct,
       "profit_mean_pct": self.full_stats.profit_mean_pct,
       "profit_total_pct": self.full_stats.profit_total_pct,
       "max_drawdown": self.results.max_drawdown_account * 100,
