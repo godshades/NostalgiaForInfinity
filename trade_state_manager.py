@@ -42,6 +42,10 @@ class TradeStateManager:
         
         # Load existing states
         self.load_all_states()
+        
+    def get_state(self, pair: str) -> TradeState:
+        """Get current state for a pair"""
+        return self.states.get(pair, TradeState.IDLE)
     
     def _serialize_state_data(self) -> Dict:
         """Serialize all states to dictionary"""
