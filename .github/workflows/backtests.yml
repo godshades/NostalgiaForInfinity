@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
   push:
     paths:
-      - 'AlexNexusForgeV7.py'
+      - 'AlexOpusV1.py'
 
 jobs:
   # Docker build

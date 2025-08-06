@@ -80,7 +80,7 @@ class Backtest:
     cmdline = [
       "freqtrade",
       "backtesting",
-      "--strategy=AlexNexusForgeV7",
+      "--strategy=AlexOpusV1",
       f"--timerange={start_date}-{end_date}",
       "--user-data-dir=user_data",
       "--config=configs/exampleconfig.json",
@@ -233,13 +233,13 @@ class BacktestResults:
     strategy_data = self.raw_data.get("strategy")
 
     if isinstance(strategy_data, dict):
-      # Expected structure: {"strategy": {"AlexNexusForgeV7": {...}}}
-      return strategy_data.get("AlexNexusForgeV7")
+      # Expected structure: {"strategy": {"AlexOpusV1": {...}}}
+      return strategy_data.get("AlexOpusV1")
 
-    elif isinstance(strategy_data, str) and strategy_data == "AlexNexusForgeV7":
-      # Fallback structure: {"strategy": "AlexNexusForgeV7"}
+    elif isinstance(strategy_data, str) and strategy_data == "AlexOpusV1":
+      # Fallback structure: {"strategy": "AlexOpusV1"}
       # Then use the top-level key instead
-      return self.raw_data.get("AlexNexusForgeV7")
+      return self.raw_data.get("AlexOpusV1")
 
     else:
       raise TypeError(f"Unsupported 'strategy' value: {strategy_data!r}. Expected a dict or strategy name.")

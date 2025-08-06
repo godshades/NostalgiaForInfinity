@@ -84,10 +84,10 @@ if [ ! -f "$CONFIG_FILE" ]; then
     log "Config file not found. Creating a new one at $CONFIG_FILE."
 
     # Prompt user for configuration values
-    echo "Enter strategy files (default: AlexNexusForgeV7.py)."
+    echo "Enter strategy files (default: AlexOpusV1.py)."
     echo "You can use commas, spaces, or press Enter to accept the default value:"
     read -p "Strategy files: " strategy_file
-    strategy_file=${strategy_file:-AlexNexusForgeV7.py}
+    strategy_file=${strategy_file:-AlexOpusV1.py}
     validate_file_extension "$strategy_file" ".py" || { log "Invalid strategy file extension."; exit 1; }
 
     echo "Enter blacklist file(s) (default: blacklist-binance.json)."

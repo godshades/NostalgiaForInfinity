@@ -65,8 +65,8 @@ done
 # -----------------------------------------------------------------------------
 if [[ ! -f "$CONFIG_FILE" ]]; then
     log "Config not found — creating $CONFIG_FILE"
-    read -rp "Strategy files (comma‑sep) [AlexNexusForgeV7.py]: " strategy_file
-    strategy_file=${strategy_file:-AlexNexusForgeV7.py}
+    read -rp "Strategy files (comma‑sep) [AlexOpusV1.py]: " strategy_file
+    strategy_file=${strategy_file:-AlexOpusV1.py}
     validate_ext "$strategy_file" ".py" || exit 1
 
     read -rp "Blacklist files [blacklist-binance.json]: " blacklist_file
@@ -92,7 +92,7 @@ fi
 source "$CONFIG_FILE"
 
 # Ensure defaults
-strategy_file=${strategy_file:-AlexNexusForgeV7.py}
+strategy_file=${strategy_file:-AlexOpusV1.py}
 blacklist_file=${blacklist_file:-blacklist-binance.json}
 cleanup_old_files=${cleanup_old_files:-y}
 telegram_bot_token=${telegram_bot_token:-}
