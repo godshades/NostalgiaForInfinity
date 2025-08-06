@@ -3,7 +3,7 @@ import numpy as np
 import pandas as pd
 import warnings
 from datetime import datetime
-from typing import Optional, Dict, List, Tuple
+from typing import Optional, Dict, List, Tuple, Any
 
 import talib.abstract as ta
 from scipy.signal import argrelextrema
