@@ -13,10 +13,10 @@ from freqtrade.strategy import IStrategy, DecimalParameter, IntParameter, Boolea
 from freqtrade.persistence import Trade
 
 # Import our new modules
-from .strategy_constants import *
-from .strategy_helpers import MarketAnalyzer, SignalGenerator, RiskManager, PerformanceOptimizer
-from .trade_state_manager import TradeStateManager, TradeState
-from .mml_exit_system import MMLExitSystem
+from strategy_constants import *
+from strategy_helpers import MarketAnalyzer, SignalGenerator, RiskManager, PerformanceOptimizer
+from trade_state_manager import TradeStateManager, TradeState
+from mml_exit_system import MMLExitSystem
 
 warnings.simplefilter(action="ignore", category=pd.errors.PerformanceWarning)
 logger = logging.getLogger(__name__)
