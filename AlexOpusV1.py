@@ -1233,26 +1233,7 @@ class AlexOpusV1(IStrategy):
                 (dataframe['rsi'] > 30) & (dataframe['rsi'] < 80) &
                 (dataframe['DI_catch'] == 1)
             )
-        
-        # === TIME-BASED ADJUSTMENTS ===
-        
-        # Stricter requirements for certain times
-        if market_conditions['day_of_week'] == 0:  # Monday
-            high_quality_long &= (dataframe['signal_strength'] >= 6)
-            medium_quality_long &= (dataframe['signal_strength'] >= 5)
-            if self.can_short:
-                high_quality_short &= (dataframe['signal_strength'] <= 1)
-        
-        if market_conditions['day_of_week'] >= 5:  # Weekend
-            # Much stricter on weekends
-            high_quality_long &= (dataframe['confluence_score'] >= 4)
-            backup_long = False  # No backup entries on weekends
-        
-        if market_conditions['session'] == 'asian':
-            # Require volume confirmation in quiet sessions
-            high_quality_long &= (dataframe['volume_strength'] > 1.5)
-            medium_quality_long &= (dataframe['volume_strength'] > 1.3)
-        
+                
         # === AVOID PROBLEMATIC CONDITIONS ===
         
         # Don't enter during flash moves or high volatility
