@@ -1255,26 +1255,26 @@ class AlexOpusV1(IStrategy):
         
         # Long entries (priority: high > medium > backup)
         dataframe.loc[high_quality_long, 'enter_long'] = 1
-        dataframe.loc[high_quality_long, 'enter_tag'] = f'HQ_zone_{market_conditions["session"]}'
+        dataframe.loc[high_quality_long, 'enter_tag'] = f'HQ_zone'
         
         # Only apply medium if no high quality
         medium_long_mask = medium_quality_long & (dataframe['enter_long'] == 0)
         dataframe.loc[medium_long_mask, 'enter_long'] = 1
-        dataframe.loc[medium_long_mask, 'enter_tag'] = f'MQ_zone_{market_conditions["session"]}'
+        dataframe.loc[medium_long_mask, 'enter_tag'] = f'MQ_zone'
         
         # Only apply backup if no other entry
         backup_long_mask = backup_long & (dataframe['enter_long'] == 0)
         dataframe.loc[backup_long_mask, 'enter_long'] = 1
-        dataframe.loc[backup_long_mask, 'enter_tag'] = f'backup_zone_{market_conditions["session"]}'
+        dataframe.loc[backup_long_mask, 'enter_tag'] = f'backup_zone'
         
         # Short entries
         if self.can_short:
             dataframe.loc[high_quality_short, 'enter_short'] = 1
-            dataframe.loc[high_quality_short, 'enter_tag'] = f'HQ_short_zone_{market_conditions["session"]}'
+            dataframe.loc[high_quality_short, 'enter_tag'] = f'HQ_short_zone'
             
             medium_short_mask = medium_quality_short & (dataframe['enter_short'] == 0)
             dataframe.loc[medium_short_mask, 'enter_short'] = 1
-            dataframe.loc[medium_short_mask, 'enter_tag'] = f'MQ_short_zone_{market_conditions["session"]}'
+            dataframe.loc[medium_short_mask, 'enter_tag'] = f'MQ_short_zone'
         
         # === STATE MANAGEMENT UPDATES ===
         
@@ -1300,7 +1300,6 @@ class AlexOpusV1(IStrategy):
                 'entry_price': float(last_long['close']),
                 'entry_rsi': float(last_long['rsi']),
                 'entry_time': datetime.now(),
-                'session': market_conditions['session'],
                 'market_health': market_conditions['market_health']
             }
             
@@ -1336,7 +1335,6 @@ class AlexOpusV1(IStrategy):
                 'entry_price': float(last_short['close']),
                 'entry_rsi': float(last_short['rsi']),
                 'entry_time': datetime.now(),
-                'session': market_conditions['session'],
                 'market_health': market_conditions['market_health']
             }
             
