@@ -3,6 +3,7 @@ import numpy as np
 import logging
 from typing import Tuple, Dict, Optional
 from strategy_constants import *
+from trade_state_manager import TradeState  # Add this import
 
 logger = logging.getLogger(__name__)
 
