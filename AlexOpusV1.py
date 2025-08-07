@@ -1802,8 +1802,17 @@ class AlexOpusV1(IStrategy):
                     risk_report['reasons'].append(reason_str)
             
             # 3. Calculate current drawdown
-            total_profit_loss = sum(trade.calc_profit() for trade in open_trades)
-            total_stake = sum(trade.stake_amount for trade in open_trades)
+            total_profit_loss = 0
+            total_stake = 0
+            for trade in open_trades:
+                # Get the latest data for the pair of the current trade
+                dataframe, _ = self.dp.get_analyzed_dataframe(trade.pair, self.timeframe)
+                if not dataframe.empty:
+                    # Get the last known price (current rate)
+                    current_rate = dataframe.iloc[-1]['close']
+                    # Now calculate profit with the required 'rate' argument
+                    total_profit_loss += trade.calc_profit(rate=current_rate)
+                    total_stake += trade.stake_amount
             
             if total_stake > 0:
                 current_drawdown = abs(min(0, total_profit_loss / total_stake))

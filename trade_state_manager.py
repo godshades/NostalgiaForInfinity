@@ -36,12 +36,16 @@ class TradeStateManager:
         
         # Auto-save interval
         self._last_save = datetime.now()
-        self._auto_save_interval = 300  # seconds
+        self._auto_save_interval = 60  # seconds
         
         logger.info(f"TradeStateManager initialized for bot: {self.bot_name}")
         
         # Load existing states
         self.load_all_states()
+        
+        if not self.state_file.exists():
+            logger.warning(f"State file not found at {self.state_file}. Creating a new, empty one.")
+            self.save_all_states(force=True)
         
     def get_state(self, pair: str) -> TradeState:
         """Get current state for a pair"""
@@ -51,7 +55,7 @@ class TradeStateManager:
         """Serialize all states to dictionary"""
         data = {
             'bot_name': self.bot_name,
-            'version': '2.0',
+            'version': '1.0',
             'last_updated': datetime.now().isoformat(),
             'pairs': {}
         }
