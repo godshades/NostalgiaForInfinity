@@ -1,7 +1,6 @@
 import pandas as pd
 import numpy as np
 import logging
-from typing import Tuple, Dict, Optional
 from strategy_constants import *
 from trade_state_manager import TradeState  # Add this import
 
@@ -56,7 +55,7 @@ class MMLExitSystem:
         
         return df
     
-    def _calculate_mml_structure(self, df: pd.DataFrame) -> Dict[str, pd.Series]:
+    def _calculate_mml_structure(self, df: pd.DataFrame) -> dict[str, pd.Series]:
         """Calculate MML market structure indicators"""
         
         structure = {}
@@ -79,7 +78,7 @@ class MMLExitSystem:
         
         return structure
     
-    def _calculate_long_exits(self, df: pd.DataFrame, mml_structure: Dict) -> pd.DataFrame:
+    def _calculate_long_exits(self, df: pd.DataFrame, mml_structure: dict) -> pd.DataFrame:
         """Calculate all long exit signals (your original logic, organized)"""
         
         exits = pd.DataFrame(index=df.index)
@@ -166,7 +165,7 @@ class MMLExitSystem:
         
         return exits
     
-    def _calculate_short_exits(self, df: pd.DataFrame, mml_structure: Dict) -> pd.DataFrame:
+    def _calculate_short_exits(self, df: pd.DataFrame, mml_structure: dict) -> pd.DataFrame:
         """Calculate all short exit signals (your original logic, organized)"""
         
         exits = pd.DataFrame(index=df.index)

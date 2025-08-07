@@ -4,7 +4,7 @@ import os
 from pathlib import Path
 from enum import Enum
 from datetime import datetime, timedelta
-from typing import Optional, Dict, Any
+from typing import Any
 from threading import Lock
 import logging
 
@@ -22,8 +22,8 @@ class TradeState(Enum):
 
 class TradeStateManager:
     def __init__(self, bot_name: str = "default", state_file_path: str = "user_data/state_data"):
-        self.states: Dict[str, TradeState] = {}
-        self.trade_metadata: Dict[str, Dict[str, Any]] = {}
+        self.states: dict[str, TradeState] = {}
+        self.trade_metadata: dict[str, dict[str, Any]] = {}
         self.bot_name = bot_name
         
         # Single file for all states
@@ -47,7 +47,7 @@ class TradeStateManager:
         """Get current state for a pair"""
         return self.states.get(pair, TradeState.IDLE)
     
-    def _serialize_state_data(self) -> Dict:
+    def _serialize_state_data(self) -> dict:
         """Serialize all states to dictionary"""
         data = {
             'bot_name': self.bot_name,
@@ -154,7 +154,7 @@ class TradeStateManager:
         """Save single state (triggers full save with auto-save logic)"""
         self.save_all_states(force=False)
     
-    def transition(self, pair: str, new_state: TradeState, metadata: Dict[str, Any] = None):
+    def transition(self, pair: str, new_state: TradeState, metadata: dict[str, Any] = None):
         """Transition with auto-save"""
         old_state = self.get_state(pair)
         

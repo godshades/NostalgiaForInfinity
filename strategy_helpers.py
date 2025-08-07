@@ -1,6 +1,6 @@
 import numpy as np
 import pandas as pd
-from typing import Tuple, Any
+from typing import Any
 import logging
 
 logger = logging.getLogger(__name__)
@@ -9,7 +9,7 @@ class MarketAnalyzer:
     """Reusable market analysis functions"""
     
     @staticmethod
-    def calculate_support_resistance(df: pd.DataFrame, window: int = 20) -> Tuple[pd.Series, pd.Series]:
+    def calculate_support_resistance(df: pd.DataFrame, window: int = 20) -> tuple[pd.Series, pd.Series]:
         """Calculate dynamic support and resistance levels"""
         support = df['low'].rolling(window=window).min()
         resistance = df['high'].rolling(window=window).max()

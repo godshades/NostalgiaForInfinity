@@ -1507,7 +1507,7 @@ class AlexOpusV1(IStrategy):
             return time_open >= min_hours_between_dca
         return False
 
-    def should_dca(self, trade: Trade, current_profit: float, last_candle: pd.Series) -> Tuple[bool, str]:
+    def should_dca(self, trade: Trade, current_profit: float, last_candle: pd.Series) -> tuple[bool, str]:
         """More flexible DCA logic with reason"""
         
         # Basic checks
