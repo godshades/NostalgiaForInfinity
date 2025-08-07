@@ -38,7 +38,7 @@ class AlexOpusV1(IStrategy):
     stoploss_on_exchange = True
     stoploss_on_exchange_interval = STOPLOSS_CHECK_INTERVAL
     position_adjustment_enable = True
-    can_short = True
+    can_short = False
     use_exit_signal = True
     ignore_roi_if_entry_signal = True
     process_only_new_candles = True
@@ -54,6 +54,9 @@ class AlexOpusV1(IStrategy):
         self.mml_exit_system = MMLExitSystem(
             use_emergency_exits=self.use_emergency_exits.value
         )
+        
+        if ("trading_mode" in self.config) and (self.config["trading_mode"] in ["futures", "margin"]):
+            self.can_short = True
         
         # Cache for expensive calculations
         self._indicator_cache = {}
