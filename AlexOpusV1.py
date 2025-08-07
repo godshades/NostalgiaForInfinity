@@ -88,7 +88,7 @@ class AlexOpusV1(IStrategy):
     # Add parameter to choose exit system
     use_mml_exits = BooleanParameter(default=True, space="sell", optimize=False)
     use_simple_exits = BooleanParameter(default=False, space="sell", optimize=False)
-    use_emergency_exits = BooleanParameter(default=True, space="sell", optimize=False)
+    use_emergency_exits = True
     
     # 🚨  REGIME CHANGE DETECTION PARAMETERS (NEU)
     regime_change_enabled = BooleanParameter(default=True, space="sell", optimize=False, load=True)
@@ -418,8 +418,8 @@ class AlexOpusV1(IStrategy):
         
         for name, window in windows.items():
             # Vectorized min/max detection
-            rolling_min = dataframe['ha_close'].rolling(window=window, center=True).min()
-            rolling_max = dataframe['ha_close'].rolling(window=window, center=True).max()
+            rolling_min = dataframe['ha_close'].rolling(window=window).min()
+            rolling_max = dataframe['ha_close'].rolling(window=window).max()
             
             is_min = (dataframe['ha_close'] == rolling_min) & (dataframe['ha_close'] != dataframe['ha_close'].shift(1))
             is_max = (dataframe['ha_close'] == rolling_max) & (dataframe['ha_close'] != dataframe['ha_close'].shift(1))
@@ -642,7 +642,7 @@ class AlexOpusV1(IStrategy):
         
         # Multi-timeframe momentum
         for period, days in [(3, 6), (7, 14), (14, 28), (21, 21)]:
-            dataframe[f'momentum_{period}'] = dataframe['close'].pct_change(days)
+            dataframe[f'momentum_{period}'] = dataframe['close'].pct_change(period)
         
         # Momentum acceleration
         dataframe['momentum_acceleration'] = (
@@ -742,13 +742,13 @@ class AlexOpusV1(IStrategy):
         
         # Swing highs and lows
         dataframe['swing_high'] = (
-            (dataframe['high'] > high_1) &
-            (dataframe['high'] > dataframe['high'].shift(-1))
+            (dataframe['high'].shift(1) > dataframe['high'].shift(2)) &
+            (dataframe['high'].shift(1) > dataframe['high'])
         ).astype(np.int8)
-        
+
         dataframe['swing_low'] = (
-            (dataframe['low'] < low_1) &
-            (dataframe['low'] < dataframe['low'].shift(-1))
+            (dataframe['low'].shift(1) < dataframe['low'].shift(2)) &
+            (dataframe['low'].shift(1) < dataframe['low'])
         ).astype(np.int8)
         
         # Market structure breaks
@@ -1383,12 +1383,7 @@ class AlexOpusV1(IStrategy):
         # Choose exit system based on parameters
         if self.use_mml_exits.value:
             # Use your sophisticated MML exit system
-            dataframe = self.mml_exit_system.calculate_exits_with_state(
-                df=dataframe,
-                state_manager=self.state_manager,
-                pair=metadata['pair'],
-                can_short=self.can_short
-            )
+            dataframe = self.mml_exit_system.calculate_exits(df=dataframe, can_short=self.can_short)
             
             # Log MML exit details for major pairs
             if metadata['pair'] in DEBUG_PAIRS:
@@ -1405,10 +1400,7 @@ class AlexOpusV1(IStrategy):
         
         else:
             # Use hybrid approach - combine both systems
-            mml_df = self.mml_exit_system.calculate_exits_with_state(
-                dataframe.copy(), 
-                can_short=self.can_short
-            )
+            mml_df = self.mml_exit_system.calculate_exits(dataframe.copy(), can_short=self.can_short)
             simple_df = self._apply_simple_exits(dataframe.copy())
             
             # Combine signals (MML takes priority)
@@ -1423,7 +1415,14 @@ class AlexOpusV1(IStrategy):
         
         # Update state manager on exits
         if any(dataframe['exit_long']) or any(dataframe['exit_short']):
-            self.state_manager.transition(metadata['pair'], TradeState.EXITING)
+            # Determine the correct state transition based on exit tag
+            last_exit_idx = dataframe[(dataframe['exit_long'] == 1) | (dataframe['exit_short'] == 1)].index[-1]
+            exit_tag = dataframe.loc[last_exit_idx, 'exit_tag']
+
+            if 'Emergency' in exit_tag:
+                self.state_manager.transition(metadata['pair'], TradeState.EMERGENCY_EXIT)
+            else:
+                self.state_manager.transition(metadata['pair'], TradeState.EXITING)
         
         return dataframe
     
@@ -1786,18 +1785,21 @@ class AlexOpusV1(IStrategy):
                 risk_report['allow_new_trades'] = False
                 risk_report['reasons'].append(f"max_positions_reached_{len(open_trades)}")
             
-            # 2. Calculate correlation exposure
-            pairs_by_base = {}
-            for trade in open_trades:
-                base = trade.pair.split('/')[0]
-                pairs_by_base.setdefault(base, []).append(trade)
-            
-            # Check concentration
-            for base, trades in pairs_by_base.items():
-                if len(trades) > 2:  # More than 2 positions in same base currency
+            # 2. Correlation and Concentration Risk
+            open_pairs = [t.pair for t in open_trades]
+            if len(open_pairs) > 1:
+                # Call the corrected correlation check from the RiskManager
+                correlation_report = self.risk_manager.check_correlation_risk(
+                    pairs=open_pairs,
+                    dp=self.dp,
+                    timeframe=self.timeframe,
+                    correlation_threshold=self.max_correlation.value
+                )
+                if correlation_report['risk_level'] == 'high':
                     risk_report['allow_new_trades'] = False
-                    risk_report['reasons'].append(f"concentrated_in_{base}")
-                    risk_report['risk_level'] = 'high'
+                    # Add a descriptive reason about which pairs are correlated
+                    reason_str = f"high_correlation_{correlation_report['high_correlation_pairs']}"
+                    risk_report['reasons'].append(reason_str)
             
             # 3. Calculate current drawdown
             total_profit_loss = sum(trade.calc_profit() for trade in open_trades)

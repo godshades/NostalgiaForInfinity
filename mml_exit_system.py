@@ -53,21 +53,6 @@ class MMLExitSystem:
         current_state = state_manager.get_state(pair)
         
         # Force exit if in emergency state
-        if current_state == TradeState.EMERGENCY_EXIT:
-            df.iloc[-1, df.columns.get_loc('exit_long')] = 1
-            df.iloc[-1, df.columns.get_loc('exit_short')] = 1
-            df.iloc[-1, df.columns.get_loc('exit_tag')] = 'emergency_state_exit'
-        
-        # Update state based on exit signals
-        if df['exit_long'].any() or df['exit_short'].any():
-            # Find the type of exit
-            last_exit_idx = df[(df['exit_long'] == 1) | (df['exit_short'] == 1)].index[-1]
-            exit_tag = df.loc[last_exit_idx, 'exit_tag']
-            
-            if 'Emergency' in exit_tag:
-                state_manager.transition(pair, TradeState.EMERGENCY_EXIT)
-            else:
-                state_manager.transition(pair, TradeState.EXITING)
         
         return df
     
@@ -88,17 +73,9 @@ class MMLExitSystem:
         )
         
         # MML resistance/support levels
-        structure['at_resistance'] = (
-            (df["high"] >= df["[6/8]P"]) |  # At 75%
-            (df["high"] >= df["[7/8]P"]) |  # At 87.5%
-            (df["high"] >= df["[8/8]P"])    # At 100%
-        )
+        structure['at_resistance'] = (df["high"] >= df["[6/8]P"])
         
-        structure['at_support'] = (
-            (df["low"] <= df["[2/8]P"]) |   # At 25%
-            (df["low"] <= df["[1/8]P"]) |   # At 12.5%
-            (df["low"] <= df["[0/8]P"])     # At 0%
-        )
+        structure['at_support'] = (df["low"] <= df["[2/8]P"])
         
         return structure
     
@@ -144,18 +121,17 @@ class MMLExitSystem:
             (df["close"] < df["open"]) &
             (df["low"] < df["low"].shift(1)) &
             (df["close"] < df["close"].rolling(3).mean()) &
-            (df.get("momentum_quality", 0) < 0)
+            (df.get("momentum_quality", 0) < 1)
         )
         
         # 3. Momentum Divergence
         exits['momentum_divergence'] = (
             mml_structure['at_resistance'] &
-            (df["rsi"] < df["rsi"].shift(1)) &
-            (df["rsi"].shift(1) < df["rsi"].shift(2)) &
-            (df["rsi"] < df["rsi"].shift(3)) &
-            (df["close"] >= df["close"].shift(1)) &
-            (df["maxima"] == 1) &
-            (df["rsi"] > 60)
+            # Placeholder for proper divergence detection:
+            # For now, a simple reversal after high RSI
+            (df["rsi"] > 70) &
+            (df["close"] < df["close"].shift(1)) &
+            (df["maxima"] == 1)
         )
         
         # 4. Range Exit
@@ -231,18 +207,17 @@ class MMLExitSystem:
             (df["volume"] > df["volume"].rolling(15).mean() * 2.0) &
             (df["close"] > df["open"]) &
             (df["high"] > df["high"].shift(1)) &
-            (df.get("momentum_quality", 0) > 0)
+            (df.get("momentum_quality", 0) > 4)
         )
         
         # 3. Momentum Divergence
         exits['momentum_divergence'] = (
             mml_structure['at_support'] &
-            (df["rsi"] > df["rsi"].shift(1)) &
-            (df["rsi"].shift(1) > df["rsi"].shift(2)) &
-            (df["rsi"] > df["rsi"].shift(3)) &
-            (df["close"] <= df["close"].shift(1)) &
-            (df["minima"] == 1) &
-            (df["rsi"] < 40)
+            # Placeholder for proper divergence detection:
+            # For now, a simple reversal after low RSI
+            (df["rsi"] < 30) &
+            (df["close"] > df["close"].shift(1)) &
+            (df["minima"] == 1)
         )
         
         # 4. Range Exit
@@ -289,11 +264,11 @@ class MMLExitSystem:
         # Don't exit if we have a new entry signal at the same candle
         if has_long_entry:
             long_entry_mask = df["enter_long"] == 1
-            long_exits['any_exit'] = long_exits['any_exit'] & (~long_entry_mask)
+            long_exits['any_exit'] = long_exits['any_exit'] & (~long_entry_mask | long_exits['emergency'])
         
         if has_short_entry:
             short_entry_mask = df["enter_short"] == 1
-            short_exits['any_exit'] = short_exits['any_exit'] & (~short_entry_mask)
+            short_exits['any_exit'] = short_exits['any_exit'] & (~short_entry_mask | short_exits['emergency'])
         
         # Apply Long Exits with priority
         df.loc[long_exits['any_exit'], "exit_long"] = 1
@@ -329,11 +304,11 @@ class MMLExitSystem:
                 elif short_exits.loc[idx, 'extreme_oversold']:
                     df.loc[idx, "exit_tag"] = "MML_Extreme_Oversold"
                 elif short_exits.loc[idx, 'volume_exhaustion']:
-                    df.loc[idx, "exit_tag"] = "MML_Volume_Exhaustion_Short"
+                    df.loc[idx, "exit_tag"] = "MML_Volume_Exhaustion"
                 elif short_exits.loc[idx, 'momentum_divergence']:
-                    df.loc[idx, "exit_tag"] = "MML_Momentum_Divergence_Short"
+                    df.loc[idx, "exit_tag"] = "MML_Momentum_Divergence"
                 elif short_exits.loc[idx, 'range_exit']:
-                    df.loc[idx, "exit_tag"] = "MML_Range_Exit_Short"
+                    df.loc[idx, "exit_tag"] = "MML_Range_Exit"
         
         return df
     

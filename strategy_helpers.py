@@ -1,6 +1,6 @@
 import numpy as np
 import pandas as pd
-from typing import Tuple, Optional
+from typing import Tuple, Optional, Dict, Any
 import logging
 
 logger = logging.getLogger(__name__)
@@ -169,21 +169,74 @@ class RiskManager:
     
     @staticmethod
     def check_correlation_risk(
-        pairs: list,
+        pairs: List[str],
+        dp: Any,
+        timeframe: str,
         correlation_threshold: float = 0.7
-    ) -> dict:
-        """Check correlation between pairs to avoid concentrated risk"""
-        # This would need price data for all pairs
-        # Simplified example structure
-        correlation_matrix = {}
-        high_correlation_pairs = []
-        
-        # In practice, calculate actual correlations
-        # For now, return empty risk assessment
-        return {
-            'high_correlation_pairs': high_correlation_pairs,
+    ) -> Dict[str, Any]:
+        """
+        Check correlation between currently open trade pairs to avoid concentrated risk.
+        This version uses the correct Freqtrade DataProvider method.
+        """
+        risk_report = {
+            'high_correlation_pairs': [],
             'risk_level': 'low'
         }
+
+        if len(pairs) < 2:
+            return risk_report
+
+        all_pair_dfs = []
+        for pair in pairs:
+            try:
+                # CORRECT: Use dp.get_analyzed_dataframe to get data for each pair
+                df, _ = dp.get_analyzed_dataframe(pair, timeframe)
+                if not df.empty:
+                    # Select date and close, then set date as the index for alignment
+                    pair_df = df[['date', 'close']].copy()
+                    pair_df.set_index('date', inplace=True)
+                    pair_df.rename(columns={'close': pair}, inplace=True)
+                    all_pair_dfs.append(pair_df)
+            except Exception as e:
+                logger.error(f"Could not get analyzed dataframe for {pair} during correlation check: {e}")
+                continue
+
+        if len(all_pair_dfs) < 2:
+            return risk_report
+
+        # Combine all dataframes. The 'inner' join aligns them by date,
+        # ensuring we only use timestamps where all pairs have data.
+        try:
+            close_prices = pd.concat(all_pair_dfs, axis=1, join='inner')
+        except Exception as e:
+            logger.error(f"Failed to concatenate dataframes for correlation check: {e}")
+            return risk_report
+
+        # Need at least 2 overlapping data points to calculate correlation
+        if len(close_prices) < 2:
+            logger.warning("Not enough overlapping data points to calculate pair correlation.")
+            return risk_report
+
+        correlation_matrix = close_prices.corr()
+
+        # Identify highly correlated pairs
+        correlated_pairs = set()
+        pair_names = correlation_matrix.columns.tolist()
+        for i in range(len(pair_names)):
+            for j in range(i + 1, len(pair_names)):
+                pair1 = pair_names[i]
+                pair2 = pair_names[j]
+                correlation = correlation_matrix.loc[pair1, pair2]
+
+                if abs(correlation) > correlation_threshold:
+                    correlated_pairs.add(tuple(sorted((pair1, pair2))))
+
+        if correlated_pairs:
+            risk_report['high_correlation_pairs'] = [list(p) for p in correlated_pairs]
+            risk_report['risk_level'] = 'high'
+            logger.warning(f"High correlation detected among open trades: {risk_report['high_correlation_pairs']}")
+
+        return risk_report
 
 class PerformanceOptimizer:
     """Performance optimization utilities"""

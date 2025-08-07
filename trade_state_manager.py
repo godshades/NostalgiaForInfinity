@@ -177,6 +177,22 @@ class TradeStateManager:
         
         return True
     
+    def _is_valid_transition(self, from_state: TradeState, to_state: TradeState) -> bool:
+        """Check if state transition is valid"""
+        
+        valid_transitions = {
+            TradeState.IDLE: [TradeState.ENTERING],
+            TradeState.ENTERING: [TradeState.MANAGING, TradeState.EMERGENCY_EXIT],
+            TradeState.MANAGING: [TradeState.SCALING_IN, TradeState.SCALING_OUT, 
+                                 TradeState.EXITING, TradeState.EMERGENCY_EXIT],
+            TradeState.SCALING_IN: [TradeState.MANAGING, TradeState.EMERGENCY_EXIT],
+            TradeState.SCALING_OUT: [TradeState.MANAGING, TradeState.EXITING],
+            TradeState.EXITING: [TradeState.IDLE],
+            TradeState.EMERGENCY_EXIT: [TradeState.IDLE]
+        }
+        
+        return to_state in valid_transitions.get(from_state, [])
+        
     def reset_state(self, pair: str):
         """Reset state for a pair"""
         if pair in self.states:
