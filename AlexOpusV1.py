@@ -52,7 +52,7 @@ class AlexOpusV1(IStrategy):
         self.risk_manager = RiskManager()
         self.performance_optimizer = PerformanceOptimizer()
         self.mml_exit_system = MMLExitSystem(
-            use_emergency_exits=self.use_emergency_exits.value
+            use_emergency_exits=self.use_emergency_exits
         )
         
         if ("trading_mode" in self.config) and (self.config["trading_mode"] in ["futures", "margin"]):
