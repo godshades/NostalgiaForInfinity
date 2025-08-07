@@ -46,7 +46,8 @@ class AlexOpusV1(IStrategy):
     # === INITIALIZE COMPONENTS ===
     def __init__(self, config: dict) -> None:
         super().__init__(config)
-        self.state_manager = TradeStateManager()
+        bot_name = self.config["bot_name"]
+        self.state_manager = TradeStateManager(bot_name=bot_name)
         self.market_analyzer = MarketAnalyzer()
         self.signal_generator = SignalGenerator()
         self.risk_manager = RiskManager()
