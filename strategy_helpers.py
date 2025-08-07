@@ -1,6 +1,6 @@
 import numpy as np
 import pandas as pd
-from typing import Tuple, Optional, Dict, Any
+from typing import Tuple, Any
 import logging
 
 logger = logging.getLogger(__name__)
@@ -169,11 +169,11 @@ class RiskManager:
     
     @staticmethod
     def check_correlation_risk(
-        pairs: List[str],
+        pairs: list[str],
         dp: Any,
         timeframe: str,
         correlation_threshold: float = 0.7
-    ) -> Dict[str, Any]:
+    ) -> dict[str, Any]:
         """
         Check correlation between currently open trade pairs to avoid concentrated risk.
         This version uses the correct Freqtrade DataProvider method.

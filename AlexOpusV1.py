@@ -3,7 +3,7 @@ import numpy as np
 import pandas as pd
 import warnings
 from datetime import datetime
-from typing import Optional, Dict, List, Tuple, Any
+from typing import Optional, Any
 
 import talib.abstract as ta
 from scipy.signal import argrelextrema
@@ -461,11 +461,11 @@ class AlexOpusV1(IStrategy):
         
         return dataframe
     
-    def calculate_rolling_murrey_math_levels_optimized(self, df: pd.DataFrame, window_size: int) -> Dict[str, pd.Series]:
+    def calculate_rolling_murrey_math_levels_optimized(self, df: pd.DataFrame, window_size: int) -> dict[str, pd.Series]:
         """
         OPTIMIZED Version - Calculate MML levels every 5 candles using only past data
         """
-        murrey_levels_data: Dict[str, list] = {key: [np.nan] * len(df) for key in MML_LEVEL_NAMES}
+        murrey_levels_data: dict[str, list] = {key: [np.nan] * len(df) for key in MML_LEVEL_NAMES}
         mml_c1 = self.mml_const1.value
         mml_c2 = self.mml_const2.value
         
@@ -507,7 +507,7 @@ class AlexOpusV1(IStrategy):
     
     @staticmethod
     def _calculate_mml_core(mn: float, finalH: float, mx: float, finalL: float,
-                            mml_c1: float, mml_c2: float) -> Dict[str, float]:
+                            mml_c1: float, mml_c2: float) -> dict[str, float]:
         dmml_calc = ((finalH - finalL) / 8.0) * mml_c1
         if dmml_calc == 0 or np.isinf(dmml_calc) or np.isnan(dmml_calc) or finalH == finalL:
             return {key: finalL for key in MML_LEVEL_NAMES}
@@ -1686,7 +1686,7 @@ class AlexOpusV1(IStrategy):
         
         return True
     
-    def get_market_conditions(self, pair: str, dataframe: pd.DataFrame) -> Dict[str, Any]:
+    def get_market_conditions(self, pair: str, dataframe: pd.DataFrame) -> dict[str, Any]:
         """Analyze current market conditions"""
         
         # Get recent data
@@ -1758,7 +1758,7 @@ class AlexOpusV1(IStrategy):
         
         return conditions
     
-    def check_portfolio_risk(self) -> Tuple[bool, Dict[str, Any]]:
+    def check_portfolio_risk(self) -> tuple[bool, dict[str, Any]]:
         
         current_time = datetime.now()
         # Only recalculate every 5 minutes
