@@ -30,7 +30,7 @@ class AlexOpusV1(IStrategy):
     timeframe = "15m"
     startup_candle_count: int = 100
     stoploss = -0.15
-    trailing_stop = True
+    trailing_stop = False
     trailing_stop_positive = 0.005
     trailing_stop_positive_offset = 0.03
     trailing_only_offset_is_reached = True
@@ -1312,11 +1312,11 @@ class AlexOpusV1(IStrategy):
                 'market_health': market_conditions['market_health']
             }
             
-            self.state_manager.transition(
-                metadata['pair'], 
-                TradeState.ENTERING,
-                entry_metadata
-            )
+            # self.state_manager.transition(
+            #     metadata['pair'], 
+            #     TradeState.ENTERING,
+            #     entry_metadata
+            # )
             
             # Log entry details for major pairs
             if metadata['pair'] in DEBUG_PAIRS:
@@ -1347,11 +1347,11 @@ class AlexOpusV1(IStrategy):
                 'market_health': market_conditions['market_health']
             }
             
-            self.state_manager.transition(
-                metadata['pair'], 
-                TradeState.ENTERING,
-                entry_metadata
-            )
+            # self.state_manager.transition(
+            #     metadata['pair'], 
+            #     TradeState.ENTERING,
+            #     entry_metadata
+            # )
         
         # === PERFORMANCE LOGGING ===
         
@@ -1609,6 +1609,10 @@ class AlexOpusV1(IStrategy):
         if dataframe.empty:
             return None
         
+        if self.state_manager.get_state(trade.pair) == TradeState.ENTERING:
+            logger.info(f"{trade.pair}: Entry order filled. Transitioning to MANAGING state.")
+            self.state_manager.transition(trade.pair, TradeState.MANAGING)
+        
         last_candle = dataframe.iloc[-1]
         
         # ... profit taking logic ...
@@ -1670,7 +1674,13 @@ class AlexOpusV1(IStrategy):
                 return False
         
         # Update state to managing after successful entry
-        self.state_manager.transition(pair, TradeState.MANAGING)
+        entry_metadata = {
+            'quality': entry_tag,
+            'entry_type': side,
+            'entry_price': rate,
+            'entry_time': current_time
+        }
+        self.state_manager.transition(pair, TradeState.ENTERING, entry_metadata)
         
         return True
     
