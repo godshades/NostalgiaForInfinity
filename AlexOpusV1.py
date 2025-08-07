@@ -1779,11 +1779,11 @@ class AlexOpusV1(IStrategy):
             if not open_trades:
                 return True, risk_report
             
-            # 1. Maximum position check
-            max_open_trades = 6  # Adjust as needed
-            if len(open_trades) >= max_open_trades:
-                risk_report['allow_new_trades'] = False
-                risk_report['reasons'].append(f"max_positions_reached_{len(open_trades)}")
+            # # 1. Maximum position check
+            # max_open_trades = 6  # Adjust as needed
+            # if len(open_trades) >= max_open_trades:
+            #     risk_report['allow_new_trades'] = False
+            #     risk_report['reasons'].append(f"max_positions_reached_{len(open_trades)}")
             
             # 2. Correlation and Concentration Risk
             open_pairs = [t.pair for t in open_trades]
@@ -1843,7 +1843,7 @@ class AlexOpusV1(IStrategy):
             
             if losing_trades_count > 3:
                 risk_report['allow_new_trades'] = False
-                risk_report['reasons'].append(f"too_many_losers_{len(losing_trades)}")
+                risk_report['reasons'].append(f"too_many_losers_{losing_trades_count}")
                 risk_report['risk_level'] = 'medium'
             
             # 5. Check average loss
