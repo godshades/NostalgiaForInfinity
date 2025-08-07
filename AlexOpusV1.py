@@ -1800,20 +1800,32 @@ class AlexOpusV1(IStrategy):
                     # Add a descriptive reason about which pairs are correlated
                     reason_str = f"high_correlation_{correlation_report['high_correlation_pairs']}"
                     risk_report['reasons'].append(reason_str)
-            
-            # 3. Calculate current drawdown
+                    
             total_profit_loss = 0
             total_stake = 0
+            total_loss_ratio = 0
+
+            # Efficiently loop through trades ONCE to get all rate-dependent data
             for trade in open_trades:
-                # Get the latest data for the pair of the current trade
                 dataframe, _ = self.dp.get_analyzed_dataframe(trade.pair, self.timeframe)
-                if not dataframe.empty:
-                    # Get the last known price (current rate)
-                    current_rate = dataframe.iloc[-1]['close']
-                    # Now calculate profit with the required 'rate' argument
-                    total_profit_loss += trade.calc_profit(rate=current_rate)
-                    total_stake += trade.stake_amount
-            
+                if dataframe.empty:
+                    continue
+
+                current_rate = dataframe.iloc[-1]['close']
+                total_stake += trade.stake_amount
+
+                # Calculate absolute profit
+                total_profit_loss += trade.calc_profit(rate=current_rate)
+
+                # Calculate profit ratio and categorize trades
+                profit_ratio = trade.calc_profit_ratio(rate=current_rate)
+                if profit_ratio < 0:
+                    losing_trades_count += 1
+                    total_loss_ratio += profit_ratio
+                else:
+                    winning_trades_count += 1 
+                    
+            # 3. Calculate current drawdown          
             if total_stake > 0:
                 current_drawdown = abs(min(0, total_profit_loss / total_stake))
                 risk_report['metrics']['drawdown_pct'] = current_drawdown
@@ -1823,21 +1835,18 @@ class AlexOpusV1(IStrategy):
                     risk_report['reasons'].append(f"high_drawdown_{current_drawdown:.1%}")
                     risk_report['risk_level'] = 'high'
             
-            # 4. Check losing trades
-            losing_trades = [t for t in open_trades if t.calc_profit_ratio() < 0]
-            winning_trades = [t for t in open_trades if t.calc_profit_ratio() > 0]
+            # 4. Check losing trades           
+            risk_report['metrics']['losing_trades'] = losing_trades_count
+            risk_report['metrics']['winning_trades'] = winning_trades_count
             
-            risk_report['metrics']['losing_trades'] = len(losing_trades)
-            risk_report['metrics']['winning_trades'] = len(winning_trades)
-            
-            if len(losing_trades) > 3:
+            if losing_trades_count > 3:
                 risk_report['allow_new_trades'] = False
                 risk_report['reasons'].append(f"too_many_losers_{len(losing_trades)}")
                 risk_report['risk_level'] = 'medium'
             
             # 5. Check average loss
-            if losing_trades:
-                avg_loss = np.mean([t.calc_profit_ratio() for t in losing_trades])
+            if losing_trades_count > 0:
+                avg_loss = total_loss_ratio / losing_trades_count
                 risk_report['metrics']['avg_loss'] = avg_loss
                 
                 if avg_loss < -0.05:  # Average loss > 5%
