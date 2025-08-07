@@ -1804,6 +1804,8 @@ class AlexOpusV1(IStrategy):
             total_profit_loss = 0
             total_stake = 0
             total_loss_ratio = 0
+            losing_trades_count = 0
+            winning_trades_count = 0
 
             # Efficiently loop through trades ONCE to get all rate-dependent data
             for trade in open_trades:
