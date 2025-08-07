@@ -64,6 +64,13 @@ class AlexOpusV1(IStrategy):
         self._cache_max_size = 100
         self._last_portfolio_check = None
         self._cached_risk_report = None
+        
+    def bot_start(self, **kwargs) -> None:
+        """
+        Called once by Freqtrade at the very start of the bot.
+        This is the correct place to initialize data and sync states.
+        """
+        # The bot_start method is the ideal place for our one-time sync.
         self._resync_states_on_startup()
     
     # === HYPERPARAMETERS (Reduced and organized) ===
@@ -81,10 +88,7 @@ class AlexOpusV1(IStrategy):
     
     # Simplified ROI
     minimal_roi = {
-        "0": 0.08,
-        "10": 0.04,
-        "30": 0.02,
-        "60": 0.01
+        "0": 100.0,
     }
     
     # Add parameter to choose exit system
@@ -1367,6 +1371,12 @@ class AlexOpusV1(IStrategy):
         Enhanced exit logic with multiple exit systems
         Now properly uses your MML exits!
         """
+        if (dataframe.iloc[-1]['enter_long'] == 1) or (dataframe.iloc[-1]['enter_short'] == 1):
+            logger.info(
+                f"Entry signal on current candle for {metadata['pair']}. "
+                "Skipping exit logic for this candle."
+            )
+            return dataframe
         
         # Initialize exit columns
         dataframe['exit_long'] = 0
