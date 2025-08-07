@@ -63,6 +63,7 @@ class AlexOpusV1(IStrategy):
         self._cache_max_size = 100
         self._last_portfolio_check = None
         self._cached_risk_report = None
+        self._resync_states_on_startup()
     
     # === HYPERPARAMETERS (Reduced and organized) ===
     
@@ -1888,3 +1889,45 @@ class AlexOpusV1(IStrategy):
         except Exception as e:
             logger.error(f"Portfolio risk check failed: {e}")
             return True, {'allow_new_trades': True, 'risk_level': 'unknown', 'error': str(e)}
+        
+    def _resync_states_on_startup(self):
+        """
+        Checks for open trades at startup and forces the state manager to
+        be in sync with the reality of the database.
+        """
+        # This check is crucial. We only want this to run ONCE.
+        if hasattr(self, '_states_synced') and self._states_synced:
+            return
+
+        logger.info("Performing one-time state synchronization on startup...")
+
+        try:
+            # Use Freqtrade's official way to get all open trades
+            open_trades = Trade.get_open_trades()
+
+            for trade in open_trades:
+                pair = trade.pair
+                current_state = self.state_manager.get_state(pair)
+
+                # If a trade is open but the state manager thinks it's IDLE, there's a mismatch.
+                if current_state == TradeState.IDLE:
+                    logger.warning(
+                        f"State mismatch detected for {pair}. "
+                        f"Trade is open, but state is IDLE. Forcing state to MANAGING."
+                    )
+                    # We don't have the original entry metadata, so we create a placeholder.
+                    # This is better than having an invalid state.
+                    placeholder_metadata = {
+                        'quality': 'unknown_resynced',
+                        'entry_type': 'long' if not trade.is_short else 'short',
+                        'entry_reason': 'resynced_on_startup'
+                    }
+                    self.state_manager.transition(pair, TradeState.MANAGING, placeholder_metadata)
+
+            self._states_synced = True
+            logger.info("State synchronization complete.")
+
+        except Exception as e:
+            logger.error(f"Could not perform state synchronization on startup: {e}")
+            # Mark as synced even on error to avoid retrying constantly.
+            self._states_synced = True
